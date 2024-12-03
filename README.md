@@ -1,5 +1,5 @@
 # EasySales - Admin 
-Church management SAAS - Admin Panel
+Sales and Merchandiser App - Admin Panel
 
 
 # Projects
