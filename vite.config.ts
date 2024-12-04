@@ -1,3 +1,4 @@
+import path from "path"
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -17,11 +18,16 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
-      port: 5173,
+      port: 5174,
     },
     define: {
       // Set NODE_ENV based on the mode
       'process.env.NODE_ENV': JSON.stringify(envMode),
+    },
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
     },
   };
 })
