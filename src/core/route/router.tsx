@@ -10,6 +10,9 @@ import DashboardPage from "../../features/dashboard/presentation/ui/DashboardPag
 import { UserDetailPage, UsersListPage, UsersPage } from "@/features/user/presentation";
 import { routeName } from "./route-name";
 import UserRolePage from "@/features/role/presentation/ui/RolePage";
+import CreateUserPage from "@/features/user/presentation/ui/CreateUserPage";
+import CompanyPage from "@/features/company/presentation/ui/CompanyPage";
+import CompanyListPage from "@/features/company/presentation/ui/CompanyListPage";
 
 
 export const router = createBrowserRouter([
@@ -44,18 +47,43 @@ export const router = createBrowserRouter([
                         {
                           index: true, // default component
                           element: <UsersListPage />,
+                          errorElement: <NotFoundPage />,
                         },
                         {
                           path: ":id",
                           element: <UserDetailPage />,
                           errorElement: <NotFoundPage />,
+                          children: [
+                            {
+                              path: routeName.roles,
+                              element: <UserRolePage />,
+                              errorElement: <NotFoundPage />,
+                            },
+                          ]
                         },
+                        {
+                          path: routeName.createUser,
+                          element: <CreateUserPage />,
+                          errorElement: <NotFoundPage />,
+                        }
                       ],
                     },
                     {
                       path: routeName.roles,
                       element: <UserRolePage />,
                       errorElement: <NotFoundPage />,
+                    },
+                    {
+                      path: routeName.company,
+                      element: <CompanyPage />,
+                      errorElement: <NotFoundPage />,
+                      children: [
+                        {
+                          index: true,
+                          element: <CompanyListPage />,
+                          errorElement: <NotFoundPage />,
+                        },
+                      ]
                     },
                     
                   ],
@@ -81,7 +109,7 @@ export const router = createBrowserRouter([
           path: routeName.privacyPolicy,
           element: <PrivacyPolicyPage />,
           errorElement: <NotFoundPage />,
-        },
+        },        
         {
           path: routeName.others,
           element: <NotFoundPage />,
