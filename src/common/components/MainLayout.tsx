@@ -17,22 +17,19 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
+  CssBaseline,
 } from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { useState } from "react";
-import { darkTheme, lightTheme } from "../../common/theme/theme";
+import { darkTheme, lightTheme } from "../theme/theme";
 import { Brightness7, Brightness4 } from "@mui/icons-material";
 import { useAuthStore } from "../../features/auth/login/presentation/index";
 import { routeName } from "@/core/route";
 
 const drawerWidth = 240;
 
-export const AdminLayout = (): JSX.Element => {
+export const MainLayout = (): JSX.Element => {
   const navigate = useNavigate(); // For navigation
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const logout = useAuthStore.use.logout();
@@ -68,14 +65,17 @@ export const AdminLayout = (): JSX.Element => {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Box
         sx={{
           height: "100vh", // Full viewport height
           width: "100vw",  // Full viewport width
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden", // Prevent scrollbars
+          overflow: "auto", // Prevent scrollbars
           boxSizing: "border-box", // Ensures padding is included in height/width
+          m: 0,
+          p: 0,
         }}
       >
         {/* AppBar at the top */}
@@ -181,7 +181,7 @@ export const AdminLayout = (): JSX.Element => {
               <Toolbar />
               <Box sx={{ overflow: "auto" }}>
                 <List>
-                  {["Users", "Roles", "Company"].map((name, index) => (
+                  {["Users", "Roles", "Companies", "Countries"].map((name, index) => (
                     <ListItem key={name} disablePadding>
                       <ListItemButton
                         onClick={() =>
@@ -200,38 +200,7 @@ export const AdminLayout = (): JSX.Element => {
               </Box>
             </Drawer>
           </>
-        )}
-
-        Conditionally render the welcome card only on the root ("/") route
-        {location.pathname === "/" && (
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              mt: 8, // Adjust for AppBar height (e.g., 64px)
-              overflow: "auto", // Scroll only if necessary
-
-            }}
-          >
-            <Card sx={{ maxWidth: 400, p: 2 }}>
-              <CardContent>
-                <Typography variant="h4" component="div" gutterBottom>
-                  Welcome to EasySales
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  Your platform for efficient sales management and insights.
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small" onClick={() => navigate("/dashboard")}>
-                  Go to Dashboard
-                </Button>
-              </CardActions>
-            </Card>
-          </Box>
-        )}
+        )}       
 
         {/* Main content - renders the child routes */}
         <Outlet />

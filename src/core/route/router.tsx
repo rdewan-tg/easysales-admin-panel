@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { NotFoundPage } from "../../common/pages";
-import { AdminLayout } from "../../common/components";
+import { MainLayout } from "../../common/components";
 import AuthChecker from "../../common/components/AuthChecker";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
@@ -13,12 +13,16 @@ import UserRolePage from "@/features/role/presentation/ui/RolePage";
 import CreateUserPage from "@/features/user/presentation/ui/CreateUserPage";
 import CompanyPage from "@/features/company/presentation/ui/CompanyPage";
 import CompanyListPage from "@/features/company/presentation/ui/CompanyListPage";
+import CreateCompanyPage from "@/features/company/presentation/ui/CreateCompanyPage";
+import CountryPage from "@/features/country/presentation/ui/CountryPage";
+import CountryListPage from "@/features/country/presentation/ui/CountryListPage";
+import CreateCountryPage from "@/features/country/presentation/ui/CreateCountryPage";
 
 
 export const router = createBrowserRouter([
     {
       path: "/",
-      element: <AdminLayout />,
+      element: <MainLayout />,
       errorElement: <NotFoundPage />,
       children: [
         {
@@ -74,7 +78,7 @@ export const router = createBrowserRouter([
                       errorElement: <NotFoundPage />,
                     },
                     {
-                      path: routeName.company,
+                      path: routeName.companies,
                       element: <CompanyPage />,
                       errorElement: <NotFoundPage />,
                       children: [
@@ -83,8 +87,29 @@ export const router = createBrowserRouter([
                           element: <CompanyListPage />,
                           errorElement: <NotFoundPage />,
                         },
+                        {
+                          path: routeName.createCompany,
+                          element: <CreateCompanyPage />,
+                          errorElement: <NotFoundPage />,
+                        }
                       ]
                     },
+                    {
+                      path: routeName.countries,
+                      element: <CountryPage />,
+                      children: [
+                        {
+                          index: true,
+                          element: <CountryListPage />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        {
+                          path: routeName.createCountry,
+                          element: <CreateCountryPage />,
+                          errorElement: <NotFoundPage />,
+                        }
+                      ]
+                    }
                     
                   ],
                 },

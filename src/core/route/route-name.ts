@@ -6,8 +6,10 @@ export const routeName = {
     createUser: "create-user",
     roles: "roles",
     roleDetail: "roleDetail",
-    company: "company",
+    companies: "companies",
     createCompany: "create-company",
+    countries: "countries",
+    createCountry: "create-country",
     privacyPolicy: "privacy-policy",
     others: "*",
 };

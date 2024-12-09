@@ -66,6 +66,8 @@ function LoginPage(): JSX.Element {
                     height: '100vh',
                     width: '100vw',
                     gap: 2,
+                    m: 0,
+                    p: 0,
                     backgroundColor: (theme) => theme.palette.background.default,
                 }
             }>

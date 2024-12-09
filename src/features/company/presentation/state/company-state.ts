@@ -1,4 +1,5 @@
 import { Company } from "@/common/dtos";
+import { CreateCompanyDto } from "../../data";
 
 
 export type CompanyState = {
@@ -6,5 +7,5 @@ export type CompanyState = {
     companies: Company[];
     error: string | null;
     getCompanies: () => Promise<void>;
-    createCompany: (data: Company) => Promise<void>;
+    createCompany: (data: CreateCompanyDto) => Promise<void>;
 }

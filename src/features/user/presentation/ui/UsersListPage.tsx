@@ -84,14 +84,17 @@ const UsersListPage = () => {
   }
 
   return (
-    <Box component={"main"} sx={{
-      flexGrow: 1,          // Ensures it takes the available space
-      overflow: "auto",     // Ensures content scrolling without affecting layout
-      m: 0,                 // Remove margin to avoid layout overflow
-      p: 1,                 // Optional padding for spacing within the container
-      height: "100%",       // Ensures the container fits the parent
-      boxSizing: "border-box", // Include padding in height/width calculations
-    }}>
+    <Box
+      component={"main"}
+      sx={{
+        height: "100vh", // Full viewport height
+        display: "flex",
+        flexDirection: "column",
+        boxSizing: "border-box", // Ensures padding is included in height/width
+        m: 0,
+        p: 0,
+      }}
+    >
       <Typography variant="h3">Users</Typography>
 
       {isLoading ? (
@@ -103,36 +106,54 @@ const UsersListPage = () => {
         </Backdrop>
       ) : null}
 
-      <IconButton color="primary" onClick={getUsersByCompany}>
-        <RefreshOutlined />
-      </IconButton>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}>
 
-      <IconButton color="primary" onClick={navigateToCreateUser}>
-        <PersonAdd />
-      </IconButton>
+        <IconButton color="primary" onClick={getUsersByCompany}>
+          <RefreshOutlined />
+        </IconButton>
 
-      <Grid>
-        <List dense={true}>
-          {Array.isArray(users) ? (
-            users.map((member) => (
-              <Card
-                key={member.id}
-                raised
-                onClick={() => navigateToMemberDetails(member.id)}
-                sx={{ mb: 2, p: 2 }}
-              >
-                <CardHeader
-                  avatar={<Avatar alt={member.name} src={member.photo ?? undefined} />}
-                  title={member.name}
-                  subheader={member.email}
-                />
-              </Card>
-            ))
-          ) : (
-            <Typography variant="body1">No users available</Typography>
-          )}
-        </List>
-      </Grid>
+        <IconButton color="primary" onClick={navigateToCreateUser}>
+          <PersonAdd />
+        </IconButton>
+
+      </Box>
+
+      <Box
+        sx={{
+          height: "80vh", // Fixed height for the grid container
+          overflow: "auto", // or "scroll"
+          p: 2,
+        }}
+      >
+        <Grid>
+          <List dense={true}>
+            {Array.isArray(users) ? (
+              users.map((member) => (
+                <Card
+                  key={member.id}
+                  raised
+                  onClick={() => navigateToMemberDetails(member.id)}
+                  sx={{ mb: 2, p: 2 }}
+                >
+                  <CardHeader
+                    avatar={<Avatar alt={member.name} src={member.photo ?? undefined} />}
+                    title={member.name}
+                    subheader={member.email}
+                  />
+                </Card>
+              ))
+            ) : (
+              <Typography variant="body1">No users available</Typography>
+            )}
+          </List>
+        </Grid>
+      </Box>
+
 
       {/* Display global error */}
       {errorMessage && (

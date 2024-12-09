@@ -85,6 +85,7 @@ const CreateUserPage = () => {
         resolver: zodResolver(signupSchema),
     });
 
+    // destructure form
     const { handleSubmit, formState, control } = form;
     // destructure formState
     const { errors, isSubmitting, isValid } = formState;
