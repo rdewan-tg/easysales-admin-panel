@@ -1,15 +1,28 @@
 import { create } from "zustand";
 import { createSelectors } from "../../../../core/data";
 import { UserState } from "../state/user-state";
-import { deleteUser, getUserById, getUsersByCompany } from "../../data";
+import { createUser, deleteUser, getCompanies, getUserById, getUsersByCompany } from "../../data";
+import { SignupForm } from "@/common/types";
 
 const useUserStore = create<UserState>((set, get) => ({
   users: [],
   user: undefined,
+  companies: [],
   isLoading: false,
   isUserDeleted: null,
+  isUserCreated: null,
   error: null,
   deleteSnackbarOpen: false,
+  createUser: async (data: SignupForm) : Promise<void> => {
+    try {
+      set({ isLoading: true, isUserCreated: null, error: null });
+      await createUser(data);
+      set({ isLoading: false, isUserCreated: true, error: null });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    }
+  },
   setDeleteUserSnackbarOpen: (value: boolean) => {
     set({ deleteSnackbarOpen: value });
   },
@@ -46,6 +59,17 @@ const useUserStore = create<UserState>((set, get) => ({
   },
   setUserDeleted: (value: boolean) => {
     set({ isUserDeleted: value });
+  },
+  getCompanies: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await getCompanies();
+      set({ companies: response.data, isLoading: false, error: null });
+      
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    }
   },
   reset: () => {
     set({

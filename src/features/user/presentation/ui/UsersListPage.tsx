@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import useUserStore from "../store/user-store";
-import { RefreshOutlined } from "@mui/icons-material";
+import { PersonAdd, RefreshOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { BaseSnackBarComponent } from "../../../../common/components";
 import { routeName } from "@/core/route";
@@ -79,9 +79,20 @@ const UsersListPage = () => {
     navigate(`/${routeName.dashboard}/${routeName.users}/${id}`);
   };
 
+  const navigateToCreateUser = () => {
+    navigate(`/${routeName.dashboard}/${routeName.users}/${routeName.createUser}`);
+  }
+
   return (
-    <Box component="main" sx={{ flexGrow: 1, m: 1 }}>
-      <Typography variant="h1">Users</Typography>
+    <Box component={"main"} sx={{
+      flexGrow: 1,          // Ensures it takes the available space
+      overflow: "auto",     // Ensures content scrolling without affecting layout
+      m: 0,                 // Remove margin to avoid layout overflow
+      p: 1,                 // Optional padding for spacing within the container
+      height: "100%",       // Ensures the container fits the parent
+      boxSizing: "border-box", // Include padding in height/width calculations
+    }}>
+      <Typography variant="h3">Users</Typography>
 
       {isLoading ? (
         <Backdrop
@@ -94,6 +105,10 @@ const UsersListPage = () => {
 
       <IconButton color="primary" onClick={getUsersByCompany}>
         <RefreshOutlined />
+      </IconButton>
+
+      <IconButton color="primary" onClick={navigateToCreateUser}>
+        <PersonAdd />
       </IconButton>
 
       <Grid>

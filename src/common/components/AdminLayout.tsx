@@ -202,7 +202,7 @@ export const AdminLayout = (): JSX.Element => {
           </>
         )}
 
-        {/* Conditionally render the welcome card only on the root ("/") route */}
+        Conditionally render the welcome card only on the root ("/") route
         {location.pathname === "/" && (
           <Box
             sx={{
