@@ -19,11 +19,10 @@ import {
   ListItemText,
   CssBaseline,
 } from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+
 import { useState } from "react";
 import { darkTheme, lightTheme } from "../theme/theme";
-import { Brightness7, Brightness4 } from "@mui/icons-material";
+import { Brightness7, Brightness4, PeopleAltOutlined, ShieldOutlined, BusinessOutlined, PublicOutlined, InfoOutlined } from "@mui/icons-material";
 import { useAuthStore } from "../../features/auth/login/presentation/index";
 import { routeName } from "@/core/route";
 
@@ -181,7 +180,7 @@ export const MainLayout = (): JSX.Element => {
               <Toolbar />
               <Box sx={{ overflow: "auto" }}>
                 <List>
-                  {["Users", "Roles", "Companies", "Countries"].map((name, index) => (
+                  {["Users", "Roles", "Companies", "Countries"].map((name) => (
                     <ListItem key={name} disablePadding>
                       <ListItemButton
                         onClick={() =>
@@ -189,7 +188,9 @@ export const MainLayout = (): JSX.Element => {
                         }
                       >
                         <ListItemIcon>
-                          {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                          {
+                            getListItemIcon(name.toLowerCase())
+                          }
                         </ListItemIcon>
                         <ListItemText primary={name} />
                       </ListItemButton>
@@ -208,3 +209,18 @@ export const MainLayout = (): JSX.Element => {
     </ThemeProvider>
   );
 };
+
+function getListItemIcon(name: string) {
+  switch (name) {
+    case 'users':
+      return <PeopleAltOutlined />;
+    case 'roles':
+      return <ShieldOutlined />;
+    case 'companies':
+      return <BusinessOutlined />;
+    case 'countries':
+      return <PublicOutlined />;
+    default:
+      return <InfoOutlined />;
+  }
+}

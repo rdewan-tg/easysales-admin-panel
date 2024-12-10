@@ -7,38 +7,28 @@ import { useCompanyStore } from "..";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { AddBusiness } from "@mui/icons-material";
 import { useEffect, useState } from "react";
+import { useCountryStore } from "@/features/country/presentation";
 // import { DevTool } from "@hookform/devtools";
-
-const countries = [
-    {
-        name: "Nigeria",
-        countryCode: "NG",
-        companyCode: "NG",
-        currencyCode: "NGNSD",
-        timeZone: "Africa/Lagos",       
-    },
-    {
-        name: "Ghana",
-        countryCode: "GH",
-        companyCode: "GHED",
-        currencyCode: "GHS",
-        timeZone: "Africa/Accra",
-    },
-    {
-        name: "Kenya",
-        countryCode: "KE",
-        companyCode: "KEWS",
-        currencyCode: "KES",
-        timeZone: "Africa/Nairobi",
-    },
-]
-
 
 const CreateCompanyPage = () => {
 const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
 
     const createCompany = useCompanyStore.use.createCompany();
     const errorMessage = useCompanyStore((state) => state.error);
+
+    const countries = useCountryStore((state) => state.countries);
+    const getCountries = useCountryStore.use.getCountries();
+
+    useEffect(() => {
+        // fetch countries when the component mounts
+        const fetchCountries = async () => {
+            if (countries.length === 0) {
+                // Check if it's already loading or data exists
+                await getCountries();
+            }
+        };
+        fetchCountries();
+    }, []);
 
      // observe error state and display error message
      useEffect(() => {
@@ -178,7 +168,6 @@ const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
                     <TextField
                         {...field}
                         id="country"
-                        label="Country"
                         type="text"
                         variant="outlined"
                         select
@@ -203,6 +192,7 @@ const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
 
                         }}
                     >
+                        <option aria-label="None" value="" >Please select a country</option>
                         {
                             countries.map((country) => (
                             <option key={country.name} value={country.name}>{country.name}</option>

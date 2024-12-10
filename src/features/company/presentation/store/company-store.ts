@@ -7,7 +7,7 @@ import { createCompany } from "../../data/source/remote/api/company-api-service"
 import { CreateCompanyDto } from "../../data";
 
 
-const useCompanyStore = create<CompanyState>((set, get) => ({
+const useCompanyStore = create<CompanyState>((set) => ({
     companies: [],
     isLoading: false,
     error: null,

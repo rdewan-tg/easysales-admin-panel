@@ -48,7 +48,7 @@ const UsersListPage = () => {
       }
     };
     fetchMembers();
-  }, [getUsersByCompany, isLoading, isUserDeleted]);
+  }, [isLoading, isUserDeleted]);
 
   const handleErrorSnackbarOpen = () => {
     setOpenErrorSnackbar(true);

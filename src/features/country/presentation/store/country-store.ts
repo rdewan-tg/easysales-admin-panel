@@ -4,7 +4,7 @@ import { createCountry, CreateCountryDto, getCountries } from "../../data";
 import { CountryState } from "../state/country-state";
 
 
-const useCountryStore = create<CountryState>((set, get) => ({
+const useCountryStore = create<CountryState>((set) => ({
     countries: [],
     isLoading: false,
     isCountryCreated: false,
