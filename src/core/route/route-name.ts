@@ -11,5 +11,10 @@ export const routeName = {
     countries: "countries",
     createCountry: "create-country",
     privacyPolicy: "privacy-policy",
+    me: "me",
+    profile: "profile",
+    photo: "photo",
+    photoList: "photo-list",
+    photoGallery: "photo-gallery",
     others: "*",
 };

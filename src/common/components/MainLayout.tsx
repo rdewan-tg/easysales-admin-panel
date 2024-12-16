@@ -13,18 +13,16 @@ import {
   Divider,
   Drawer,
   List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   CssBaseline,
 } from "@mui/material";
 
 import { useState } from "react";
 import { darkTheme, lightTheme } from "../theme/theme";
-import { Brightness7, Brightness4, PeopleAltOutlined, ShieldOutlined, BusinessOutlined, PublicOutlined, InfoOutlined } from "@mui/icons-material";
+import { Brightness7, Brightness4} from "@mui/icons-material";
 import { useAuthStore } from "../../features/auth/login/presentation/index";
 import { routeName } from "@/core/route";
+
+import Sidebar from "./Sidebar";
 
 const drawerWidth = 240;
 
@@ -50,6 +48,10 @@ export const MainLayout = (): JSX.Element => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleProfileClick = () => {
+    navigate(`/${routeName.dashboard}/${routeName.me}`);
   };
 
   const handleLogin = () => {
@@ -154,7 +156,7 @@ export const MainLayout = (): JSX.Element => {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
                     <Divider component="li" />
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
@@ -180,28 +182,14 @@ export const MainLayout = (): JSX.Element => {
               <Toolbar />
               <Box sx={{ overflow: "auto" }}>
                 <List>
-                  {["Users", "Roles", "Companies", "Countries"].map((name) => (
-                    <ListItem key={name} disablePadding>
-                      <ListItemButton
-                        onClick={() =>
-                          navigate(`/${routeName.dashboard}/${name.toLowerCase()}`)
-                        }
-                      >
-                        <ListItemIcon>
-                          {
-                            getListItemIcon(name.toLowerCase())
-                          }
-                        </ListItemIcon>
-                        <ListItemText primary={name} />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
+                  <Sidebar />
+
                 </List>
                 <Divider />
               </Box>
             </Drawer>
           </>
-        )}       
+        )}
 
         {/* Main content - renders the child routes */}
         <Outlet />
@@ -209,18 +197,3 @@ export const MainLayout = (): JSX.Element => {
     </ThemeProvider>
   );
 };
-
-function getListItemIcon(name: string) {
-  switch (name) {
-    case 'users':
-      return <PeopleAltOutlined />;
-    case 'roles':
-      return <ShieldOutlined />;
-    case 'companies':
-      return <BusinessOutlined />;
-    case 'countries':
-      return <PublicOutlined />;
-    default:
-      return <InfoOutlined />;
-  }
-}

@@ -17,6 +17,11 @@ import CreateCompanyPage from "@/features/company/presentation/ui/CreateCompanyP
 import CountryPage from "@/features/country/presentation/ui/CountryPage";
 import CountryListPage from "@/features/country/presentation/ui/CountryListPage";
 import CreateCountryPage from "@/features/country/presentation/ui/CreateCountryPage";
+import MePage from "@/features/me/presentation/ui/MePage";
+import ProfilePage from "@/features/me/presentation/ui/ProfilePage";
+import PhotoListScreen from "@/features/photo/presentation/ui/PhotoListScreen";
+import PhotoGalleryScreen from "@/features/photo/presentation/ui/PhotoGalleryScreen";
+import PhotoScreen from "@/features/photo/presentation/ui/PhotoScreen";
 
 
 export const router = createBrowserRouter([
@@ -109,7 +114,36 @@ export const router = createBrowserRouter([
                           errorElement: <NotFoundPage />,
                         }
                       ]
-                    }
+                    },
+                    {
+                      path: routeName.me,
+                      element: <MePage />,
+                      children: [
+                        {
+                          index: true,
+                          element: <ProfilePage />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        
+                      ]
+                    },
+                    {
+                      path: routeName.photo,
+                      element: <PhotoScreen />,
+                      children: [
+                        {
+                          index: true,
+                          element: <PhotoListScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        {
+                          path: routeName.photoGallery,
+                          element: <PhotoGalleryScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        
+                      ]
+                    },
                     
                   ],
                 },
