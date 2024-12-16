@@ -85,6 +85,7 @@ const CreateUserPage = () => {
         resolver: zodResolver(signupSchema),
     });
 
+    // destructure form
     const { handleSubmit, formState, control } = form;
     // destructure formState
     const { errors, isSubmitting, isValid } = formState;
@@ -103,11 +104,12 @@ const CreateUserPage = () => {
                 {
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    alignItems: 'start',
+                    justifyContent: 'start',
                     height: '100vh',
                     width: '100vw',
-                    gap: 2,
+                    gap: 1.4,
+                    p: 2,
                     backgroundColor: (theme) => theme.palette.background.default,
                 }
             }
@@ -173,7 +175,6 @@ const CreateUserPage = () => {
                     <TextField
                         {...field}
                         id="companyId"
-                        label="Company"
                         type="text"
                         select
                         defaultValue=""
@@ -182,9 +183,10 @@ const CreateUserPage = () => {
                                 native: true,
                             },
                         }}
-                        helperText="Please select a company"
+                        helperText={errors.companyId ? errors.companyId.message : null}
                         sx={{ width: '100%', maxWidth: 400 }}
                     >
+                        <option aria-label="None" value="" >Please select a company</option>
                         {companies.map((option) => (
                             <option key={option.id} value={option.id}>
                                 {option.name}

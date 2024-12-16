@@ -2,11 +2,12 @@
 import { createSelectors } from "@/core/data";
 import { create } from "zustand";
 import { CompanyState } from "../state/company-state";
-import { Company, getCompanies } from "@/features/user/data";
+import {  getCompanies } from "@/features/user/data";
 import { createCompany } from "../../data/source/remote/api/company-api-service";
+import { CreateCompanyDto } from "../../data";
 
 
-const useCompanyStore = create<CompanyState>((set, get) => ({
+const useCompanyStore = create<CompanyState>((set) => ({
     companies: [],
     isLoading: false,
     error: null,
@@ -20,7 +21,7 @@ const useCompanyStore = create<CompanyState>((set, get) => ({
             set({ isLoading: false, error: errorMessage });
         }
     },
-    createCompany: async (data: Company) : Promise<void> => {
+    createCompany: async (data: CreateCompanyDto) : Promise<void> => {
         try {
             set({ isLoading: true, error: null });
             await createCompany(data);
