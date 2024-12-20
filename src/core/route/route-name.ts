@@ -16,5 +16,8 @@ export const routeName = {
     photo: "photo",
     photoList: "photo-list",
     photoGallery: "photo-gallery",
+    customer: "customer",
+    merchandiserCustomer: "merchandiser-customer",
+    salesCustomer: "sales-customer",
     others: "*",
 };
