@@ -137,8 +137,7 @@ const SalesCustomerScreen = () => {
                     </Alert>
                 </Snackbar>
 
-            )}
-            
+            )}            
         </Box>
     )
 }
