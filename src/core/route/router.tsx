@@ -22,6 +22,9 @@ import ProfilePage from "@/features/me/presentation/ui/ProfilePage";
 import PhotoListScreen from "@/features/photo/presentation/ui/PhotoListScreen";
 import PhotoGalleryScreen from "@/features/photo/presentation/ui/PhotoGalleryScreen";
 import PhotoScreen from "@/features/photo/presentation/ui/PhotoScreen";
+import CustomerScreen from "@/features/master-data/customer/presentation/ui/CustomerScreen";
+import MerchandiserCustomerScreen from "@/features/master-data/customer/presentation/ui/MerchandiserCustomerScreen";
+import SalesCustomerScreen from "@/features/master-data/customer/presentation/ui/SalesCustomerScreen";
 
 
 export const router = createBrowserRouter([
@@ -142,6 +145,22 @@ export const router = createBrowserRouter([
                           errorElement: <NotFoundPage />,
                         },
                         
+                      ]
+                    },
+                    {
+                      path: routeName.customer,
+                      element: <CustomerScreen />,
+                      children: [
+                        {
+                          path: routeName.merchandiserCustomer,
+                          element: <MerchandiserCustomerScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        {
+                          path: routeName.salesCustomer,
+                          element: <SalesCustomerScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
                       ]
                     },
                     

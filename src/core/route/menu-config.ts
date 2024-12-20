@@ -6,6 +6,8 @@ import {
     PhotoAlbumOutlined,
     PhotoLibraryOutlined,
     ViewListOutlined,
+    GridView,
+    HailOutlined,
 } from "@mui/icons-material";
 import React from "react";
 
@@ -18,6 +20,8 @@ const iconMapping = {
     photo: PhotoAlbumOutlined,
     gallery: PhotoLibraryOutlined,
     list: ViewListOutlined,
+    grid: GridView,
+    hailOutlined: HailOutlined,
 };
 
 export interface MenuItemConfig {
@@ -38,7 +42,17 @@ export const menuConfig: MenuItemConfig[] = [
         iconKey: "photo",
         children: [
             { label: "Gallery", path: "/dashboard/photo/photo-gallery", iconKey: "gallery" },
-            { label: "List", path: "/dashboard/photo", iconKey: "list" },
+            { label: "Data Grid", path: "/dashboard/photo", iconKey: "grid" },
+        ],
+    },
+    {
+        label: "Master Data",
+        path: "/dashboard/customer",
+        iconKey: "list",
+        children: [
+            { label: "Merchandiser Customer", path: "/dashboard/customer/merchandiser-customer", iconKey: "hailOutlined" },
+            { label: "Sales Customer", path: "/dashboard/customer/sales-customer", iconKey: "hailOutlined" },
+         
         ],
     },
 ];
