@@ -36,10 +36,6 @@ const UsersListPage = () => {
   const getUsersByCompany = useUserStore.use.getUsersByCompany();
 
   useEffect(() => {
-    // check if member is deleted
-    if (isUserDeleted) {
-      setDeleteMemberSnackbarOpen(true);
-    }
     // fetch members when the component mounts
     const fetchMembers = async () => {
       if (!isLoading && users.length === 0) {
@@ -48,7 +44,15 @@ const UsersListPage = () => {
       }
     };
     fetchMembers();
-  }, [isLoading, isUserDeleted]);
+  });
+
+  useEffect(() => {
+    // check if member is deleted
+    if (isUserDeleted) {
+      setDeleteMemberSnackbarOpen(true);
+    }
+    
+  }, [isUserDeleted]);
 
   const handleErrorSnackbarOpen = () => {
     setOpenErrorSnackbar(true);

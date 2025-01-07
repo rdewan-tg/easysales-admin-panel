@@ -8,6 +8,8 @@ import {
     ViewListOutlined,
     GridView,
     HailOutlined,
+    CategoryOutlined,
+    PriceChangeOutlined,
 } from "@mui/icons-material";
 import React from "react";
 
@@ -22,6 +24,8 @@ const iconMapping = {
     list: ViewListOutlined,
     grid: GridView,
     hailOutlined: HailOutlined,
+    categoryOutlinedIcon: CategoryOutlined,
+    priceChangeOutlinedIcon: PriceChangeOutlined,
 };
 
 export interface MenuItemConfig {
@@ -52,6 +56,8 @@ export const menuConfig: MenuItemConfig[] = [
         children: [
             { label: "Merchandiser Customer", path: "/dashboard/customer/merchandiser-customer", iconKey: "hailOutlined" },
             { label: "Sales Customer", path: "/dashboard/customer/sales-customer", iconKey: "hailOutlined" },
+            { label: "Item", path: "/dashboard/item/item-list", iconKey: "categoryOutlinedIcon" },
+            { label: "Price", path: "/dashboard/price/price-list", iconKey: "priceChangeOutlinedIcon" },
          
         ],
     },

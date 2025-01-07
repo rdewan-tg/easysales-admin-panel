@@ -19,5 +19,9 @@ export const routeName = {
     customer: "customer",
     merchandiserCustomer: "merchandiser-customer",
     salesCustomer: "sales-customer",
+    item: "item",
+    itemList: "item-list",
+    price: "price",
+    priceList: "price-list",
     others: "*",
 };

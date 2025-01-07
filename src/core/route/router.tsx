@@ -23,8 +23,12 @@ import PhotoListScreen from "@/features/photo/presentation/ui/PhotoListScreen";
 import PhotoGalleryScreen from "@/features/photo/presentation/ui/PhotoGalleryScreen";
 import PhotoScreen from "@/features/photo/presentation/ui/PhotoScreen";
 import CustomerScreen from "@/features/master-data/customer/presentation/ui/CustomerScreen";
-import MerchandiserCustomerScreen from "@/features/master-data/customer/presentation/ui/MerchandiserCustomerScreen";
 import SalesCustomerScreen from "@/features/master-data/customer/presentation/ui/SalesCustomerScreen";
+import MerchandiserCustomerScreen from "@/features/master-data/merchandiser-customer/presentation/ui/MerchandiserCustomerScreen";
+import ItemScreen from "@/features/master-data/item/presentation/ui/ItemScreen";
+import ItemListScreen from "@/features/master-data/item/presentation/ui/ItemListScreen";
+import PriceScreen from "@/features/master-data/price/presentation/ui/PriceScreen";
+import PriceListScreen from "@/features/master-data/price/presentation/ui/PriceListScreen";
 
 
 export const router = createBrowserRouter([
@@ -147,6 +151,7 @@ export const router = createBrowserRouter([
                         
                       ]
                     },
+                    // customer
                     {
                       path: routeName.customer,
                       element: <CustomerScreen />,
@@ -161,6 +166,32 @@ export const router = createBrowserRouter([
                           element: <SalesCustomerScreen />,
                           errorElement: <NotFoundPage />,
                         },
+                      ]
+                    },
+                    // item
+                    {
+                      path: routeName.item,
+                      element: <ItemScreen />,
+                      children: [
+                        {
+                          path: routeName.itemList,
+                          element: <ItemListScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        
+                      ]
+                    },
+                    // price
+                    {
+                      path: routeName.price,
+                      element: <PriceScreen />,
+                      children: [
+                        {
+                          path: routeName.priceList,
+                          element: <PriceListScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        
                       ]
                     },
                     
