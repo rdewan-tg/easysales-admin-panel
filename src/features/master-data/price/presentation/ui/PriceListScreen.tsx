@@ -1,5 +1,5 @@
 import { Alert, Backdrop, Box, CircularProgress, Slide, Snackbar, SnackbarCloseReason, TextField } from "@mui/material";
-import { useCustomerStore } from "..";
+import { usePriceStore } from "..";
 import {
     ColumnDirective,
     ColumnsDirective,
@@ -23,14 +23,14 @@ import { useCompanyStore } from "@/features/company/presentation";
 //import { DevTool } from "@hookform/devtools";
 
 
-const SalesCustomerScreen = () => {
+const PriceListScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const pageSettings: PageSettingsModel = { pageSize: 15 };
 
-    const isLoading = useCustomerStore(state => state.isLoading);
-    const errorMessage = useCustomerStore(state => state.error);
-    const customers = useCustomerStore(state => state.customers);
-    const getCustomers = useCustomerStore.use.geCustomers();
+    const isLoading = usePriceStore(state => state.isLoading);
+    const errorMessage = usePriceStore(state => state.error);
+    const prices = usePriceStore(state => state.prices);
+    const getPrices = usePriceStore.use.getprices();
 
     const companies = useCompanyStore((state) => state.companies);
     const getCompanies = useCompanyStore.use.getCompanies();
@@ -45,7 +45,7 @@ const SalesCustomerScreen = () => {
     const { errors, isSubmitting, isValid } = formState;
 
     const onSubmit: SubmitHandler<GetCustomerForm> = async (data: GetCustomerForm) => {
-        await getCustomers(data.companyCode);
+        await getPrices(data.companyCode);
     };
 
 
@@ -160,7 +160,7 @@ const SalesCustomerScreen = () => {
                 }}>
 
                 <GridComponent
-                    dataSource={customers}
+                    dataSource={prices}
                     allowResizing={true}
                     autoFit={true}
                     allowPaging={true}
@@ -168,22 +168,16 @@ const SalesCustomerScreen = () => {
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
-                        <ColumnDirective field='customerId' headerText='CustomerId' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='customerName' headerText='CustomerName' minWidth='100' width='200' textAlign="Left" />
-                        <ColumnDirective field='address' headerText='Address' format="C2" textAlign="Left" />
-                        <ColumnDirective field='salesPersonId' headerText='SalesPersonId' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='salesPerson' headerText='SalesPerson' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='merchandiser' headerText='Merchandiser' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='phoneNumber' headerText='phoneNumber' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='countryId' headerText='CountryId' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='latitude' headerText='Latitude' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='longitude' headerText='Longitude' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='creditLimit' headerText='CreditLimit' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
+                        <ColumnDirective field='productId' headerText='ProductId' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
+                        <ColumnDirective field='itemId' headerText='ItemId' minWidth='100' width='200' textAlign="Left" />
+                        <ColumnDirective field='fromDate' headerText='FromDate' format="C2" textAlign="Left" />
+                        <ColumnDirective field='toDate' headerText='ToDate' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
+                        <ColumnDirective field='unitPrice' headerText='UnitPrice' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='currencyCode' headerText='CurrencyCode' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='paymentTerm' headerText='PaymentTerm' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
+                        <ColumnDirective field='salesUnit' headerText='SalesUnit' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='priceGroup' headerText='PriceGroup' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='customreDimension' headerText='CustomreDimension' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='status' headerText='status' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
+                        <ColumnDirective field='recId' headerText='RecId' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
+                        <ColumnDirective field='companyCode' headerText='CompanyCode' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
                         <ColumnDirective field='companyId' headerText='companyId' minWidth='50' width='80' textAlign="Left" />
                         <ColumnDirective field='createAt' headerText='createAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='updatedAt' textAlign="Left" />
@@ -218,4 +212,4 @@ const SalesCustomerScreen = () => {
     )
 }
 
-export default SalesCustomerScreen;
+export default PriceListScreen;

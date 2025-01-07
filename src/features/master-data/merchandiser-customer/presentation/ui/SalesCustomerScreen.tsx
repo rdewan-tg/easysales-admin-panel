@@ -1,5 +1,5 @@
 import { Alert, Backdrop, Box, CircularProgress, Slide, Snackbar, SnackbarCloseReason, TextField } from "@mui/material";
-import { useCustomerStore } from "..";
+import { useMerchandiserCustomerStore } from "..";
 import {
     ColumnDirective,
     ColumnsDirective,
@@ -14,23 +14,22 @@ import {
     Sort,
 } from '@syncfusion/ej2-react-grids';
 import { useEffect, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { GetCustomerForm, getCustomerSchema } from "@/common/types";
-import LoadingButton from '@mui/lab/LoadingButton';
-import { SendOutlined } from "@mui/icons-material";
 import { useCompanyStore } from "@/features/company/presentation";
-//import { DevTool } from "@hookform/devtools";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SendOutlined } from "@mui/icons-material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 
 
 const SalesCustomerScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const pageSettings: PageSettingsModel = { pageSize: 15 };
 
-    const isLoading = useCustomerStore(state => state.isLoading);
-    const errorMessage = useCustomerStore(state => state.error);
-    const customers = useCustomerStore(state => state.customers);
-    const getCustomers = useCustomerStore.use.geCustomers();
+    const isLoading = useMerchandiserCustomerStore(state => state.isLoading);
+    const errorMessage = useMerchandiserCustomerStore(state => state.error);
+    const customers = useMerchandiserCustomerStore(state => state.customers);
+    const getMerchandiserCustomers = useMerchandiserCustomerStore.use.getMerchandiserCustomers();
 
     const companies = useCompanyStore((state) => state.companies);
     const getCompanies = useCompanyStore.use.getCompanies();
@@ -45,7 +44,7 @@ const SalesCustomerScreen = () => {
     const { errors, isSubmitting, isValid } = formState;
 
     const onSubmit: SubmitHandler<GetCustomerForm> = async (data: GetCustomerForm) => {
-        await getCustomers(data.companyCode);
+        await getMerchandiserCustomers(data.companyCode);
     };
 
 
@@ -213,7 +212,6 @@ const SalesCustomerScreen = () => {
                 </Snackbar>
 
             )}
-
         </Box>
     )
 }

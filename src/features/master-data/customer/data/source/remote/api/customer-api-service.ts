@@ -1,8 +1,9 @@
 import { axiosAdminInstance } from "@/core/data";
-import { MerchandiserCustomerDto } from "../dto/merchandiser-customer.dto";
+import { CustomerDto } from "../../..";
 
 
-export const getMerchandiserCustomers = async (dataAreaId: string) => {
-    const response = await axiosAdminInstance.get<MerchandiserCustomerDto>(`/api/v1/getCustomerByDataAreaId/${dataAreaId}`);
+
+export const getCustomers = async (dataAreaId: string) => {
+    const response = await axiosAdminInstance.get<CustomerDto>(`/api/v1/customers/${dataAreaId}`);
     return response.data;
 }

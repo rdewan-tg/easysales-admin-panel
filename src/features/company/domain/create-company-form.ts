@@ -2,7 +2,7 @@ import { z } from "zod";
 
 
 export const createCompanySchema = z.object({
-    name: z.string().min(4, { message: "Name must be at least 4 characters long" }).max(20),
+    name: z.string().min(4, { message: "Name must be at least 4 characters long" }).max(50),
     address: z.string().min(4, { message: "Address must be at least 4 characters long" }).max(200),
     email: z.string().email(),
     phone: z.string().min(10, { message: "Phone must be at least 10 characters long" }).max(20),
