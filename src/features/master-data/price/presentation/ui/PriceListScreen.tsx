@@ -150,7 +150,7 @@ const PriceListScreen = () => {
                         }
                     }
                 >
-                    Get Customers
+                    Get Price
                 </LoadingButton>
             </Box>
 

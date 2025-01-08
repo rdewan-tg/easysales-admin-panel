@@ -150,7 +150,7 @@ const ItemListScreen = () => {
                         }
                     }
                 >
-                    Get Customers
+                    Get Items
                 </LoadingButton>
             </Box>
 
