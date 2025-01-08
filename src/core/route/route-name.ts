@@ -23,5 +23,7 @@ export const routeName = {
     itemList: "item-list",
     price: "price",
     priceList: "price-list",
+    activityLog: "activity-log",
+    activityLogList: "activity-log-list",
     others: "*",
 };

@@ -29,6 +29,7 @@ import ItemScreen from "@/features/master-data/item/presentation/ui/ItemScreen";
 import ItemListScreen from "@/features/master-data/item/presentation/ui/ItemListScreen";
 import PriceScreen from "@/features/master-data/price/presentation/ui/PriceScreen";
 import PriceListScreen from "@/features/master-data/price/presentation/ui/PriceListScreen";
+import ActivityLogScreen from "@/features/activity-log/presentation/ui/ActivityLogScreen";
 
 
 export const router = createBrowserRouter([
@@ -55,6 +56,7 @@ export const router = createBrowserRouter([
                       // Redirects to /dashboard/users
                       element: <Navigate to={routeName.users} replace={true} />,
                     },
+                    //user
                     {
                       path: routeName.users,
                       element: <UsersPage />,
@@ -84,11 +86,13 @@ export const router = createBrowserRouter([
                         }
                       ],
                     },
+                    //rols
                     {
                       path: routeName.roles,
                       element: <UserRolePage />,
                       errorElement: <NotFoundPage />,
                     },
+                    // companies
                     {
                       path: routeName.companies,
                       element: <CompanyPage />,
@@ -193,6 +197,11 @@ export const router = createBrowserRouter([
                         },
                         
                       ]
+                    },
+                    // Activity Log
+                    {
+                      path: routeName.activityLog,
+                      element: <ActivityLogScreen />,                      
                     },
                     
                   ],
