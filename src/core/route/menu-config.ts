@@ -10,6 +10,7 @@ import {
     HailOutlined,
     CategoryOutlined,
     PriceChangeOutlined,
+    ReceiptLongOutlined,
 } from "@mui/icons-material";
 import React from "react";
 
@@ -26,6 +27,7 @@ const iconMapping = {
     hailOutlined: HailOutlined,
     categoryOutlinedIcon: CategoryOutlined,
     priceChangeOutlinedIcon: PriceChangeOutlined,
+    receiptLongOutlinedIcon: ReceiptLongOutlined,
 };
 
 export interface MenuItemConfig {
@@ -61,6 +63,7 @@ export const menuConfig: MenuItemConfig[] = [
          
         ],
     },
+    { label: "Logs", path: "/dashboard/activity-log", iconKey: "receiptLongOutlinedIcon" },
 ];
 
 // Export the icon resolver
