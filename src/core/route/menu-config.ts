@@ -11,6 +11,7 @@ import {
     CategoryOutlined,
     PriceChangeOutlined,
     ReceiptLongOutlined,
+    DevicesOutlined
 } from "@mui/icons-material";
 import React from "react";
 
@@ -28,6 +29,7 @@ const iconMapping = {
     categoryOutlinedIcon: CategoryOutlined,
     priceChangeOutlinedIcon: PriceChangeOutlined,
     receiptLongOutlinedIcon: ReceiptLongOutlined,
+    devicesOutlined: DevicesOutlined,
 };
 
 export interface MenuItemConfig {
@@ -63,6 +65,7 @@ export const menuConfig: MenuItemConfig[] = [
          
         ],
     },
+    { label: "Device Setting", path: "/dashboard/device-setting", iconKey: "devicesOutlined" },
     { label: "Logs", path: "/dashboard/activity-log", iconKey: "receiptLongOutlinedIcon" },
 ];
 

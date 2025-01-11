@@ -20,6 +20,7 @@
     "@mui/lab": "^6.0.0-beta.17",
     "@mui/material": "^6.1.9",
     "@syncfusion/ej2-react-grids": "^28.1.33",
+    "@syncfusion/ej2-react-navigations": "^28.1.37",
     "axios": "^1.7.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

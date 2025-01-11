@@ -1,28 +1,43 @@
-import { SignupForm, signupSchema } from "@/common/types";
+import { CreateDeviceSettingForm, createDeviceSettingSchema } from "@/common/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, Box, Slide, Snackbar, SnackbarCloseReason, TextField, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import PasswordFieldComponent from "./components/PasswordFieldComponent";
 import { PersonAdd } from "@mui/icons-material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useUserStore } from "..";
+import { useDeviceSettingStore } from "..";
 import { useEffect, useState } from "react";
-import PasswordConfirmFieldComponent from "./components/PasswordConfirmFieldComponent";
 import { BaseSnackBarComponent } from "@/common/components";
-//import { DevTool } from "@hookform/devtools";
+// import { DevTool } from "@hookform/devtools";
 
 
-
-const CreateUserPage = () => {
+const CreateDeviceSettingPage = () => {
     const [open, setOpen] = useState(false);
     const [openUserCreatedSnackBar, setOpenUserCreatedSnackBar] = useState(false);
+    
+    const users = useDeviceSettingStore((state) => state.users);
+    const companies = useDeviceSettingStore((state) => state.companies);
+    const isDeviceSettingCreated = useDeviceSettingStore((state) => state.isDeviceSettingCreated);
+    const errorMessage = useDeviceSettingStore((state) => state.error);
+    const createDeviceSetting = useDeviceSettingStore.use.createDeviceSetting();
+    const getUsers = useDeviceSettingStore.use.getUsers();
+    const getCompanies = useDeviceSettingStore.use.getCompanies();
 
-    const companies = useUserStore((state) => state.companies);
-    const isLoading = useUserStore((state) => state.isLoading);
-    const isUserCreated = useUserStore((state) => state.isUserCreated);
-    const errorMessage = useUserStore((state) => state.error);
-    const getCompanies = useUserStore.use.getCompanies();
-    const createUser = useUserStore.use.createUser();
+    // fetch users and companies when the component mounts
+    useEffect(() => {
+        async function fetchUsers() {
+            if (users.length === 0) {
+                getUsers();
+            }
+        }
+
+        async function fetchCompanies() {
+            if (companies.length === 0) {
+                getCompanies();
+            }
+        }
+        fetchUsers();
+        fetchCompanies();
+    },[])
 
     const handleSnackbarClick = () => {
         setOpen(true);
@@ -64,34 +79,23 @@ const CreateUserPage = () => {
 
     // observe user created state and display  message
     useEffect(() => {
-        if (isUserCreated) {
+        if (isDeviceSettingCreated) {
             handleUserCreatedSnackbarClick();
         }
-    }, [isUserCreated]);
+    }, [isDeviceSettingCreated]);
 
-    // fetch companies
-    useEffect(() => {
-        // fetch companies when the component mounts
-        const fetchCompanies = async () => {
-            if (!isLoading && companies.length === 0) {
-                // Check if it's already loading or data exists
-                await getCompanies();
-            }
-        };
-        fetchCompanies();
-    }, [isLoading, companies.length, getCompanies]);
 
-    const form = useForm<SignupForm>({
-        resolver: zodResolver(signupSchema),
+    const form = useForm<CreateDeviceSettingForm>({
+        resolver: zodResolver(createDeviceSettingSchema),
     });
 
     // destructure form
-    const { handleSubmit, formState, control } = form;
+    const { handleSubmit, formState, control, setValue } = form;
     // destructure formState
     const { errors, isSubmitting, isValid } = formState;
 
-    const onSubmit: SubmitHandler<SignupForm> = async (data: SignupForm) => {
-        await createUser(data);
+    const onSubmit: SubmitHandler<CreateDeviceSettingForm> = async (data: CreateDeviceSettingForm) => {
+        await createDeviceSetting(data);
     };
 
     const variant = isSubmitting ? "outlined" : "contained";
@@ -114,58 +118,122 @@ const CreateUserPage = () => {
                 }
             }
         >
-            <Typography variant="h5">Create Users</Typography>
+            <Typography variant="h5">Device Setting</Typography>
+
+            <Box sx={{marginTop: 2}}></Box>
 
             <Controller
-                name="name"
+                name="deviceId"
                 control={control}
                 render={({ field }) => (
                     <TextField
                         {...field}
-                        id="name"
-                        label="Name"
-                        type="name"
+                        id="deviceId"
+                        label="DeviceId"
+                        type="text"
                         variant="outlined"
                         required={true}
-                        autoComplete="name"
-                        error={!!errors.name} // Set error state
-                        helperText={errors.name ? errors.name.message : null} // Display error message
+                        autoComplete="deviceId"
+                        error={!!errors.deviceId} // Set error state
+                        helperText={errors.deviceId ? errors.deviceId.message : null} // Display error message
+                        sx={{ width: '100%', maxWidth: 400 }}
+                    />
+                )}
+            />
+           
+
+            <Controller
+                name="userId"
+                control={control}
+                render={({ field }) => (
+                    <TextField
+                        {...field}
+                        id="userId"
+                        type="text"
+                        variant="outlined"
+                        select
+                        required={true}
+                        slotProps={{
+                            select: {
+                                native: true,
+                            },
+                        }}
+                        error={!!errors.userId} // Set error state
+                        helperText={errors.userId ? errors.userId.message : null} // Display error message
+                        sx={{ width: '100%', maxWidth: 400 }}
+                        onChange={(e) => {                            
+                            const selectedUser = users.find((user) => user.id === parseInt(e.target.value, 10));
+                            if (selectedUser) {
+                                setValue('userName', selectedUser?.name);
+                            }
+                            field.onChange(e);
+
+                        }}
+                    >
+                        <option aria-label="None" value="" >Please select a user</option>
+                        {
+                            users.map((user) => (
+                                <option key={user.id} value={user.id}>{user.name}</option>
+                            ))}
+                    </TextField>
+                )}
+            />
+
+            <Controller
+                name="userName"
+                control={control}
+                render={({ field }) => (
+                    <TextField
+                        {...field}
+                        id="userName"
+                        type="text"
+                        variant="outlined"
+                        required={true}
+                        disabled
+                        error={!!errors.userName} // Set error state
+                        helperText={errors.userName ? errors.userName.message : null} // Display error message
+                        sx={{ width: '100%', maxWidth: 400 }}
+                    />
+                )}
+            />
+
+
+            <Controller
+                name="salesPersonCode"
+                control={control}
+                render={({ field }) => (
+                    <TextField
+                        {...field}
+                        id="salesPersonCode"
+                        label="Sales Person Code"
+                        type="text"
+                        variant="outlined"
+                        required={true}
+                        autoComplete="salesPersonCode"
+                        error={!!errors.salesPersonCode} // Set error state
+                        helperText={errors.salesPersonCode ? errors.salesPersonCode.message : null} // Display error message
                         sx={{ width: '100%', maxWidth: 400 }}
                     />
                 )}
             />
 
             <Controller
-                name="email"
+                name="orderNumberFormat"
                 control={control}
                 render={({ field }) => (
                     <TextField
                         {...field}
-                        id="email"
-                        label="Email"
-                        type="email"
+                        id="orderNumberFormat"
+                        label="Order Number Format"
+                        type="text"
                         variant="outlined"
                         required={true}
-                        autoComplete="email"
-                        error={!!errors.email} // Set error state
-                        helperText={errors.email ? errors.email.message : null} // Display error message
+                        autoComplete="orderNumberFormat"
+                        error={!!errors.orderNumberFormat} // Set error state
+                        helperText={errors.orderNumberFormat ? errors.orderNumberFormat.message : null} // Display error message
                         sx={{ width: '100%', maxWidth: 400 }}
                     />
                 )}
-            />
-
-            <PasswordFieldComponent
-                control={control}
-                errors={errors}
-                id="password"
-                lable="Password"
-            />
-
-            <PasswordConfirmFieldComponent
-                control={control}
-                errors={errors}
-                id="confirm_password"
-                lable="Confirm Password"
             />
 
             <Controller
@@ -208,7 +276,7 @@ const CreateUserPage = () => {
                 sx={
                     {
                         width: '100%',
-                        maxWidth: 180,
+                        maxWidth: 250,
                         marginTop: 2,
                         backgroundColor: 'primary.main',
                         '&:hover': {
@@ -217,7 +285,7 @@ const CreateUserPage = () => {
                     }
                 }
             >
-                Create User
+                Create Device Setting
             </LoadingButton>
 
             {/* Display global error */}
@@ -240,9 +308,9 @@ const CreateUserPage = () => {
 
             )}
 
-            {isUserCreated && (
+            {isDeviceSettingCreated && (
                 <BaseSnackBarComponent
-                    message={"User is added successfully."}
+                    message={"Device Setting is added successfully."}
                     autoHideDuration={6000}
                     severity="success"
                     open={openUserCreatedSnackBar}
@@ -257,4 +325,4 @@ const CreateUserPage = () => {
     );
 };
 
-export default CreateUserPage;
+export default CreateDeviceSettingPage;

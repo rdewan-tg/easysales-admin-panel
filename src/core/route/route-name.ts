@@ -25,5 +25,8 @@ export const routeName = {
     priceList: "price-list",
     activityLog: "activity-log",
     activityLogList: "activity-log-list",
+    deviceSetting: "device-setting",
+    deviceSettingList: "device-setting-list",
+    createdeviceSetting: "create-device-setting",
     others: "*",
 };

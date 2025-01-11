@@ -30,6 +30,9 @@ import ItemListScreen from "@/features/master-data/item/presentation/ui/ItemList
 import PriceScreen from "@/features/master-data/price/presentation/ui/PriceScreen";
 import PriceListScreen from "@/features/master-data/price/presentation/ui/PriceListScreen";
 import ActivityLogScreen from "@/features/activity-log/presentation/ui/ActivityLogScreen";
+import DeviceSettingPage from "@/features/device-setting/presentation/ui/DeviceSettingPage";
+import DeviceSettingListPage from "@/features/device-setting/presentation/ui/DeviceSettingListPage";
+import CreateDeviceSettingPage from "@/features/device-setting/presentation/ui/CreateDeviceSettingPage";
 
 
 export const router = createBrowserRouter([
@@ -110,6 +113,7 @@ export const router = createBrowserRouter([
                         }
                       ]
                     },
+                    // countries
                     {
                       path: routeName.countries,
                       element: <CountryPage />,
@@ -202,6 +206,25 @@ export const router = createBrowserRouter([
                     {
                       path: routeName.activityLog,
                       element: <ActivityLogScreen />,                      
+                    },
+                    // device setting
+                    {
+                      path: routeName.deviceSetting,
+                      element: <DeviceSettingPage />,
+                      errorElement: <NotFoundPage />,
+                      children: [
+                        {
+                          index: true,
+                          element: <DeviceSettingListPage />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        { 
+                          path: routeName.createdeviceSetting,                        
+                          element: <CreateDeviceSettingPage />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        
+                      ]
                     },
                     
                   ],
