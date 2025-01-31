@@ -33,6 +33,8 @@ import ActivityLogScreen from "@/features/activity-log/presentation/ui/ActivityL
 import DeviceSettingPage from "@/features/device-setting/presentation/ui/DeviceSettingPage";
 import DeviceSettingListPage from "@/features/device-setting/presentation/ui/DeviceSettingListPage";
 import CreateDeviceSettingPage from "@/features/device-setting/presentation/ui/CreateDeviceSettingPage";
+import AddressScreen from "@/features/master-data/address/presentation/ui/AddressScreen";
+import AddressListScreen from "@/features/master-data/address/presentation/ui/AddressListScreen";
 
 
 export const router = createBrowserRouter([
@@ -174,6 +176,19 @@ export const router = createBrowserRouter([
                           element: <SalesCustomerScreen />,
                           errorElement: <NotFoundPage />,
                         },
+                      ]
+                    },
+                    // address
+                    {
+                      path: routeName.address,
+                      element: <AddressScreen />,
+                      children: [
+                        {
+                          index: true,
+                          element: <AddressListScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        
                       ]
                     },
                     // item

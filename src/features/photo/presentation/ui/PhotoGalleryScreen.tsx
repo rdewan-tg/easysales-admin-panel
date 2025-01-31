@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePhotoStore } from "..";
-import { Box, Backdrop, CircularProgress, TextField } from "@mui/material";
+import { Box, Backdrop, CircularProgress, Chip, Typography } from "@mui/material";
 import LightGallery from 'lightgallery/react';
 
 // LIGHT GALLERY
@@ -11,21 +11,20 @@ import 'lightgallery/css/lg-thumbnail.css';
 
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { GetPhotoForm, getPhotoSchema } from "@/common/types/get-photo-form";
-import { SendOutlined } from "@mui/icons-material";
-import LoadingButton from "@mui/lab/LoadingButton";
+import FilterPhotoDialogForm from "./components/filter-photo-dialog-form";
+import { PhotoFilterEnum } from "@/common/enum/photo-filter-enum";
 
 
 const PhotoGalleryScreen = () => {
 
-    const findPhotos = usePhotoStore.use.findPhotos();
+    const [openFilterDialog, setOpenFilterDialog] = useState(false);
+    const [filterType, setFilterType] = useState(PhotoFilterEnum.byDeviceAndDate);
+
     const getDevices = usePhotoStore.use.getDevices();
     const getTransDates = usePhotoStore.use.getTransDates();
+    const getCustomerChains = usePhotoStore.use.getCustomerChains();
     const photos = usePhotoStore((state) => state.photos);
-    const devices = usePhotoStore((state) => state.devices);
-    const transDates = usePhotoStore((state) => state.transDates);
+
     const isLoading = usePhotoStore((state) => state.isLoading);
 
     useEffect(() => {
@@ -33,35 +32,29 @@ const PhotoGalleryScreen = () => {
         async function fetchDevices() {
             getDevices();
         }
-
         // fetch transDates when the component mounts
         async function fetchTransDates() {
             getTransDates();
         }
+        // fetch the customer chains
+        async function fetchCustomerChains() {
+            getCustomerChains();
+        }
+
         fetchDevices();
         fetchTransDates();
-    },[])
+        fetchCustomerChains();
+    }, [])
 
-    const form = useForm<GetPhotoForm>({
-        resolver: zodResolver(getPhotoSchema),
-    });
-
-    // destructure form
-    const { handleSubmit, formState, control } = form;
-    // destructure formState
-    const { errors, isSubmitting, isValid } = formState;
-
-    const onSubmit: SubmitHandler<GetPhotoForm> = async (data: GetPhotoForm) => {
-        await findPhotos(
-            data.deviceId,
-            data.transDate
-        );
-
+    const handleClickOpen = (type: PhotoFilterEnum) => {
+        setOpenFilterDialog(true);
+        setFilterType(type);
     };
 
-    const onInit = () => {
-        console.log('lightGallery has been initialized');
+    const handleClose = () => {
+        setOpenFilterDialog(false);
     };
+
 
     const renderPhotos = useCallback(() => {
         return photos.map((item) => {
@@ -70,8 +63,18 @@ const PhotoGalleryScreen = () => {
                     key={item.id}
                     className="gallery-item"
                     data-src={item.photo}
+                    data-sub-html={
+                        `<div class='lightGallery-captions'>
+                            <h4>${item.deviceId}-${item.customerName}</h4> 
+                            <p>${item.customerAddress}</p>
+                            <p>${item.transDate}</p>
+                        </div>
+                        `
+                    }
                 >
-                    <img src={item.photo} alt="Gallery" style={{ width: '100%', height: 'auto' }} />
+                    <img
+                        src={item.photo}
+                        style={{ width: '100%', height: 'auto', alignItems: 'center', justifyContent: 'center' }} />
                 </Box>
             );
         });
@@ -80,95 +83,25 @@ const PhotoGalleryScreen = () => {
 
     return (
 
-        <Box>
-
-            <Box
-                component={"form"}
-                onSubmit={handleSubmit(onSubmit)}
-                sx={{ display: 'block', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-
-                <Controller
-                    name="deviceId"
-                    control={control}
-                    render={({ field }) => (
-                        <TextField
-                            {...field}
-                            id="device-id"
-                            type="text"
-                            size="small"
-                            select
-                            defaultValue=""                            
-                            slotProps={{
-                                select: {
-                                    native: true,
-                                },
-                            }}
-                            helperText={errors.deviceId ? errors.deviceId.message : null}
-                            sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                        >
-                            <option aria-label="None" value="" >Select a DeviceId</option>
-                            {devices.map((option) => (
-                                <option key={option.deviceId} value={option.deviceId}>
-                                    {option.deviceId}
-                                </option>
-                            ))}
-                        </TextField>
-
-                    )}
-                />
-
-                <Controller
-                    name="transDate"
-                    control={control}
-                    render={({ field }) => (
-                        <TextField
-                            {...field}
-                            id="trans-data"
-                            type="text"
-                            size="small"
-                            select
-                            defaultValue=""
-                            slotProps={{
-                                select: {
-                                    native: true,
-                                },
-                            }}
-                            helperText={errors.transDate ? errors.transDate.message : null}
-                            sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                        >
-                            <option aria-label="None" value="" >Select a Date</option>
-                            {transDates.map((option) => (
-                                <option key={option.transDate} value={option.transDate}>
-                                    {option.transDate}
-                                </option>
-                            ))}
-                        </TextField>
-
-                    )}
-                />
-                <LoadingButton
-                    loading={isSubmitting}
-                    loadingPosition="center"
-                    startIcon={<SendOutlined />}
-                    variant="contained"
-                    disabled={!isValid || isSubmitting}
-                    type="submit"
-                    sx={
-                        {
-                            width: '100%',
-                            maxWidth: 180,
-                            margin: 1,
-                            backgroundColor: 'primary.main',
-                            '&:hover': {
-                                backgroundColor: 'secondary.main',
-                            }
-                        }
-                    }
-                >
-                    Get Photos
-                </LoadingButton>
-            </Box>
-
+        <Box
+            component={"main"}
+            sx={{
+                height: "100vh", // Full viewport height
+                display: "flex",
+                flexDirection: "column",
+                boxSizing: "border-box", // Ensures padding is included in height/width
+                m: 0,
+                p: 0,
+            }}>
+            {/* open a filter dialog */}
+            <FilterPhotoDialogForm
+                open={openFilterDialog}
+                close={handleClose}
+                title="Select Filters"
+                description="Choose the filter options to filter the photos"
+                type={filterType}
+            />
+            {/* show a loading indicator if the data is still loading */}
             {isLoading ? (
                 <Backdrop
                     sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -178,14 +111,50 @@ const PhotoGalleryScreen = () => {
                 </Backdrop>
             ) : null}
 
+            <Box sx={{ marginLeft: 1, marginTop: 1 }}>
+                <Typography variant="body1">Filter Option:</Typography>
+            </Box>
 
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
+                <Chip
+                    label="Device & Date"
+                    color="secondary"
+                    size="small"
+                    sx={{ margin: 1 }}
+                    onClick={() => handleClickOpen(PhotoFilterEnum.byDeviceAndDate)}
+
+                />
+                <Chip
+                    label="From & To Date"
+                    color="secondary"
+                    size="small" sx={{ margin: 1 }}
+                    onClick={() => handleClickOpen(PhotoFilterEnum.byFromAndToDate)}
+                />
+                <Chip
+                    label="Customer Chain"
+                    color="secondary"
+                    size="small" sx={{ margin: 1 }}
+                    onClick={() => handleClickOpen(PhotoFilterEnum.byCustomerChainAndDate)}
+                />
+            </Box>
 
             <LightGallery
-                onInit={onInit}
                 speed={500}
                 plugins={[lgThumbnail, lgZoom]}
-                mode="lg-zoom-in"
+                zoom={true}
+                rotate={true}
+                thumbnail={true}
                 elementClassNames="gallery-container"
+                appendSubHtmlTo={'.lg-item'}
+                slideDelay={400}
+                thumbWidth={130}
+                thumbHeight={'100px'}
+                mobileSettings={{
+                    controls: false,
+                    showCloseIcon: false,
+                    download: false,
+                    rotate: false,
+                  }}
             >
                 {renderPhotos()}
             </LightGallery>

@@ -28,5 +28,7 @@ export const routeName = {
     deviceSetting: "device-setting",
     deviceSettingList: "device-setting-list",
     createdeviceSetting: "create-device-setting",
+    address: "address",
+    addressList: "address-list",
     others: "*",
 };

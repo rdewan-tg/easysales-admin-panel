@@ -1,5 +1,5 @@
 import { axiosAdminInstance } from "@/core/data";
-import { PhotoDto, PhotoFilterDeviceDto, PhotoFilterTransDateDto } from "../..";
+import { PhotoDto, PhotoFilterCustomerChainDto, PhotoFilterDeviceDto, PhotoFilterTransDateDto } from "../..";
 
 
 export const getAllPhotos = async () => {
@@ -7,9 +7,27 @@ export const getAllPhotos = async () => {
     return response.data;
 }
 
-export const findPhotos = async (deviceId: string, transDate: string) => {
-    const response = await axiosAdminInstance.get<PhotoDto>(`/api/v1/merchandiser/photo/find`, {
-        params: { deviceId: deviceId, transDate: transDate },
+export const findPhotosByDeviceId = async (fromDate: string, toDate: string, deviceId: string) => {
+    const response = await axiosAdminInstance.get<PhotoDto>(`/api/v1/merchandiser/photo/find-by-device-and-date`, {
+        params: { fromDate: fromDate, toDate: toDate, deviceId: deviceId },
+    },);
+
+    return response.data;
+
+}
+
+export const findPhotosByFromToDate = async (fromDate: string, toDate: string) => {
+    const response = await axiosAdminInstance.get<PhotoDto>(`/api/v1/merchandiser/photo/find-by-from-and-to-date`, {
+        params: { fromDate: fromDate, toDate: toDate },
+    },);
+
+    return response.data;
+
+}
+
+export const findPhotosByCustomerChain = async (fromDate: string, toDate: string, customerChain: string) => {
+    const response = await axiosAdminInstance.get<PhotoDto>(`/api/v1/merchandiser/photo/find-by-customer-chain-and-date`, {
+        params: { fromDate: fromDate, toDate: toDate, customerChain: customerChain },
     },);
 
     return response.data;
@@ -25,6 +43,12 @@ export const getDevices = async () => {
 
 export const getTransDates= async () => {
     const response = await axiosAdminInstance.get<PhotoFilterTransDateDto>(`/api/v1/merchandiser/photo/trans-dates`);
+
+    return response.data;
+}
+
+export const getCustomerChains= async () => {
+    const response = await axiosAdminInstance.get<PhotoFilterCustomerChainDto>(`/api/v1/merchandiser/photo/customer-chains`);
 
     return response.data;
 }
