@@ -1,42 +1,41 @@
-
 export interface LoginResponse {
     status: string;
-    data:   Data;
+    data:   LoginResponseData;
 }
 
-interface Data {
+export interface LoginResponseData {
     token: Token;
     user:  User;
 }
 
-interface Token {
+export interface Token {
     access_token:  string;
     refresh_token: string;
 }
 
-interface User {
+export interface User {
+    id:            number;
+    name:          string;
+    email:         string;
+    phoneNumber:   string | null;
+    photo:         string | null;
+    role:          Role[];
+    company:       Company;
+    deviceSetting: DeviceSetting;
+}
+
+export interface Company {
     id:          number;
     name:        string;
-    email:       string;
-    phoneNumber: null;
-    photo:       null;
-    role:        Role[];
-    guild:       Guild[];
-    church:      Church;
+    timeZone:    string;
+    companyCode: string;
+    countryCode: string;
 }
 
-interface Church {
-    id:       number;
-    name:     string;
-    timeZone: string;
+export interface DeviceSetting {
 }
 
-interface Role {
-    id:   number;
-    name: string;
-}
-
-interface Guild {
+export interface Role {
     id:   number;
     name: string;
 }

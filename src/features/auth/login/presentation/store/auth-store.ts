@@ -7,12 +7,13 @@ import { createSelectors } from "../../../../../core/data/index";
 const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   isLoading: false,
+  loginData: null,
   error: null,
   login: async (data: LoginForm) => {
     try {
       set({ isLoading: true, error: null });
-      await loginApiService(data);
-      set({ isAuthenticated: true, isLoading: false, error: null });
+      const response  = await loginApiService(data);
+      set({ isAuthenticated: true, loginData: response.data, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isAuthenticated: false, isLoading: false, error: errorMessage });

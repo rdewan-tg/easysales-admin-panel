@@ -10,12 +10,15 @@ import {
   Divider,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { getIconComponent, menuConfig } from "@/core/route";
+import { getIconComponent, menuConfig, permissions } from "@/core/route";
 import { useState } from "react";
+import { useAuthStore } from "@/features/auth/login/presentation";
 
 
 // Define the Sidebar component
 const Sidebar = () => {
+  const  user = useAuthStore(state => (state.loginData?.user ));
+
   // Get the current theme using the useTheme hook
   const theme = useTheme();
 
@@ -34,6 +37,14 @@ const Sidebar = () => {
     setOpenSubmenus((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
+  // Get the list of roles assigned to the user
+  const userRoleNames = user?.role.map((role) => role.name) || [];
+  // Get allowed routes based on the user's roles (check if any of the user's roles match the permission roles)
+  const allowedRoutes = userRoleNames.flatMap((roleName) => permissions[roleName] || []);
+
+  // Remove duplicates (if a user has multiple roles with access to the same route)
+  const uniqueAllowedRoutes = Array.from(new Set(allowedRoutes));
+
   // Define a function to render a single menu item
   const renderMenuItem = (menu: typeof menuConfig[0]) => {
     // Check if the menu item has children
@@ -41,6 +52,11 @@ const Sidebar = () => {
 
     // Check if the current location matches the menu item's path
     const isActive = location.pathname.startsWith(menu.path);
+
+    // Skip menu items that the user does not have permission to access
+    if (!uniqueAllowedRoutes.includes(menu.key)) {
+      return null;
+    }
 
     // Return the rendered menu item
     return (
