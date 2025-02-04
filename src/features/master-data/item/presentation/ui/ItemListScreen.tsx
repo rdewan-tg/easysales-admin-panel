@@ -168,10 +168,10 @@ const ItemListScreen = () => {
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
-                        <ColumnDirective field='productId' headerText='ProductId' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='itemId' headerText='ItemId' minWidth='100' width='200' textAlign="Left" />
-                        <ColumnDirective field='productName' headerText='ProductName' format="C2" textAlign="Left" />
-                        <ColumnDirective field='description' headerText='Description' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
+                        <ColumnDirective field='productId' headerText='ProductId' width='200' textAlign="Left" />
+                        <ColumnDirective field='itemId' headerText='ItemId' width='150' textAlign="Left" />
+                        <ColumnDirective field='productName' headerText='ProductName' width='200' textAlign="Left" />
+                        <ColumnDirective field='description' headerText='Description' width='200'  textAlign="Left" />
                         <ColumnDirective field='category' headerText='Category' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='barcode' headerText='Barcode' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='itemGroup' headerText='ItemGroup' minWidth='100' width='150' maxWidth='200' textAlign="Left" />

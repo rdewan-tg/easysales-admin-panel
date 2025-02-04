@@ -229,7 +229,6 @@ const MerchandiserReportByDateRangeScreen = () => {
                         <ColumnDirective field='customerName' headerText='CustomerName' width='150' textAlign="Left" />
                         <ColumnDirective field='customerAddress' headerText='Address' width='150' textAlign="Left" />
                         <ColumnDirective field='transDate' headerText='Date' width='150' textAlign="Left" />
-                        <ColumnDirective field='visitCount' headerText='visitCount' width='150' textAlign="Left" />
                     </ColumnsDirective>
                     <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar]} />
                 </GridComponent>

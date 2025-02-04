@@ -168,10 +168,10 @@ const PriceListScreen = () => {
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
-                        <ColumnDirective field='productId' headerText='ProductId' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='itemId' headerText='ItemId' minWidth='100' width='200' textAlign="Left" />
-                        <ColumnDirective field='fromDate' headerText='FromDate' format="C2" textAlign="Left" />
-                        <ColumnDirective field='toDate' headerText='ToDate' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
+                        <ColumnDirective field='productId' headerText='ProductId' width='200' textAlign="Left" />
+                        <ColumnDirective field='itemId' headerText='ItemId'  width='150' textAlign="Left" />
+                        <ColumnDirective field='fromDate' headerText='FromDate' width='150' textAlign="Left" />
+                        <ColumnDirective field='toDate' headerText='ToDate'  width='150' textAlign="Left" />
                         <ColumnDirective field='unitPrice' headerText='UnitPrice' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='currencyCode' headerText='CurrencyCode' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='salesUnit' headerText='SalesUnit' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
