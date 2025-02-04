@@ -1,19 +1,22 @@
 import { create } from "zustand";
 import { AuthState } from "..";
 import { LoginForm } from "../../../../../common/types";
-import { checkAuthState, loginApiService, logout } from "../../data";
+import { checkAuthState, getMyRoles, loginApiService, logout} from "../../data";
 import { createSelectors } from "../../../../../core/data/index";
+import { Role } from "@/common/interface";
 
 const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   isLoading: false,
-  loginData: null,
   error: null,
+  roles: [] as Role[],
   login: async (data: LoginForm) => {
     try {
       set({ isLoading: true, error: null });
-      const response  = await loginApiService(data);
-      set({ isAuthenticated: true, loginData: response.data, isLoading: false, error: null });
+      // call api
+      await loginApiService(data);
+      // update the state
+      set({ isAuthenticated: true, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isAuthenticated: false, isLoading: false, error: errorMessage });
@@ -22,7 +25,9 @@ const useAuthStore = create<AuthState>((set) => ({
   logout: async () => {
     try {
       set({ isLoading: true, error: null });
+      // call api
       await logout();
+      // update the state
       set({ isAuthenticated: false, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;
@@ -43,6 +48,18 @@ const useAuthStore = create<AuthState>((set) => ({
       set({ isAuthenticated: false, isLoading: false, error: errorMessage });
     }
   },
+  getMyRoles: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await getMyRoles();
+      set({        
+        roles: response.data,
+      });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ error: errorMessage });
+    }
+  }
 }));
 
 export default createSelectors(useAuthStore);

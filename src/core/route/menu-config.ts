@@ -14,7 +14,7 @@ import {
     DevicesOutlined,
     ContactMailOutlined
 } from "@mui/icons-material";
-import { useTheme } from "@mui/material";
+import { Theme } from "@mui/material";
 import React from "react";
 
 // Define an icon mapping function
@@ -62,7 +62,12 @@ export const menuConfig: MenuItemConfig[] = [
         iconKey: "photo",
         children: [
             { key: "gallery", label: "Gallery", path: "/dashboard/photo/photo-gallery", iconKey: "gallery" },
-            { key: "data-grid", label: "Data Grid", path: "/dashboard/photo", iconKey: "grid" },
+            { 
+                key: "merchandiser-report-by-date-range", 
+                label: "Report" ,
+                path: "/dashboard/photo/merchandiser-report-by-date-range", 
+                iconKey: "grid" 
+            },
         ],
     },
     {
@@ -89,8 +94,7 @@ export const menuConfig: MenuItemConfig[] = [
     It uses the iconMapping object to resolve the icon component and applies theme-based styling (active or inactive color) to the icon. 
     If the iconKey is not found in iconMapping, it returns null.
 */
-export const getIconComponent = (iconKey: keyof typeof iconMapping, isActive: boolean) => {
-    const theme = useTheme(); // Get theme colors
+export const getIconComponent = (iconKey: keyof typeof iconMapping, isActive: boolean, theme: Theme) => {
 
     const IconComponent = iconMapping[iconKey];
     return IconComponent ? React.createElement(IconComponent, {

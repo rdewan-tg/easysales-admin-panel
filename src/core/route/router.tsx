@@ -35,6 +35,7 @@ import DeviceSettingListPage from "@/features/device-setting/presentation/ui/Dev
 import CreateDeviceSettingPage from "@/features/device-setting/presentation/ui/CreateDeviceSettingPage";
 import AddressScreen from "@/features/master-data/address/presentation/ui/AddressScreen";
 import AddressListScreen from "@/features/master-data/address/presentation/ui/AddressListScreen";
+import MerchandiserReportByDateRangeScreen from "@/features/report/merchandiser/presentation/ui/MerchandiserReportByDateRangeScreen";
 
 
 export const router = createBrowserRouter([
@@ -132,6 +133,7 @@ export const router = createBrowserRouter([
                         }
                       ]
                     },
+                    // me
                     {
                       path: routeName.me,
                       element: <MePage />,
@@ -144,6 +146,7 @@ export const router = createBrowserRouter([
                         
                       ]
                     },
+                    // photo
                     {
                       path: routeName.photo,
                       element: <PhotoScreen />,
@@ -156,6 +159,11 @@ export const router = createBrowserRouter([
                         {
                           path: routeName.photoGallery,
                           element: <PhotoGalleryScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        {
+                          path: routeName.merchandiserReportByDaterange,
+                          element: <MerchandiserReportByDateRangeScreen />,
                           errorElement: <NotFoundPage />,
                         },
                         

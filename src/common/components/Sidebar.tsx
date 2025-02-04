@@ -6,21 +6,17 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
-  useTheme,
   Divider,
+  Theme,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { getIconComponent, menuConfig, permissions } from "@/core/route";
 import { useState } from "react";
-import { useAuthStore } from "@/features/auth/login/presentation";
+import { Role } from "../interface";
 
 
 // Define the Sidebar component
-const Sidebar = () => {
-  const  user = useAuthStore(state => (state.loginData?.user ));
-
-  // Get the current theme using the useTheme hook
-  const theme = useTheme();
+const Sidebar = ({ roles, theme }: { roles: Role[] | null, theme: Theme}) => { 
 
   // Get the current location using the useLocation hook
   const location = useLocation();
@@ -38,7 +34,7 @@ const Sidebar = () => {
   };
 
   // Get the list of roles assigned to the user
-  const userRoleNames = user?.role.map((role) => role.name) || [];
+  const userRoleNames = roles?.map((role) => role.name) || [];
   // Get allowed routes based on the user's roles (check if any of the user's roles match the permission roles)
   const allowedRoutes = userRoleNames.flatMap((roleName) => permissions[roleName] || []);
 
@@ -74,7 +70,7 @@ const Sidebar = () => {
           >
             {/* Render a ListItemIcon component with the menu item's icon */}
             <ListItemIcon>
-              {getIconComponent(menu.iconKey, isActive)}
+              {getIconComponent(menu.iconKey, isActive, theme)}
             </ListItemIcon>
             {/* Render a ListItemText component with the menu item's label */}
             <ListItemText
@@ -114,7 +110,7 @@ const Sidebar = () => {
                   >
                     {/* Render a ListItemIcon component with the submenu item's icon */}
                     <ListItemIcon>
-                      {getIconComponent(child.iconKey, isChildActive)}
+                      {getIconComponent(child.iconKey, isChildActive, theme)}
                     </ListItemIcon>
                     {/* Render a ListItemText component with the submenu item's label */}
                     <ListItemText

@@ -1,6 +1,6 @@
 
+import { RoleDto } from "@/common/dtos";
 import { axiosAdminInstance } from "../../../../../../core/data";
-import { RoleDto } from "../dto/role.dto";
 import { UpdateUserRoleDto } from "../dto/update-user-role.dto";
 
 

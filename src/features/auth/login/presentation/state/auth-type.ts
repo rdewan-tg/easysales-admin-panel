@@ -1,14 +1,16 @@
+
+import { Role } from "@/common/interface";
 import { LoginForm } from "../../../../../common/types";
-import { LoginResponseData } from "../../data";
 
 
 export type AuthState = {
     isAuthenticated: boolean;
     isLoading: boolean;
     error: string | null;
-    loginData: LoginResponseData | null;
+    roles: Role[] | null;
     login: (data: LoginForm) => Promise<void>;
     logout: () => Promise<void>;
     checkAuthState: () => Promise<void>;
+    getMyRoles: () => Promise<void>;
 };
 

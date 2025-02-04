@@ -1,5 +1,5 @@
 import { axiosAdminInstance } from "@/core/data";
-import { PhotoDto, PhotoFilterCustomerChainDto, PhotoFilterDeviceDto, PhotoFilterTransDateDto } from "../..";
+import { PhotoDto, PhotoFilterCustomerChainDto, PhotoFilterDeviceDto, PhotoFilterTransDateDto } from "../../..";
 
 
 export const getAllPhotos = async () => {

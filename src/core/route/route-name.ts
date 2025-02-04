@@ -30,5 +30,7 @@ export const routeName = {
     createdeviceSetting: "create-device-setting",
     address: "address",
     addressList: "address-list",
+    merchandiserReport: "merchandiser-report",
+    merchandiserReportByDaterange: "merchandiser-report-by-date-range",
     others: "*",
 };

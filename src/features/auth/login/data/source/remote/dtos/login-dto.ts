@@ -1,3 +1,5 @@
+import { Role } from "@/common/interface";
+
 export interface LoginResponse {
     status: string;
     data:   LoginResponseData;
@@ -35,7 +37,3 @@ export interface Company {
 export interface DeviceSetting {
 }
 
-export interface Role {
-    id:   number;
-    name: string;
-}

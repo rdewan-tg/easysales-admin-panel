@@ -1,4 +1,5 @@
-import { Role } from "@/features/role/data";
+import { Role } from "@/common/interface";
+
 
 export const permissions: Record<Role["name"], string[]> = {
     admin: [
@@ -10,6 +11,7 @@ export const permissions: Record<Role["name"], string[]> = {
         "activity-log",
         'device-setting',
         'photo',
+        'merchandiser-report-by-date-range',
         "master-data",
         "address",
         "item",
@@ -24,11 +26,12 @@ export const permissions: Record<Role["name"], string[]> = {
         "activity-log",
         'device-setting',
         'photo',
+        'merchandiser-report-by-date-range',
         "master-data",
         "address",
         "item",
         "price",
     ],
-    manager: ["dashboard", 'photo', "master-data", "address", "item", "price"],
+    manager: ["dashboard", "photo","merchandiser-report-by-date-range", "master-data", "address", "item", "price"],
     supervisor: ["dashboard", 'photo', "master-data", "address", "item", "price"],
 };

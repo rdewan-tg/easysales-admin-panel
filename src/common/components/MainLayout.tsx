@@ -29,6 +29,7 @@ const drawerWidth = 240;
 export const MainLayout = (): JSX.Element => {
   const navigate = useNavigate(); // For navigation
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const roles = useAuthStore((state) => state.roles);
   const logout = useAuthStore.use.logout();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // State to manage theme mode
@@ -182,7 +183,7 @@ export const MainLayout = (): JSX.Element => {
               <Toolbar />
               <Box sx={{ overflow: "auto" }}>
                 <List>
-                  <Sidebar />
+                  <Sidebar roles={roles} theme={theme}/>
 
                 </List>
                 <Divider />
