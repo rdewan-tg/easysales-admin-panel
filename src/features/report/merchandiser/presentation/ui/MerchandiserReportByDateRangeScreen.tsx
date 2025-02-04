@@ -13,6 +13,7 @@ import {
     Sort,
     Group,
     GroupSettingsModel,
+    SortDirection ,
 } from '@syncfusion/ej2-react-grids';
 import { useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -28,6 +29,11 @@ const MerchandiserReportByDateRangeScreen = () => {
     const groupOptions: GroupSettingsModel = {
         columns: ['salesPersonCode']
     };
+    const sortingOptions = {
+        columns: [
+          { field: 'salesPersonCode', direction: 'Ascending' as SortDirection },
+        ],
+      };
 
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
 
@@ -211,8 +217,11 @@ const MerchandiserReportByDateRangeScreen = () => {
                     autoFit={true}
                     allowPaging={true}
                     pageSettings={pageSettings}
+                    allowSorting={true} 
+                    sortSettings={sortingOptions}
                     allowGrouping={true}
-                    groupSettings={groupOptions}
+                    groupSettings={groupOptions}                   
+
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='salesPersonCode' headerText='SalesPerson' width='150' textAlign="Left" />
