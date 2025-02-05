@@ -1,5 +1,6 @@
 import { Alert, Backdrop, Box, CircularProgress, Slide, Snackbar, SnackbarCloseReason, TextField } from "@mui/material";
 import { useMerchandiserReportStore } from "..";
+import { ClickEventArgs } from '@syncfusion/ej2-navigations';
 import {
     ColumnDirective,
     ColumnsDirective,
@@ -13,9 +14,11 @@ import {
     Sort,
     Group,
     GroupSettingsModel,
-    SortDirection ,
+    SortDirection,
+    ExcelExport,
+    ToolbarItems,
 } from '@syncfusion/ej2-react-grids';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { SendOutlined } from "@mui/icons-material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -25,19 +28,33 @@ import { parse } from "date-fns";
 
 
 const MerchandiserReportByDateRangeScreen = () => {
+    const gridRef = useRef<GridComponent | null>(null);
     const pageSettings: PageSettingsModel = { pageSize: 50 };
+    const toolbar: ToolbarItems[] = ['ExcelExport'];
     const groupOptions: GroupSettingsModel = {
         columns: ['salesPersonCode']
     };
     const sortingOptions = {
         columns: [
-          { field: 'salesPersonCode', direction: 'Ascending' as SortDirection },
+            { field: 'salesPersonCode', direction: 'Ascending' as SortDirection },
         ],
-      };
+    };
+
+    const toolbarClick = (args: ClickEventArgs) => {
+        if (gridRef.current && args.item.id === 'Grid_excelexport') {
+            gridRef.current.showSpinner();
+            gridRef.current.excelExport();
+        }
+    }
+
+    const excelExportComplete = (): void => {
+        if (gridRef.current) {
+            gridRef.current.hideSpinner();
+        }
+    }
+
 
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-
-
     const isLoading = useMerchandiserReportStore((state) => state.isLoading);
     const errorMessage = useMerchandiserReportStore((state) => state.error);
     const transDates = useMerchandiserReportStore((state) => state.transDates);
@@ -212,16 +229,23 @@ const MerchandiserReportByDateRangeScreen = () => {
                 }}>
 
                 <GridComponent
+                    id='Grid'
                     dataSource={data}
                     allowResizing={true}
                     autoFit={true}
                     allowPaging={true}
                     pageSettings={pageSettings}
-                    allowSorting={true} 
+                    allowSorting={true}
                     sortSettings={sortingOptions}
                     allowGrouping={true}
-                    groupSettings={groupOptions}                   
-
+                    groupSettings={groupOptions}
+                    toolbar={toolbar}
+                    allowExcelExport={true}
+                    toolbarClick={toolbarClick}
+                    excelExportComplete={excelExportComplete}
+                    ref={g => {
+                        gridRef.current = g;
+                    }}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='salesPersonCode' headerText='SalesPerson' width='150' textAlign="Left" />
@@ -230,7 +254,7 @@ const MerchandiserReportByDateRangeScreen = () => {
                         <ColumnDirective field='customerAddress' headerText='Address' width='150' textAlign="Left" />
                         <ColumnDirective field='transDate' headerText='Date' width='150' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar]} />
+                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport]} />
                 </GridComponent>
             </Box>
 

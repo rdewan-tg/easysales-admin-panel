@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box"
 import { useCustomerAddressStore } from ".."
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -22,14 +22,20 @@ import {
     Inject,
     Page,
     PageSettingsModel,
-    Sort,
+    Sort,    
+    ToolbarItems,
+    ExcelExport,
 } from '@syncfusion/ej2-react-grids';
 import { useCompanyStore } from "@/features/company/presentation";
+import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 
 
 const AddressListScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const pageSettings: PageSettingsModel = { pageSize: 15 };
+    const gridRef = useRef<GridComponent | null>(null);
+    const toolbar: ToolbarItems[] = ['ExcelExport'];
+
 
     const isLoading = useCustomerAddressStore(state => state.isLoading);
     const addresses = useCustomerAddressStore(state => state.addresses);
@@ -38,6 +44,19 @@ const AddressListScreen = () => {
 
     const companies = useCompanyStore((state) => state.companies);
     const getCompanies = useCompanyStore.use.getCompanies();
+
+    const toolbarClick = (args: ClickEventArgs) => {        
+        if (gridRef.current && args.item.id === 'Grid_excelexport') {
+            gridRef.current.showSpinner();
+            gridRef.current.excelExport();
+        }
+    }
+
+    const excelExportComplete = (): void => {
+        if (gridRef.current) {
+            gridRef.current.hideSpinner();
+        }
+    }
 
     const form = useForm<GetCustomerForm>({
         resolver: zodResolver(getCustomerSchema),
@@ -167,11 +186,19 @@ const AddressListScreen = () => {
                 }}>
 
                 <GridComponent
+                    id='Grid'
                     dataSource={addresses}
                     allowResizing={true}
                     autoFit={true}
                     allowPaging={true}
                     pageSettings={pageSettings}
+                    toolbar={toolbar}
+                    allowExcelExport={true}
+                    toolbarClick={toolbarClick}
+                    excelExportComplete={excelExportComplete}
+                    ref={g => {
+                        gridRef.current = g;
+                    }}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
@@ -189,7 +216,7 @@ const AddressListScreen = () => {
                         <ColumnDirective field='createAt' headerText='CreateAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='UpdatedAt' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar]} />
+                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport]} />
                 </GridComponent>
             </Box>          
 

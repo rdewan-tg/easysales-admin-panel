@@ -12,25 +12,43 @@ import {
     Page,
     PageSettingsModel,
     Sort,
+    ToolbarItems,
+    ExcelExport,
 } from '@syncfusion/ej2-react-grids';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GetCustomerForm, getCustomerSchema } from "@/common/types";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { SendOutlined } from "@mui/icons-material";
 import { useCompanyStore } from "@/features/company/presentation";
+import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 //import { DevTool } from "@hookform/devtools";
 
 
 const PriceListScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const pageSettings: PageSettingsModel = { pageSize: 15 };
+    const gridRef = useRef<GridComponent | null>(null);
+    const toolbar: ToolbarItems[] = ['ExcelExport'];
 
     const isLoading = usePriceStore(state => state.isLoading);
     const errorMessage = usePriceStore(state => state.error);
     const prices = usePriceStore(state => state.prices);
     const getPrices = usePriceStore.use.getprices();
+
+    const toolbarClick = (args: ClickEventArgs) => {        
+        if (gridRef.current && args.item.id === 'Grid_excelexport') {
+            gridRef.current.showSpinner();
+            gridRef.current.excelExport();
+        }
+    }
+
+    const excelExportComplete = (): void => {
+        if (gridRef.current) {
+            gridRef.current.hideSpinner();
+        }
+    }
 
     const companies = useCompanyStore((state) => state.companies);
     const getCompanies = useCompanyStore.use.getCompanies();
@@ -160,11 +178,19 @@ const PriceListScreen = () => {
                 }}>
 
                 <GridComponent
-                    dataSource={prices}
-                    allowResizing={true}
-                    autoFit={true}
-                    allowPaging={true}
-                    pageSettings={pageSettings}
+                   id='Grid'
+                   dataSource={prices}
+                   allowResizing={true}
+                   autoFit={true}
+                   allowPaging={true}
+                   pageSettings={pageSettings}
+                   toolbar={toolbar}
+                   allowExcelExport={true}
+                   toolbarClick={toolbarClick}
+                   excelExportComplete={excelExportComplete}
+                   ref={g => {
+                       gridRef.current = g;
+                   }}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
@@ -182,7 +208,7 @@ const PriceListScreen = () => {
                         <ColumnDirective field='createAt' headerText='createAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='updatedAt' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar]} />
+                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport]} />
                 </GridComponent>
             </Box>
 
