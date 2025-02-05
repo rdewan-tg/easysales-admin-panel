@@ -17,6 +17,7 @@ import {
     SortDirection,
     ExcelExport,
     ToolbarItems,
+    Search,
 } from '@syncfusion/ej2-react-grids';
 import { useEffect, useRef, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -30,7 +31,7 @@ import { parse } from "date-fns";
 const MerchandiserReportByDateRangeScreen = () => {
     const gridRef = useRef<GridComponent | null>(null);
     const pageSettings: PageSettingsModel = { pageSize: 50 };
-    const toolbar: ToolbarItems[] = ['ExcelExport'];
+    const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
     const groupOptions: GroupSettingsModel = {
         columns: ['salesPersonCode']
     };
@@ -39,6 +40,12 @@ const MerchandiserReportByDateRangeScreen = () => {
             { field: 'salesPersonCode', direction: 'Ascending' as SortDirection },
         ],
     };
+
+    const created = () => {
+        (document.getElementById((gridRef.current as GridComponent).element.id + "_searchbar") as HTMLElement).addEventListener('keyup', (event) => {
+          (gridRef.current as GridComponent).search((event.target as HTMLInputElement).value)
+        });
+    }
 
     const toolbarClick = (args: ClickEventArgs) => {
         if (gridRef.current && args.item.id === 'Grid_excelexport') {
@@ -246,6 +253,7 @@ const MerchandiserReportByDateRangeScreen = () => {
                     ref={g => {
                         gridRef.current = g;
                     }}
+                    created={created}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='salesPersonCode' headerText='SalesPerson' width='150' textAlign="Left" />
@@ -254,7 +262,7 @@ const MerchandiserReportByDateRangeScreen = () => {
                         <ColumnDirective field='customerAddress' headerText='Address' width='150' textAlign="Left" />
                         <ColumnDirective field='transDate' headerText='Date' width='150' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport]} />
+                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport, Search]} />
                 </GridComponent>
             </Box>
 

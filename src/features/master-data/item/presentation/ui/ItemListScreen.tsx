@@ -14,6 +14,7 @@ import {
     Sort,    
     ToolbarItems,
     ExcelExport,
+    Search,
 } from '@syncfusion/ej2-react-grids';
 import { useEffect, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -30,7 +31,7 @@ const ItemListScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
-    const toolbar: ToolbarItems[] = ['ExcelExport'];
+    const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
 
     const isLoading = useItemStore(state => state.isLoading);
     const errorMessage = useItemStore(state => state.error);
@@ -39,6 +40,12 @@ const ItemListScreen = () => {
 
     const companies = useCompanyStore((state) => state.companies);
     const getCompanies = useCompanyStore.use.getCompanies();
+
+    const created = () => {
+        (document.getElementById((gridRef.current as GridComponent).element.id + "_searchbar") as HTMLElement).addEventListener('keyup', (event) => {
+          (gridRef.current as GridComponent).search((event.target as HTMLInputElement).value)
+        });
+    }
 
     const toolbarClick = (args: ClickEventArgs) => {        
         if (gridRef.current && args.item.id === 'Grid_excelexport') {
@@ -191,6 +198,7 @@ const ItemListScreen = () => {
                     ref={g => {
                         gridRef.current = g;
                     }}
+                    created={created}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
@@ -214,7 +222,7 @@ const ItemListScreen = () => {
                         <ColumnDirective field='createAt' headerText='createAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='updatedAt' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport]} />
+                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport, Search]} />
                 </GridComponent>
             </Box>
 

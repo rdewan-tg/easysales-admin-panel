@@ -13,7 +13,8 @@ import {
     PageSettingsModel,
     Sort,
     ToolbarItems,
-    ExcelExport
+    ExcelExport,
+    Search,
 } from '@syncfusion/ej2-react-grids';
 import { useEffect, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -30,8 +31,8 @@ const SalesCustomerScreen = () => {
     const gridRef = useRef<GridComponent | null>(null);
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const pageSettings: PageSettingsModel = { pageSize: 15 };
-    const toolbar: ToolbarItems[] = ['ExcelExport'];
-
+    const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
+    
     const isLoading = useCustomerStore(state => state.isLoading);
     const errorMessage = useCustomerStore(state => state.error);
     const customers = useCustomerStore(state => state.customers);
@@ -39,6 +40,12 @@ const SalesCustomerScreen = () => {
 
     const companies = useCompanyStore((state) => state.companies);
     const getCompanies = useCompanyStore.use.getCompanies();
+
+    const created = () => {
+        (document.getElementById((gridRef.current as GridComponent).element.id + "_searchbar") as HTMLElement).addEventListener('keyup', (event) => {
+          (gridRef.current as GridComponent).search((event.target as HTMLInputElement).value)
+        });
+    }
 
     const toolbarClick = (args: ClickEventArgs) => {        
         if (gridRef.current && args.item.id === 'Grid_excelexport') {
@@ -191,6 +198,7 @@ const SalesCustomerScreen = () => {
                     ref={g => {
                         gridRef.current = g;
                     }}
+                    created={created}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
@@ -214,7 +222,7 @@ const SalesCustomerScreen = () => {
                         <ColumnDirective field='createAt' headerText='createAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='updatedAt' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport]} />
+                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport, Search]} />
                 </GridComponent>
             </Box>
 

@@ -110,6 +110,14 @@
     /* Ensure navigation buttons are visible */
 }
 
+/* Syncfusion Grid */
+.e-grid .e-toolbar-items {
+    background-color: #deecf9;
+}
+.e-grid .e-toolbar .e-btn {
+    background-color: #deecf9;
+}
+
 /* For medium devices (e.g., tablets) */
 @media (min-width: 600px) {
     .gallery-container {
