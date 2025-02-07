@@ -83,6 +83,13 @@ const CreateUserPage = () => {
 
     const form = useForm<SignupForm>({
         resolver: zodResolver(signupSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            confirm_password: "",
+            companyId: undefined
+        }
     });
 
     // destructure form
@@ -177,7 +184,6 @@ const CreateUserPage = () => {
                         id="companyId"
                         type="text"
                         select
-                        defaultValue=""
                         slotProps={{
                             select: {
                                 native: true,

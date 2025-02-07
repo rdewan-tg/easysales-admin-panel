@@ -3,7 +3,16 @@ import { createSelectors } from "../../../../core/data";
 import { DeviceSettingState } from "../state/device-setting-state";
 
 import { CreateDeviceSettingForm} from "@/common/types";
-import { createDeviceSetting, deleteDeviceSetting, findAll, findByDeviceId, findById, getCompanies, getUsers, updateDeviceSetting } from "../../data";
+import { 
+  createDeviceSetting, 
+  deleteDeviceSetting, 
+  getDeviceSettings, 
+  findByDeviceId, 
+  getDeviceSettingById, 
+  getCompanies, 
+  getUsers, 
+  updateDeviceSetting,
+ } from "@/features/device-setting/data";
 import { UpdateDeviceSettingForm } from "@/common/types/update-device-setting-form";
 
 
@@ -40,7 +49,7 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
   findAll: async () => {
     try {
       set({ isLoading: true, error: null });
-      const  response = await findAll();
+      const  response = await getDeviceSettings();
       set({ devices: response.data, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;
@@ -50,7 +59,7 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
   findById: async (id: number) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await findById(id);
+      const response = await getDeviceSettingById(id);
       set({ device: response.data, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;

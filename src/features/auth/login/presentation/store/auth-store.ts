@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { AuthState } from "..";
 import { LoginForm } from "../../../../../common/types";
-import { checkAuthState, getMyRoles, loginApiService, logout} from "../../data";
+import { checkAuthState, getMyRoles, login, logout} from "@/features/auth/login/data";
 import { createSelectors } from "../../../../../core/data/index";
 import { Role } from "@/common/interface";
 
@@ -14,7 +14,7 @@ const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ isLoading: true, error: null });
       // call api
-      await loginApiService(data);
+      await login(data);
       // update the state
       set({ isAuthenticated: true, isLoading: false, error: null });
     } catch (error) {

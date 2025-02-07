@@ -162,8 +162,8 @@ const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
             />
 
             <Controller
-                name="country"
                 control={control}
+                name="country"
                 render={({ field }) => (
                     <TextField
                         {...field}
@@ -202,8 +202,8 @@ const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
             />
 
             <Controller
-                name="countryCode"
                 control={control}
+                name="countryCode"
                 render={({ field }) => (
                     <TextField
                         {...field}
@@ -220,8 +220,8 @@ const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
             />
 
             <Controller
-                name="companyCode"
                 control={control}
+                name="companyCode"
                 render={({ field }) => (
                     <TextField
                         {...field}
@@ -237,8 +237,8 @@ const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
             />
 
             <Controller
-                name="companySetting.timeZone"
                 control={control}
+                name="companySetting.timeZone"
                 render={({ field }) => (
                     <TextField
                         {...field}
@@ -254,8 +254,8 @@ const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
             />
 
             <Controller
-                name="companySetting.currencyCode"
                 control={control}
+                name="companySetting.currencyCode"
                 render={({ field }) => (
                     <TextField
                         {...field}

@@ -87,6 +87,14 @@ const CreateDeviceSettingPage = () => {
 
     const form = useForm<CreateDeviceSettingForm>({
         resolver: zodResolver(createDeviceSettingSchema),
+        defaultValues: {
+            deviceId: "",
+            userId: undefined,
+            userName: "",
+            salesPersonCode: "",
+            orderNumberFormat: "",
+            companyId: undefined,
+        }
     });
 
     // destructure form
@@ -99,230 +107,256 @@ const CreateDeviceSettingPage = () => {
     };
 
     const variant = isSubmitting ? "outlined" : "contained";
-
-    return (
-        <Box
-            component={"form"}
-            onSubmit={handleSubmit(onSubmit)}
-            sx={
-                {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'start',
-                    justifyContent: 'start',
-                    height: '100vh',
-                    width: '100vw',
-                    gap: 1.4,
-                    p: 2,
-                    backgroundColor: (theme) => theme.palette.background.default,
-                }
-            }
-        >
-            <Typography variant="h5">Device Setting</Typography>
-
-            <Box sx={{marginTop: 2}}></Box>
-
-            <Controller
-                name="deviceId"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="deviceId"
-                        label="DeviceId"
-                        type="text"
-                        variant="outlined"
-                        required={true}
-                        autoComplete="deviceId"
-                        error={!!errors.deviceId} // Set error state
-                        helperText={errors.deviceId ? errors.deviceId.message : null} // Display error message
-                        sx={{ width: '100%', maxWidth: 400 }}
-                    />
-                )}
-            />
-           
-
-            <Controller
-                name="userId"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="userId"
-                        type="text"
-                        variant="outlined"
-                        select
-                        required={true}
-                        slotProps={{
-                            select: {
-                                native: true,
-                            },
-                        }}
-                        error={!!errors.userId} // Set error state
-                        helperText={errors.userId ? errors.userId.message : null} // Display error message
-                        sx={{ width: '100%', maxWidth: 400 }}
-                        onChange={(e) => {                            
-                            const selectedUser = users.find((user) => user.id === parseInt(e.target.value, 10));
-                            if (selectedUser) {
-                                setValue('userName', selectedUser?.name);
-                            }
-                            field.onChange(e);
-
-                        }}
-                    >
-                        <option aria-label="None" value="" >Please select a user</option>
-                        {
-                            users.map((user) => (
-                                <option key={user.id} value={user.id}>{user.name}</option>
-                            ))}
-                    </TextField>
-                )}
-            />
-
-            <Controller
-                name="userName"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="userName"
-                        type="text"
-                        variant="outlined"
-                        required={true}
-                        disabled
-                        error={!!errors.userName} // Set error state
-                        helperText={errors.userName ? errors.userName.message : null} // Display error message
-                        sx={{ width: '100%', maxWidth: 400 }}
-                    />
-                )}
-            />
-
-
-            <Controller
-                name="salesPersonCode"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="salesPersonCode"
-                        label="Sales Person Code"
-                        type="text"
-                        variant="outlined"
-                        required={true}
-                        autoComplete="salesPersonCode"
-                        error={!!errors.salesPersonCode} // Set error state
-                        helperText={errors.salesPersonCode ? errors.salesPersonCode.message : null} // Display error message
-                        sx={{ width: '100%', maxWidth: 400 }}
-                    />
-                )}
-            />
-
-            <Controller
-                name="orderNumberFormat"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="orderNumberFormat"
-                        label="Order Number Format"
-                        type="text"
-                        variant="outlined"
-                        required={true}
-                        autoComplete="orderNumberFormat"
-                        error={!!errors.orderNumberFormat} // Set error state
-                        helperText={errors.orderNumberFormat ? errors.orderNumberFormat.message : null} // Display error message
-                        sx={{ width: '100%', maxWidth: 400 }}
-                    />
-                )}
-            />
-
-            <Controller
-                name="companyId"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="companyId"
-                        type="text"
-                        select
-                        defaultValue=""
-                        slotProps={{
-                            select: {
-                                native: true,
-                            },
-                        }}
-                        helperText={errors.companyId ? errors.companyId.message : null}
-                        sx={{ width: '100%', maxWidth: 400 }}
-                    >
-                        <option aria-label="None" value="" >Please select a company</option>
-                        {companies.map((option) => (
-                            <option key={option.id} value={option.id}>
-                                {option.name}
-                            </option>
-                        ))}
-                    </TextField>
-
-                )}
-            />
-
-
-            <LoadingButton
-                loading={isSubmitting}
-                loadingPosition="center"
-                startIcon={<PersonAdd />}
-                variant={variant}
-                disabled={!isValid || isSubmitting}
-                type="submit"
+    
+    if (users.length === 0 || companies.length === 0) {
+        return (
+            <Box
+                component={"form"}
                 sx={
                     {
-                        width: '100%',
-                        maxWidth: 250,
-                        marginTop: 2,
-                        backgroundColor: 'primary.main',
-                        '&:hover': {
-                            backgroundColor: 'secondary.main',
-                        }
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '100vh',
+                        width: '100vw',
+                        gap: 1.4,
+                        p: 2,
+                        backgroundColor: (theme) => theme.palette.background.default,
                     }
                 }
             >
-                Create Device Setting
-            </LoadingButton>
+                <Typography variant="h5">Loading...</Typography>
+            </Box>
+        );
+    }
+    else {
 
-            {/* Display global error */}
-            {errorMessage && (
-                <Snackbar
-                    open={open}
-                    autoHideDuration={6000}
-                    TransitionComponent={Slide}
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                    onClose={handleSnackbarClose}>
-                    <Alert
-                        onClose={handleSnackbarClose}
-                        severity="error"
-                        variant="filled"
-                        sx={{ width: '100%' }}
-                    >
-                        {errorMessage}
-                    </Alert>
-                </Snackbar>
-
-            )}
-
-            {isDeviceSettingCreated && (
-                <BaseSnackBarComponent
-                    message={"Device Setting is added successfully."}
-                    autoHideDuration={6000}
-                    severity="success"
-                    open={openUserCreatedSnackBar}
-                    onClose={handleUserCreatedSnackbarClose}
+        return (
+            <Box
+                component={"form"}
+                onSubmit={handleSubmit(onSubmit)}
+                sx={
+                    {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'start',
+                        justifyContent: 'start',
+                        height: '100vh',
+                        width: '100vw',
+                        gap: 1.4,
+                        p: 2,
+                        backgroundColor: (theme) => theme.palette.background.default,
+                    }
+                }
+            >
+                <Typography variant="h5">Device Setting</Typography>
+    
+                <Box sx={{marginTop: 2}}></Box>
+    
+                
+                <Controller
+                    name="deviceId"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            id="deviceId"
+                            label="DeviceId"
+                            type="text"
+                            variant="outlined"
+                            required={true}
+                            autoComplete="deviceId"
+                            error={!!errors.deviceId} // Set error state
+                            helperText={errors.deviceId ? errors.deviceId.message : null} // Display error message
+                            sx={{ width: '100%', maxWidth: 400 }}
+                        />
+                    )}
                 />
+               
+    
+                <Controller
+                    name="userId"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            id="userId"
+                            type="text"
+                            variant="outlined"
+                            select
+                            required={true}
+                            slotProps={{
+                                select: {
+                                    native: true,
+                                },
+                            }}
+                            error={!!errors.userId} // Set error state
+                            helperText={errors.userId ? errors.userId.message : null} // Display error message
+                            sx={{ width: '100%', maxWidth: 400 }}
+                            onChange={(e) => {                            
+                                const selectedUser = users.find((user) => user.id === parseInt(e.target.value, 10));
+                                if (selectedUser) {
+                                    setValue('userName', selectedUser?.name);
+                                }
+                                field.onChange(e);
+    
+                            }}
+                        >
+                            <option aria-label="None" value="" >Please select a user</option>
+                            {
+                                users.map((user) => (
+                                    <option key={user.id} value={user.id}>{user.name}</option>
+                                ))}
+                        </TextField>
+                    )}
+                />
+    
+                <Controller
+                    name="userName"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            id="userName"
+                            type="text"
+                            variant="outlined"
+                            required={true}
+                            disabled
+                            error={!!errors.userName} // Set error state
+                            helperText={errors.userName ? errors.userName.message : null} // Display error message
+                            sx={{ width: '100%', maxWidth: 400 }}
+                        />
+                    )}
+                />
+    
+    
+                <Controller
+                    name="salesPersonCode"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            id="salesPersonCode"
+                            label="Sales Person Code"
+                            type="text"
+                            variant="outlined"
+                            required={true}
+                            autoComplete="salesPersonCode"
+                            error={!!errors.salesPersonCode} // Set error state
+                            helperText={errors.salesPersonCode ? errors.salesPersonCode.message : null} // Display error message
+                            sx={{ width: '100%', maxWidth: 400 }}
+                        />
+                    )}
+                />
+    
+                <Controller
+                    name="orderNumberFormat"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            id="orderNumberFormat"
+                            label="Order Number Format"
+                            type="text"
+                            variant="outlined"
+                            required={true}
+                            autoComplete="orderNumberFormat"
+                            error={!!errors.orderNumberFormat} // Set error state
+                            helperText={errors.orderNumberFormat ? errors.orderNumberFormat.message : null} // Display error message
+                            sx={{ width: '100%', maxWidth: 400 }}
+                        />
+                    )}
+                />
+    
+                <Controller
+                    name="companyId"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            id="companyId"
+                            type="text"
+                            select
+                            slotProps={{
+                                select: {
+                                    native: true,
+                                },
+                            }}
+                            helperText={errors.companyId ? errors.companyId.message : null}
+                            sx={{ width: '100%', maxWidth: 400 }}
+                        >
+                            <option aria-label="None" value="" >Please select a company</option>
+                            {companies.map((option) => (
+                                <option key={option.id} value={option.id}>
+                                    {option.name}
+                                </option>
+                            ))}
+                        </TextField>
+    
+                    )}
+                />
+    
+    
+                <LoadingButton
+                    loading={isSubmitting}
+                    loadingPosition="center"
+                    startIcon={<PersonAdd />}
+                    variant={variant}
+                    disabled={!isValid || isSubmitting}
+                    type="submit"
+                    sx={
+                        {
+                            width: '100%',
+                            maxWidth: 250,
+                            marginTop: 2,
+                            backgroundColor: 'primary.main',
+                            '&:hover': {
+                                backgroundColor: 'secondary.main',
+                            }
+                        }
+                    }
+                >
+                    Create Device Setting
+                </LoadingButton>
+    
+                {/* Display global error */}
+                {errorMessage && (
+                    <Snackbar
+                        open={open}
+                        autoHideDuration={6000}
+                        TransitionComponent={Slide}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                        onClose={handleSnackbarClose}>
+                        <Alert
+                            onClose={handleSnackbarClose}
+                            severity="error"
+                            variant="filled"
+                            sx={{ width: '100%' }}
+                        >
+                            {errorMessage}
+                        </Alert>
+                    </Snackbar>
+    
+                )}
+    
+                {isDeviceSettingCreated && (
+                    <BaseSnackBarComponent
+                        message={"Device Setting is added successfully."}
+                        autoHideDuration={6000}
+                        severity="success"
+                        open={openUserCreatedSnackBar}
+                        onClose={handleUserCreatedSnackbarClose}
+                    />
+    
+                )}
+    
+                {/* <DevTool control={control} /> */}
+            </Box>
+    
+        );
+    }
 
-            )}
-
-            {/* <DevTool control={control} /> */}
-        </Box>
-
-    );
 };
 
 export default CreateDeviceSettingPage;

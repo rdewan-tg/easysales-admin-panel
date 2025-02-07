@@ -1,14 +1,14 @@
-import { axiosAdminInstance } from "@/core/data";
+import { axiosAdminInstance, getPhotosByFromToDateEndpoint, getPhotosByCustomerChainEndpoint, getPhotosByDeviceIdEndpoint, getPhotosEndpoint, getPhotoDevicesEndpoint, getPhotoTransDatesEndpoint, getPhotoCustomerChainsEndpoint } from "@/core/data";
 import { PhotoDto, PhotoFilterCustomerChainDto, PhotoFilterDeviceDto, PhotoFilterTransDateDto } from "../../..";
 
 
 export const getAllPhotos = async () => {
-    const response = await axiosAdminInstance.get<PhotoDto>('/api/v1/merchandiser/photo');
+    const response = await axiosAdminInstance.get<PhotoDto>(getPhotosEndpoint);
     return response.data;
 }
 
 export const findPhotosByDeviceId = async (fromDate: string, toDate: string, deviceId: string) => {
-    const response = await axiosAdminInstance.get<PhotoDto>(`/api/v1/merchandiser/photo/find-by-device-and-date`, {
+    const response = await axiosAdminInstance.get<PhotoDto>(getPhotosByDeviceIdEndpoint, {
         params: { fromDate: fromDate, toDate: toDate, deviceId: deviceId },
     },);
 
@@ -17,7 +17,7 @@ export const findPhotosByDeviceId = async (fromDate: string, toDate: string, dev
 }
 
 export const findPhotosByFromToDate = async (fromDate: string, toDate: string) => {
-    const response = await axiosAdminInstance.get<PhotoDto>(`/api/v1/merchandiser/photo/find-by-from-and-to-date`, {
+    const response = await axiosAdminInstance.get<PhotoDto>(getPhotosByFromToDateEndpoint, {
         params: { fromDate: fromDate, toDate: toDate },
     },);
 
@@ -26,7 +26,7 @@ export const findPhotosByFromToDate = async (fromDate: string, toDate: string) =
 }
 
 export const findPhotosByCustomerChain = async (fromDate: string, toDate: string, customerChain: string) => {
-    const response = await axiosAdminInstance.get<PhotoDto>(`/api/v1/merchandiser/photo/find-by-customer-chain-and-date`, {
+    const response = await axiosAdminInstance.get<PhotoDto>(getPhotosByCustomerChainEndpoint, {
         params: { fromDate: fromDate, toDate: toDate, customerChain: customerChain },
     },);
 
@@ -35,20 +35,20 @@ export const findPhotosByCustomerChain = async (fromDate: string, toDate: string
 }
 
 export const getDevices = async () => {
-    const response = await axiosAdminInstance.get<PhotoFilterDeviceDto>(`/api/v1/merchandiser/photo/devices`);
+    const response = await axiosAdminInstance.get<PhotoFilterDeviceDto>(getPhotoDevicesEndpoint);
 
     return response.data;
 
 }
 
 export const getTransDates= async () => {
-    const response = await axiosAdminInstance.get<PhotoFilterTransDateDto>(`/api/v1/merchandiser/photo/trans-dates`);
+    const response = await axiosAdminInstance.get<PhotoFilterTransDateDto>(getPhotoTransDatesEndpoint);
 
     return response.data;
 }
 
 export const getCustomerChains= async () => {
-    const response = await axiosAdminInstance.get<PhotoFilterCustomerChainDto>(`/api/v1/merchandiser/photo/customer-chains`);
+    const response = await axiosAdminInstance.get<PhotoFilterCustomerChainDto>(getPhotoCustomerChainsEndpoint);
 
     return response.data;
 }
