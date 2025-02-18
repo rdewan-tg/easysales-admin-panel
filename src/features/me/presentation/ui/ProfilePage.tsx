@@ -1,4 +1,4 @@
-import { Box, Typography, Container, Card, CardContent, Avatar, Chip, Stack, Backdrop, CircularProgress } from "@mui/material";
+import { Box, Typography, Container, Card, CardContent, Avatar, Chip, Stack, Backdrop, CircularProgress, IconButton } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { useMeStore } from "..";
 import { useEffect, useState } from "react";
@@ -67,7 +67,7 @@ const ProfilePage = () => {
 
       <Typography variant="h3">Profile</Typography>
 
-      
+
 
       <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
         <Card>
@@ -106,7 +106,10 @@ const ProfilePage = () => {
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <BusinessIcon color="secondary" />
                   <Typography variant="body1">{data?.company.name}</Typography>
-                  {hasSuperAdminRole && <ExitToAppOutlined color="primary" onClick={handleClickOpenCompanyDialog} />}
+                  {hasSuperAdminRole && <>
+                    <IconButton color="primary" aria-label="change company" onClick={handleClickOpenCompanyDialog}>
+                      <ExitToAppOutlined />
+                    </IconButton></>}
                 </Stack>
               </Grid>
 
