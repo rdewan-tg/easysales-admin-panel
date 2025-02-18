@@ -1,4 +1,4 @@
-import { Me } from "../../data";
+import { ChangeCompanyDto, Me } from "../../data";
 
 
 export type MeState = {
@@ -6,4 +6,5 @@ export type MeState = {
     me: Me | null;
     error: string | null;
     getMe: () => Promise<void>;
+    changeCompany: (data: ChangeCompanyDto) => Promise<void>;
 }

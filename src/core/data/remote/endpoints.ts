@@ -20,13 +20,14 @@ export const findByDeviceIdEndpoint: string = "/v1/api/device-setting/find";
 export const createDeviceSettingEndpoint: string = "/v1/api/admin/device-setting";
 export const updateDeviceSettingEndpoint: string = "/v1/api/admin/device-setting";
 export const deleteDeviceSettingEndpoint: string = "/v1/api/admin/device-setting";
-// user
+// user-admin
 export const getUsersEndpoint: string = "/v1/api/admin/users";
 export const getUsersByCompanyEndpoint: string = "/v1/api/admin/users";
 export const getUserByIdEndpoint: string = "/v1/api/admin/users";
 export const createUserEndpoint: string = "/v1/api/admin/users";
 export const updateUserEndpoint: string = "/v1/api/admin/users/:id";
-export const deleteUserEndpoint: string = "/v1/api/admin/users/";
+export const deleteUserEndpoint: string = "/v1/api/admin/users";
+export const changeCompanyEndpoint: string = "/v1/api/admin/users/change-company";
 // me
 export const getMeEndpoint: string = "/v1/api/me";
 // role
@@ -52,3 +53,4 @@ export const getPricesEndpoint: string = "/v1/api/prices";
 export const getSiteVisitReportByDateRangeEndpoint: string = "/v1/api/merchandiser/photos/report/site-visit-report-by-date-range";
 export const getPhotoTransDatesEndpoint: string = "/v1/api/merchandiser/photos/trans-dates";
 export const getPhotoCustomerChainsEndpoint: string = "/v1/api/merchandiser/photos/customer-chains";
+
