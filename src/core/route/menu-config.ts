@@ -76,7 +76,7 @@ export const menuConfig: MenuItemConfig[] = [
         path: "/dashboard/customer",
         iconKey: "list",
         children: [
-            // { key: "merchandiser-customer", label: "Merchandiser Customer", path: "/dashboard/customer/merchandiser-customer", iconKey: "hailOutlined" },
+            { key: "merchandiser-customer", label: "Merchandiser Customer", path: "/dashboard/customer/merchandiser-customer", iconKey: "hailOutlined" },
             { key: "sales-customer", label: "Customer", path: "/dashboard/customer/sales-customer", iconKey: "hailOutlined" },
             { key: "address", label: "Address", path: "/dashboard/address", iconKey: "contactMailOutlined" },
             { key: "item", label: "Item", path: "/dashboard/item/item-list", iconKey: "categoryOutlinedIcon" },
