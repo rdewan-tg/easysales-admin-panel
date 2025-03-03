@@ -55,6 +55,7 @@ export const menuConfig: MenuItemConfig[] = [
     { key: "roles", label: "Roles", path: "/dashboard/roles", iconKey: "roles" },
     { key: "companies", label: "Companies", path: "/dashboard/companies", iconKey: "companies" },
     { key: "countries", label: "Countries", path: "/dashboard/countries", iconKey: "countries" },
+    { key: "sales-order", label: "Sales Order", path: "/dashboard/sales-order", iconKey: "countries" },
     {
         key: "photo",
         label: "Photo",

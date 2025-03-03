@@ -36,6 +36,7 @@ import CreateDeviceSettingPage from "@/features/device-setting/presentation/ui/C
 import AddressScreen from "@/features/master-data/address/presentation/ui/AddressScreen";
 import AddressListScreen from "@/features/master-data/address/presentation/ui/AddressListScreen";
 import MerchandiserReportByDateRangeScreen from "@/features/report/merchandiser/presentation/ui/MerchandiserReportByDateRangeScreen";
+import { OrderDetailScreen, OrderScreen } from "@/features/order/presentation";
 
 
 export const router = createBrowserRouter([
@@ -131,6 +132,18 @@ export const router = createBrowserRouter([
                           element: <CreateCountryPage />,
                           errorElement: <NotFoundPage />,
                         }
+                      ]
+                    },
+                    // sales order
+                    {
+                      path: routeName.salesOrder,
+                      element: <OrderScreen />,
+                      children: [
+                        {
+                          index: true,
+                          element: <OrderDetailScreen />,
+                          errorElement: <NotFoundPage />,
+                        },                        
                       ]
                     },
                     // me
@@ -256,6 +269,7 @@ export const router = createBrowserRouter([
             },
           ],
         },
+        // Publicly accessible routes - Login
         {
           // Prevent logged-in users from visiting login page
           element: <PublicRoute />, 
