@@ -33,7 +33,7 @@ const OrderDetailScreen = () => {
 
     useEffect(() => {
         async function fetchSalesHeaders() {
-            await getSalesHeaders(1);
+            await getSalesHeaders();
         }
         fetchSalesHeaders();
     }, []);

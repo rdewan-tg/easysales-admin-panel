@@ -10,10 +10,10 @@ const useOrderStore = create<OrderState>((set) => ({
     salesHeaders: [],
     salesHeader: null,
     salesLines: [],
-    getSalesHeaders: async (id: number) => {
+    getSalesHeaders: async () => {
         set({ isLoading: true, error: null });
         try {
-            const response = await getSalesHeaders(id);            
+            const response = await getSalesHeaders();            
             set({ salesHeaders: response.data, isLoading: false, error: null });
         } catch (error) {
             const errorMessage = (error as Error).message;

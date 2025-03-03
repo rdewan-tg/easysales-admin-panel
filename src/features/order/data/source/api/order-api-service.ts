@@ -3,8 +3,8 @@ import { SalesHeaderDto, SalesHeadersDto, SalesLineDto } from "..";
 
 
 
-export const getSalesHeaders = async (id: number): Promise<SalesHeadersDto> => {
-    const response = await axiosAdminInstance.get<SalesHeadersDto>(`v1/api/sales-header/${id}`);
+export const getSalesHeaders = async (): Promise<SalesHeadersDto> => {
+    const response = await axiosAdminInstance.get<SalesHeadersDto>(`v1/api/sales-header/find-by-company-id`);
     return response.data;
 }
 
