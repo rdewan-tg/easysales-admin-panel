@@ -12,7 +12,8 @@ import {
     PriceChangeOutlined,
     ReceiptLongOutlined,
     DevicesOutlined,
-    ContactMailOutlined
+    ContactMailOutlined,
+    ShoppingBagOutlined,
 } from "@mui/icons-material";
 import { Theme } from "@mui/material";
 import React from "react";
@@ -33,6 +34,7 @@ const iconMapping = {
     receiptLongOutlinedIcon: ReceiptLongOutlined,
     devicesOutlined: DevicesOutlined,
     contactMailOutlined: ContactMailOutlined,
+    shoppingBagOutlined:ShoppingBagOutlined
 };
 
 /*
@@ -55,7 +57,7 @@ export const menuConfig: MenuItemConfig[] = [
     { key: "roles", label: "Roles", path: "/dashboard/roles", iconKey: "roles" },
     { key: "companies", label: "Companies", path: "/dashboard/companies", iconKey: "companies" },
     { key: "countries", label: "Countries", path: "/dashboard/countries", iconKey: "countries" },
-    { key: "sales-order", label: "Sales Order", path: "/dashboard/sales-order", iconKey: "countries" },
+    { key: "sales-order", label: "Sales Order", path: "/dashboard/sales-order", iconKey: "shoppingBagOutlined" },
     {
         key: "photo",
         label: "Photo",
