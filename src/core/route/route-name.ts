@@ -25,5 +25,13 @@ export const routeName = {
     priceList: "price-list",
     activityLog: "activity-log",
     activityLogList: "activity-log-list",
+    deviceSetting: "device-setting",
+    deviceSettingList: "device-setting-list",
+    createdeviceSetting: "create-device-setting",
+    address: "address",
+    addressList: "address-list",
+    merchandiserReport: "merchandiser-report",
+    merchandiserReportByDaterange: "merchandiser-report-by-date-range",
+    salesOrder: "sales-order",
     others: "*",
 };

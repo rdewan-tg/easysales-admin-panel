@@ -1,4 +1,5 @@
-import { Role, UpdateUserRoleDto } from "../../data";
+import { Role } from "@/common/interface";
+import { UpdateUserRoleDto } from "../../data";
 
 
 

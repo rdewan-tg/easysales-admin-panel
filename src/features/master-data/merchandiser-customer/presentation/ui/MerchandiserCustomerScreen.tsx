@@ -12,20 +12,25 @@ import {
     Page,
     PageSettingsModel,
     Sort,
+    ToolbarItems,
+    ExcelExport,
 } from '@syncfusion/ej2-react-grids';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GetCustomerForm, getCustomerSchema } from "@/common/types";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { SendOutlined } from "@mui/icons-material";
 import { useCompanyStore } from "@/features/company/presentation";
+import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 //import { DevTool } from "@hookform/devtools";
 
 
 const MerchandiserCustomerScreen = () => {
+    const gridRef = useRef<GridComponent | null>(null);
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const pageSettings: PageSettingsModel = { pageSize: 15 };
+    const toolbar: ToolbarItems[] = ['ExcelExport'];
 
     const isLoading = useMerchandiserCustomerStore(state => state.isLoading);
     const errorMessage = useMerchandiserCustomerStore(state => state.error);
@@ -34,6 +39,19 @@ const MerchandiserCustomerScreen = () => {
 
     const companies = useCompanyStore((state) => state.companies);
     const getCompanies = useCompanyStore.use.getCompanies();
+
+    const toolbarClick = (args: ClickEventArgs) => {
+        if (gridRef.current && args.item.id === 'Grid_excelexport') {
+            gridRef.current.showSpinner();
+            gridRef.current.excelExport();
+        }
+    }
+
+    const excelExportComplete = (): void => {
+        if (gridRef.current) {
+            gridRef.current.hideSpinner();
+        }
+    }
 
     const form = useForm<GetCustomerForm>({
         resolver: zodResolver(getCustomerSchema),
@@ -160,11 +178,19 @@ const MerchandiserCustomerScreen = () => {
                 }}>
 
                 <GridComponent
+                    id='Grid'
                     dataSource={customers}
                     allowResizing={true}
                     autoFit={true}
                     allowPaging={true}
                     pageSettings={pageSettings}
+                    toolbar={toolbar}
+                    allowExcelExport={true}
+                    toolbarClick={toolbarClick}
+                    excelExportComplete={excelExportComplete}
+                    ref={g => {
+                        gridRef.current = g;
+                    }}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
@@ -188,7 +214,7 @@ const MerchandiserCustomerScreen = () => {
                         <ColumnDirective field='createAt' headerText='createAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='updatedAt' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar]} />
+                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport]} />
                 </GridComponent>
             </Box>
 

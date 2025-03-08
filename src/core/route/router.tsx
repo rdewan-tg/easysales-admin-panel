@@ -30,6 +30,13 @@ import ItemListScreen from "@/features/master-data/item/presentation/ui/ItemList
 import PriceScreen from "@/features/master-data/price/presentation/ui/PriceScreen";
 import PriceListScreen from "@/features/master-data/price/presentation/ui/PriceListScreen";
 import ActivityLogScreen from "@/features/activity-log/presentation/ui/ActivityLogScreen";
+import DeviceSettingPage from "@/features/device-setting/presentation/ui/DeviceSettingPage";
+import DeviceSettingListPage from "@/features/device-setting/presentation/ui/DeviceSettingListPage";
+import CreateDeviceSettingPage from "@/features/device-setting/presentation/ui/CreateDeviceSettingPage";
+import AddressScreen from "@/features/master-data/address/presentation/ui/AddressScreen";
+import AddressListScreen from "@/features/master-data/address/presentation/ui/AddressListScreen";
+import MerchandiserReportByDateRangeScreen from "@/features/report/merchandiser/presentation/ui/MerchandiserReportByDateRangeScreen";
+import { OrderDetailScreen, OrderScreen } from "@/features/order/presentation";
 
 
 export const router = createBrowserRouter([
@@ -110,6 +117,7 @@ export const router = createBrowserRouter([
                         }
                       ]
                     },
+                    // countries
                     {
                       path: routeName.countries,
                       element: <CountryPage />,
@@ -126,6 +134,19 @@ export const router = createBrowserRouter([
                         }
                       ]
                     },
+                    // sales order
+                    {
+                      path: routeName.salesOrder,
+                      element: <OrderScreen />,
+                      children: [
+                        {
+                          index: true,
+                          element: <OrderDetailScreen />,
+                          errorElement: <NotFoundPage />,
+                        },                        
+                      ]
+                    },
+                    // me
                     {
                       path: routeName.me,
                       element: <MePage />,
@@ -138,6 +159,7 @@ export const router = createBrowserRouter([
                         
                       ]
                     },
+                    // photo
                     {
                       path: routeName.photo,
                       element: <PhotoScreen />,
@@ -150,6 +172,11 @@ export const router = createBrowserRouter([
                         {
                           path: routeName.photoGallery,
                           element: <PhotoGalleryScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        {
+                          path: routeName.merchandiserReportByDaterange,
+                          element: <MerchandiserReportByDateRangeScreen />,
                           errorElement: <NotFoundPage />,
                         },
                         
@@ -170,6 +197,19 @@ export const router = createBrowserRouter([
                           element: <SalesCustomerScreen />,
                           errorElement: <NotFoundPage />,
                         },
+                      ]
+                    },
+                    // address
+                    {
+                      path: routeName.address,
+                      element: <AddressScreen />,
+                      children: [
+                        {
+                          index: true,
+                          element: <AddressListScreen />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        
                       ]
                     },
                     // item
@@ -203,6 +243,25 @@ export const router = createBrowserRouter([
                       path: routeName.activityLog,
                       element: <ActivityLogScreen />,                      
                     },
+                    // device setting
+                    {
+                      path: routeName.deviceSetting,
+                      element: <DeviceSettingPage />,
+                      errorElement: <NotFoundPage />,
+                      children: [
+                        {
+                          index: true,
+                          element: <DeviceSettingListPage />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        { 
+                          path: routeName.createdeviceSetting,                        
+                          element: <CreateDeviceSettingPage />,
+                          errorElement: <NotFoundPage />,
+                        },
+                        
+                      ]
+                    },
                     
                   ],
                 },
@@ -210,6 +269,7 @@ export const router = createBrowserRouter([
             },
           ],
         },
+        // Publicly accessible routes - Login
         {
           // Prevent logged-in users from visiting login page
           element: <PublicRoute />, 

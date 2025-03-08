@@ -1,5 +1,5 @@
 import axios from "axios";
-import {refreshToken} from "../index";
+import { refreshToken } from "../index";
 
 
 export const axiosAdminInstance = axios.create({
@@ -24,12 +24,20 @@ axiosAdminInstance.interceptors.response.use(
                 return axiosAdminInstance(originalRequest);
             }
 
+            // Handle 409 - Unique constraint failed
+            if (error.response.status === 409 && error.response.data.message.includes("Unique constraint failed")) {
+                const fieldName = error.response.data.message.split(":")[1]?.trim();
+                return Promise.reject(
+                    new Error(`A record with the same ${fieldName} already exists.`)
+                );
+            }
+
             // Catch all other errors
             const errorMessage = `${error.response.data.message || error.response.statusText}`;
 
             return Promise.reject(new Error(errorMessage));
         }
-        
+
         return Promise.reject(error);
     }
 );

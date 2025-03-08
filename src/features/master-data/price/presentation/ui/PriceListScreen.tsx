@@ -12,25 +12,50 @@ import {
     Page,
     PageSettingsModel,
     Sort,
+    ToolbarItems,
+    ExcelExport,
+    Search,
 } from '@syncfusion/ej2-react-grids';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GetCustomerForm, getCustomerSchema } from "@/common/types";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { SendOutlined } from "@mui/icons-material";
 import { useCompanyStore } from "@/features/company/presentation";
+import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 //import { DevTool } from "@hookform/devtools";
 
 
 const PriceListScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const pageSettings: PageSettingsModel = { pageSize: 15 };
+    const gridRef = useRef<GridComponent | null>(null);
+    const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
 
     const isLoading = usePriceStore(state => state.isLoading);
     const errorMessage = usePriceStore(state => state.error);
     const prices = usePriceStore(state => state.prices);
     const getPrices = usePriceStore.use.getprices();
+
+    const created = () => {
+        (document.getElementById((gridRef.current as GridComponent).element.id + "_searchbar") as HTMLElement).addEventListener('keyup', (event) => {
+          (gridRef.current as GridComponent).search((event.target as HTMLInputElement).value)
+        });
+    }
+
+    const toolbarClick = (args: ClickEventArgs) => {        
+        if (gridRef.current && args.item.id === 'Grid_excelexport') {
+            gridRef.current.showSpinner();
+            gridRef.current.excelExport();
+        }
+    }
+
+    const excelExportComplete = (): void => {
+        if (gridRef.current) {
+            gridRef.current.hideSpinner();
+        }
+    }
 
     const companies = useCompanyStore((state) => state.companies);
     const getCompanies = useCompanyStore.use.getCompanies();
@@ -150,7 +175,7 @@ const PriceListScreen = () => {
                         }
                     }
                 >
-                    Get Customers
+                    Get Price
                 </LoadingButton>
             </Box>
 
@@ -160,18 +185,27 @@ const PriceListScreen = () => {
                 }}>
 
                 <GridComponent
-                    dataSource={prices}
-                    allowResizing={true}
-                    autoFit={true}
-                    allowPaging={true}
-                    pageSettings={pageSettings}
+                   id='Grid'
+                   dataSource={prices}
+                   allowResizing={true}
+                   autoFit={true}
+                   allowPaging={true}
+                   pageSettings={pageSettings}
+                   toolbar={toolbar}
+                   allowExcelExport={true}
+                   toolbarClick={toolbarClick}
+                   excelExportComplete={excelExportComplete}
+                   ref={g => {
+                       gridRef.current = g;
+                   }}
+                   created={created}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
-                        <ColumnDirective field='productId' headerText='ProductId' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='itemId' headerText='ItemId' minWidth='100' width='200' textAlign="Left" />
-                        <ColumnDirective field='fromDate' headerText='FromDate' format="C2" textAlign="Left" />
-                        <ColumnDirective field='toDate' headerText='ToDate' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
+                        <ColumnDirective field='productId' headerText='ProductId' width='200' textAlign="Left" />
+                        <ColumnDirective field='itemId' headerText='ItemId'  width='150' textAlign="Left" />
+                        <ColumnDirective field='fromDate' headerText='FromDate' width='150' textAlign="Left" />
+                        <ColumnDirective field='toDate' headerText='ToDate'  width='150' textAlign="Left" />
                         <ColumnDirective field='unitPrice' headerText='UnitPrice' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='currencyCode' headerText='CurrencyCode' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='salesUnit' headerText='SalesUnit' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
@@ -182,7 +216,7 @@ const PriceListScreen = () => {
                         <ColumnDirective field='createAt' headerText='createAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='updatedAt' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar]} />
+                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport, Search]} />
                 </GridComponent>
             </Box>
 

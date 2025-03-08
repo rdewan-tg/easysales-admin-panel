@@ -4,7 +4,7 @@ import { axiosAdminInstance } from "../index";
 
 const refreshToken = async (): Promise<boolean> => {
 
-    const result = await axiosAdminInstance.post('/api/v1/auth/refresh-token')
+    const result = await axiosAdminInstance.post('/v1/api/auth/refresh-token')
 
     const statusCode = result.data.statusCode;
 
