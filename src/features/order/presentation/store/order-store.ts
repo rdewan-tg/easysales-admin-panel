@@ -10,6 +10,7 @@ const useOrderStore = create<OrderState>((set) => ({
     salesHeaders: [],
     salesHeader: null,
     salesLines: [],
+    expandedRows: {},
     getSalesHeaders: async () => {
         set({ isLoading: true, error: null });
         try {
@@ -31,6 +32,15 @@ const useOrderStore = create<OrderState>((set) => ({
             set({ isLoading: false, error: errorMessage });
         }
     }, 
+    setExpandedRow: (salesId: string, isExpanded: boolean) => {
+        set((state) => ({
+            expandedRows: {
+                ...state.expandedRows,
+                [salesId]: isExpanded,
+            },
+        }));
+    }
+        
 }));
 
 export default createSelectors(useOrderStore);

@@ -26,16 +26,43 @@ import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
-    const filterSettings: FilterSettingsModel = {type: 'Excel'};
+    const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
 
     const isLoading = useOrderStore(state => state.isLoading);
     const errorMessage = useOrderStore(state => state.error);
+    const expandedRows = useOrderStore(state => state.expandedRows);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
     const salesLines = useOrderStore((state) => state.salesLines);
     const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
+    const setExpandedRow = useOrderStore(state => state.setExpandedRow);
+
+    // Keep rows expanded even after data reload
+    const rowDataBound = (args: any) => {
+        if (args.data?.salesId && expandedRows[args.data.salesId]) {
+            setTimeout(() => {
+                gridRef.current?.detailRowModule.expand(args.row);
+            }, 0);
+        }
+    };
+
+    // Fetch child data without collapsing
+    const detailDataBound = async (args: any) => {
+        if (args.data?.salesId) {
+            setExpandedRow(args.data.salesId, true); // Mark as expanded
+            await getSalesLinesById(args.data.salesId);
+        }
+    };
+
+    // Close expanded rows when manually collapsed
+    const actionComplete = (args: any) => {
+        if (args.requestType === "collapse" && args.rowData?.salesId) {
+            setExpandedRow(args.rowData.salesId, false);
+        }
+    };
+
 
     const childGrid: any = {
         dataSource: salesLines,
@@ -138,19 +165,9 @@ const OrderDetailScreen = () => {
                         gridRef.current = g;
                     }}
                     created={created}
-                    detailDataBound={async (args: any) => {
-                        if (args.data && args.data.salesId) {
-                            
-                            try {
-                                await getSalesLinesById(args.data.salesId);
-                            } finally {
-                                setTimeout(() => {
-                                    const grid = gridRef.current;
-                                    grid?.detailRowModule.expand(grid.getRowByIndex(args.rowIndex as number));
-                                }, 0);
-                            }
-                        }
-                    }}                    
+                    detailDataBound={detailDataBound}
+                    rowDataBound={rowDataBound}
+                    actionComplete={actionComplete}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
