@@ -25,7 +25,6 @@ import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-    const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
     const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
     const filterSettings: FilterSettingsModel = {type: 'Excel'};
     const pageSettings: PageSettingsModel = { pageSize: 15 };
@@ -151,18 +150,7 @@ const OrderDetailScreen = () => {
                                 }, 0);
                             }
                         }
-                    }}
-                    actionComplete={(args: any) => {
-                        if (args.requestType === 'expand' && args.rowData?.salesId) {
-                            setExpandedRows(prev => new Set(prev).add(args.rowData.salesId));
-                        } else if (args.requestType === 'collapse' && args.rowData?.salesId) {
-                            setExpandedRows(prev => {
-                                const newSet = new Set(prev);
-                                newSet.delete(args.rowData.salesId);
-                                return newSet;
-                            });
-                        }
-                    }}
+                    }}                    
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
