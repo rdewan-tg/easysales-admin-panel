@@ -32,21 +32,13 @@ const OrderDetailScreen = () => {
 
     const isLoading = useOrderStore(state => state.isLoading);
     const errorMessage = useOrderStore(state => state.error);
-    const expandedRows = useOrderStore(state => state.expandedRows);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
     const salesLines = useOrderStore((state) => state.salesLines);
     const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
     const setExpandedRow = useOrderStore(state => state.setExpandedRow);
+    //const expandedRows = useOrderStore(state => state.expandedRows);
 
-    // Keep rows expanded even after data reload
-    const rowDataBound = (args: any) => {
-        if (args.data?.salesId && expandedRows[args.data.salesId]) {
-            setTimeout(() => {
-                gridRef.current?.detailRowModule.expand(args.row);
-            }, 0);
-        }
-    };
 
     // Fetch child data without collapsing
     const detailDataBound = async (args: any) => {
@@ -57,9 +49,10 @@ const OrderDetailScreen = () => {
     };
 
     // Close expanded rows when manually collapsed
-    const actionComplete = (args: any) => {
-        if (args.requestType === "collapse" && args.rowData?.salesId) {
-            setExpandedRow(args.rowData.salesId, false);
+    const actionBegin = (args: any) => {
+        console.log(args.requestType);
+        if (args.requestType === "collapse" ) {
+            console.log(`Collapsing row with salesId: ${args.data.salesId}`);
         }
     };
 
@@ -94,6 +87,7 @@ const OrderDetailScreen = () => {
             handleErrorSnackbarClick();
         }
     }, [errorMessage]);
+
     const handleErrorSnackbarClick = () => {
         setOpenErrorSnackBar(true);
     };
@@ -166,8 +160,7 @@ const OrderDetailScreen = () => {
                     }}
                     created={created}
                     detailDataBound={detailDataBound}
-                    rowDataBound={rowDataBound}
-                    actionComplete={actionComplete}
+                    actionBegin={actionBegin}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
