@@ -18,8 +18,10 @@ import {
     Search,
     FilterSettingsModel,
     DetailRow,
+    SelectionSettingsModel,
 } from '@syncfusion/ej2-react-grids';
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
+import { Try } from "@mui/icons-material";
 
 
 
@@ -29,7 +31,8 @@ const OrderDetailScreen = () => {
     const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
-
+    const selectionSettings: SelectionSettingsModel = { type: 'Multiple' };
+  
     const isLoading = useOrderStore(state => state.isLoading);
     const errorMessage = useOrderStore(state => state.error);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
@@ -87,6 +90,10 @@ const OrderDetailScreen = () => {
     };
 
     const created = () => {
+        if (gridRef.current) {
+            gridRef.current.selectionSettings.enableSimpleMultiRowSelection = true;
+        }
+        
         (document.getElementById((gridRef.current as GridComponent).element.id + "_searchbar") as HTMLElement).addEventListener('keyup', (event) => {
             (gridRef.current as GridComponent).search((event.target as HTMLInputElement).value)
         });
@@ -104,20 +111,19 @@ const OrderDetailScreen = () => {
             gridRef.current.hideSpinner();
         }
     }
-
-    const onDataBound = () => {
-        if (gridRef.current && expandedRows) {
-            gridRef.current.detailRowModule.expand(expandedRows);
-        }
-    };    
-
+  
     // Fetch child data without collapsing
     const detailDataBound = async (args: any) => {
         console.log('detailDataBound', args);
-        if (args.data?.salesId) {
-            setExpandedRow(args.data.id);
-            await getSalesLinesById(args.data.salesId);
+        try {
+            if (args.data && args.data.salesId) {
+                await getSalesLinesById(args.data.salesId);
+            }
         }
+        finally {
+            gridRef.current?.detailRowModule.expand(args.data.id);           
+        }
+       
     };
 
     return (
@@ -156,8 +162,8 @@ const OrderDetailScreen = () => {
                         gridRef.current = g;
                     }}
                     created={created}
-                    detailDataBound={detailDataBound}
-                    dataBound={onDataBound}
+                    detailDataBound={detailDataBound}                    
+                    selectionSettings={selectionSettings}                    
                 >
                     <ColumnsDirective>
                         <ColumnDirective type='checkbox' width='50'></ColumnDirective>
