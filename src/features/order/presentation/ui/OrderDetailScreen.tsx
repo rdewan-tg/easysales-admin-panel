@@ -35,7 +35,7 @@ const OrderDetailScreen = () => {
     const errorMessage = useOrderStore(state => state.error);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
     const salesLines = useOrderStore((state) => state.salesLines);
-    const getSalesLinesById = useOrderStore.use.getSalesLinesById();
+    //const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
 
     const childGrid: any = {
