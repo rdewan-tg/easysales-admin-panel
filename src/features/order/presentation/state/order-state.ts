@@ -7,5 +7,5 @@ export type OrderState = {
     salesHeader: SalesHeaderData | null;
     salesLines: SalesLineData[];
     getSalesHeaders: () => Promise<void>;
-    getSalesLines: (salesId: string) => Promise<void>;
+    getSalesLinesById: (salesId: string) => Promise<void>;
 }

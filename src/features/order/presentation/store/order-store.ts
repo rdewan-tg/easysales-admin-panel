@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { OrderState } from "../state/order-state";
-import { getSalesHeaders, getSalesLines } from "../../data/source/api/order-api-service";
+import { getSalesHeaders, getSalesLinesById } from "../../data/source/api/order-api-service";
 import { createSelectors } from "@/core/data";
 
 
@@ -21,10 +21,10 @@ const useOrderStore = create<OrderState>((set) => ({
         }
 
     },
-    getSalesLines: async (salesId: string) => {
+    getSalesLinesById: async (salesId: string) => {
         set({ isLoading: true, error: null });
         try {         
-            const response = await getSalesLines(salesId);
+            const response = await getSalesLinesById(salesId);
             set({ salesLines: response.data, isLoading: false, error: null });
         } catch (error) {
             const errorMessage = (error as Error).message;

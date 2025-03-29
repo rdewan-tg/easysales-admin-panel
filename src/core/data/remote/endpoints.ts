@@ -53,4 +53,10 @@ export const getPricesEndpoint: string = "/v1/api/prices";
 export const getSiteVisitReportByDateRangeEndpoint: string = "/v1/api/merchandiser/photos/report/site-visit-report-by-date-range";
 export const getPhotoTransDatesEndpoint: string = "/v1/api/merchandiser/photos/trans-dates";
 export const getPhotoCustomerChainsEndpoint: string = "/v1/api/merchandiser/photos/customer-chains";
+// sales
+export const getSalesHeadersByCompanyEndpoint: string = "/v1/api/sales-header/find/by-company-id";
+export const getSalesHeaderByIdEndpoint: string = "/v1/api/sales-header";
+export const getSalesLinesByIdEndpoint: string = "v1/api/sales-line";
+export const findSalesHeaderByCompanyDateRangeEndpoint: string = "/v1/api/sales-header/find/by-company-date-range";
+export const findSalesLineByCompanyDateRangeEndpoint: string = "v1/api/sales-line/find/by-company-date-range";
 

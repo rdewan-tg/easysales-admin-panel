@@ -16,6 +16,8 @@ import {
     ToolbarItems,
     ExcelExport,
     Search,
+    FilterSettingsModel,
+    DetailRow,
 } from '@syncfusion/ej2-react-grids';
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 
@@ -23,13 +25,34 @@ import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
+    const filterSettings: FilterSettingsModel = {type: 'Excel'};
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
 
     const isLoading = useOrderStore(state => state.isLoading);
     const errorMessage = useOrderStore(state => state.error);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
+    const salesLines = useOrderStore((state) => state.salesLines);
+    const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
+
+    const childGrid: any = {
+        dataSource: salesLines,
+        queryString: 'salesId',
+        allowPaging: true,
+        pageSettings: { pageSize: 6, pageCount: 5 },
+        columns: [
+            { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
+            { field: 'lineId', headerText: 'LineId', width: 120 },
+            { field: 'itemId', headerText: 'ItemId', width: 120 },
+            { field: 'productId', headerText: 'ProductId', width: 150 },
+            { field: 'productName', headerText: 'ProductName', width: 150 },
+            { field: 'packSize', headerText: 'PackSize', width: 150 },
+            { field: 'quantity', headerText: 'Quantity', width: 150 },
+            { field: 'salesUnit', headerText: 'SalesUnit', width: 150 },
+            { field: 'salesPrice', headerText: 'SalesPrice', width: 150 },
+        ],
+    };
 
     useEffect(() => {
         async function fetchSalesHeaders() {
@@ -79,6 +102,17 @@ const OrderDetailScreen = () => {
         }
     }
 
+    const rowSelected = (args: any) => {
+        const selectedRecord = args.data;
+        if (selectedRecord && selectedRecord.salesId) {
+            getSalesLinesByIdHandler(selectedRecord.salesId);
+        }
+    };
+
+    const getSalesLinesByIdHandler = async (salesId: string) => {
+        await getSalesLinesById(salesId);
+    }
+
 
     return (
         <Box sx={{
@@ -110,10 +144,13 @@ const OrderDetailScreen = () => {
                     allowExcelExport={true}
                     toolbarClick={toolbarClick}
                     excelExportComplete={excelExportComplete}
+                    childGrid={childGrid}
+                    filterSettings={filterSettings}
                     ref={g => {
                         gridRef.current = g;
                     }}
                     created={created}
+                    rowSelected={rowSelected}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
@@ -133,7 +170,7 @@ const OrderDetailScreen = () => {
                         <ColumnDirective field='createAt' headerText='createAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='updatedAt' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport, Search]} />
+                    <Inject services={[DetailRow, Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport, Search]} />
                 </GridComponent>
             </Box>
 
