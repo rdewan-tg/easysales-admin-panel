@@ -40,7 +40,7 @@ const OrderDetailScreen = () => {
         dataSource: salesLines,
         queryString: 'salesId',
         created: () => {
-            const parentRowData = (gridRef.current as GridComponent).parentDetails.parentRowData;            
+            const parentRowData = (gridRef.current as GridComponent).parentDetails;            
             console.log('Child grid created', parentRowData);
         },
         columns: [
