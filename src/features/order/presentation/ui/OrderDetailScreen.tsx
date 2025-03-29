@@ -20,6 +20,7 @@ import {
     DetailRow,
 } from '@syncfusion/ej2-react-grids';
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
+import { getSalesHeaderById, getSalesLinesById } from "../../data/source/api/order-api-service";
 
 
 const OrderDetailScreen = () => {
@@ -39,9 +40,8 @@ const OrderDetailScreen = () => {
     const childGrid: any = {
         dataSource: salesLines,
         queryString: 'salesId',
-        created: () => {
-            const parentRowData = (gridRef.current as GridComponent).parentDetails;            
-            console.log('Child grid created', parentRowData);
+        created: () => {                     
+            console.log('Child grid created');
         },
         columns: [
             { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
@@ -54,6 +54,14 @@ const OrderDetailScreen = () => {
             { field: 'salesUnit', headerText: 'SalesUnit', width: 150 },
             { field: 'salesPrice', headerText: 'SalesPrice', width: 150 },
         ],
+        dataBound: async function(args: any) {
+            // This will be called when the detail row is bound
+            const parentRow = args.parentDetails.parentRowData;
+            console.log('dataBound', parentRow);
+            if (parentRow) {
+                await getSalesHeaderById(parentRow.salesId);
+            }
+        }
     };
 
     useEffect(() => {
@@ -142,6 +150,15 @@ const OrderDetailScreen = () => {
                         gridRef.current = g;
                     }}
                     created={created}
+                    detailDataBound={async (args: any) => {
+                        console.log('detailDataBound', args);
+                        // Fetch the child data when a row is expanded
+                        if (args.data && args.data.salesId) {
+                            await getSalesLinesById(args.data.salesId);
+                            // Set the child grid data source to the fetched sales lines
+                            args.childGrid.dataSource = salesLines;
+                        }
+                    }}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
