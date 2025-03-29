@@ -39,7 +39,7 @@ const OrderDetailScreen = () => {
     const childGrid: any = {
         dataSource: salesLines,
         queryString: 'salesId',
-        created: async function (args: Object) {
+        created: async function (args: any) {
             console.log('Child grid created', args);            
         },
         columns: [
