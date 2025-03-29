@@ -22,6 +22,7 @@ import {
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 
 
+
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
@@ -39,8 +40,9 @@ const OrderDetailScreen = () => {
     const childGrid: any = {
         dataSource: salesLines,
         queryString: 'salesId',
-        allowPaging: true,
-        pageSettings: { pageSize: 6, pageCount: 5 },
+        load: async (args: any) => {
+           await getSalesLinesById(args.parentRowData.salesId);
+        },
         columns: [
             { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
             { field: 'lineId', headerText: 'LineId', width: 120 },
@@ -55,6 +57,7 @@ const OrderDetailScreen = () => {
     };
 
     useEffect(() => {
+
         async function fetchSalesHeaders() {
             await getSalesHeaders();
         }
@@ -102,17 +105,6 @@ const OrderDetailScreen = () => {
         }
     }
 
-    const rowSelected = (args: any) => {
-        const selectedRecord = args.data;
-        if (selectedRecord && selectedRecord.salesId) {
-            getSalesLinesByIdHandler(selectedRecord.salesId);
-        }
-    };
-
-    const getSalesLinesByIdHandler = async (salesId: string) => {
-        await getSalesLinesById(salesId);
-    }
-
 
     return (
         <Box sx={{
@@ -150,7 +142,6 @@ const OrderDetailScreen = () => {
                         gridRef.current = g;
                     }}
                     created={created}
-                    rowSelected={rowSelected}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
