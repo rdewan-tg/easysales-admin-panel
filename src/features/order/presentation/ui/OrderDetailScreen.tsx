@@ -102,6 +102,13 @@ const OrderDetailScreen = () => {
         }
     }
 
+    const handleDataStateChange = (args: any) => {
+        if (args.action.requestType === 'filtering' || args.action.requestType === 'sorting') {
+            // Prevent state updates that would cause re-render
+            args.cancel = true;
+        }
+    };
+
 
     return (
         <Box sx={{
@@ -140,12 +147,12 @@ const OrderDetailScreen = () => {
                     }}
                     created={created}
                     detailDataBound={async (args: any) => {
-                        console.log('detailDataBound', args);
                         // Fetch the child data when a row is expanded
                         if (args.data && args.data.salesId) {
                             await getSalesLinesById(args.data.salesId);
                         }
                     }}
+                    dataStateChange={handleDataStateChange}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
