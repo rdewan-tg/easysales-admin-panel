@@ -20,6 +20,7 @@ import {
     DetailRow,
 } from '@syncfusion/ej2-react-grids';
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
+import { log } from "console";
 
 
 
@@ -40,8 +41,12 @@ const OrderDetailScreen = () => {
     const childGrid: any = {
         dataSource: salesLines,
         queryString: 'salesId',
-        load: async (args: any) => {
-           await getSalesLinesById(args.parentRowData.salesId);
+        created: async function (args: any) {
+            log('Child grid created', args);
+            const parentRow = args.grid.parentDetails.parentRowData;            
+            if (parentRow && parentRow.salesId) {
+                await getSalesLinesById(parentRow.salesId);
+            }
         },
         columns: [
             { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
