@@ -39,8 +39,9 @@ const OrderDetailScreen = () => {
     const childGrid: any = {
         dataSource: salesLines,
         queryString: 'salesId',
-        created: async function (args: any) {
-            console.log('Child grid created', args);            
+        created: () => {
+            const parentRowData = (gridRef.current as GridComponent).parentDetails.parentRowData;            
+            console.log('Child grid created', parentRowData);
         },
         columns: [
             { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
