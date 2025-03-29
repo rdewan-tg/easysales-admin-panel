@@ -41,12 +41,9 @@ const OrderDetailScreen = () => {
     const childGrid: any = {
         dataSource: salesLines,
         queryString: 'salesId',
-        created: async function (args: any) {
+        created: async function (args: Object) {
             log('Child grid created', args);
-            const parentRow = args.grid.parentDetails.parentRowData;            
-            if (parentRow && parentRow.salesId) {
-                await getSalesLinesById(parentRow.salesId);
-            }
+            
         },
         columns: [
             { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
