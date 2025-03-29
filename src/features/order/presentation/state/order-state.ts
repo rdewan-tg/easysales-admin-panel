@@ -6,8 +6,8 @@ export type OrderState = {
     salesHeaders: SalesHeaderData[];
     salesHeader: SalesHeaderData | null;
     salesLines: SalesLineData[];
-    expandedRows: number | null; // Track expanded rows by salesId
+    selectedSalesIds: string[];
     getSalesHeaders: () => Promise<void>;
     getSalesLinesById: (salesId: string) => Promise<void>;
-    setExpandedRow: (id: number) => void;
+    setSelectedSalesIds: (salesId: string) => void;
 }

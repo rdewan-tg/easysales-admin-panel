@@ -19,10 +19,10 @@ import {
     FilterSettingsModel,
     DetailRow,
     SelectionSettingsModel,
+    RowSelectEventArgs,
 } from '@syncfusion/ej2-react-grids';
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
-
-
+import { SalesHeaderData } from "../../data/source";
 
 
 const OrderDetailScreen = () => {
@@ -31,7 +31,7 @@ const OrderDetailScreen = () => {
     const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
-    const selectionSettings: SelectionSettingsModel = { type: 'Multiple' };
+    const selectionSettings: SelectionSettingsModel = {  mode: 'Row', type: 'Multiple' };
   
     const isLoading = useOrderStore(state => state.isLoading);
     const errorMessage = useOrderStore(state => state.error);
@@ -39,6 +39,7 @@ const OrderDetailScreen = () => {
     const salesLines = useOrderStore((state) => state.salesLines);
     const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
+    const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
 
     const childGrid: any = {
         dataSource: salesLines,
@@ -112,17 +113,18 @@ const OrderDetailScreen = () => {
   
     // Fetch child data without collapsing
     const detailDataBound = async (args: any) => {
-        console.log('detailDataBound', args);
-        try {
-            if (args.data && args.data.salesId) {
-                await getSalesLinesById(args.data.salesId);
-            }
-        }
-        finally {
-            gridRef.current?.detailRowModule.expand(args.data.id);           
-        }
-       
+        if (args.data && args.data.salesId) {
+            await getSalesLinesById(args.data.salesId);
+        }       
     };
+    
+    const rowSelected = (args: RowSelectEventArgs) => {
+        if (args.data) {
+            console.log(args.data);
+            const data = args.data as SalesHeaderData;
+            setSelectedSalesIds(data.salesId);
+        }
+      }
 
     return (
         <Box sx={{
@@ -161,7 +163,8 @@ const OrderDetailScreen = () => {
                     }}
                     created={created}
                     detailDataBound={detailDataBound}                    
-                    selectionSettings={selectionSettings}                    
+                    selectionSettings={selectionSettings}  
+                    rowSelected={rowSelected}                  
                 >
                     <ColumnsDirective>
                         <ColumnDirective type='checkbox' width='50'></ColumnDirective>

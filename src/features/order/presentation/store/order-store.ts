@@ -10,7 +10,15 @@ const useOrderStore = create<OrderState>((set) => ({
     salesHeaders: [],
     salesHeader: null,
     salesLines: [],
-    expandedRows: null,
+    selectedSalesIds: [],
+    setSelectedSalesIds: (salesId: string) => {
+        set((state) => {
+            const selectedSalesIds = state.selectedSalesIds.includes(salesId)
+                ? state.selectedSalesIds.filter((id) => id !== salesId)
+                : [...state.selectedSalesIds, salesId];
+            return { selectedSalesIds };
+        });
+    },
     getSalesHeaders: async () => {
         set({ isLoading: true, error: null });
         try {
@@ -32,12 +40,7 @@ const useOrderStore = create<OrderState>((set) => ({
             set({ isLoading: false, error: errorMessage });
         }
     }, 
-    setExpandedRow: (id: number) => {
-        set((state) => ({
-            expandedRows: state.expandedRows === id ? null : id,
-        }));
-    }
-        
+   
 }));
 
 export default createSelectors(useOrderStore);
