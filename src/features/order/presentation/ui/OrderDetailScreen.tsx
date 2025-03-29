@@ -25,6 +25,7 @@ import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
+    const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
     const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
     const filterSettings: FilterSettingsModel = {type: 'Excel'};
     const pageSettings: PageSettingsModel = { pageSize: 15 };
@@ -102,14 +103,6 @@ const OrderDetailScreen = () => {
         }
     }
 
-    const handleDataStateChange = (args: any) => {
-        if (args.action.requestType === 'filtering' || args.action.requestType === 'sorting') {
-            // Prevent state updates that would cause re-render
-            args.cancel = true;
-        }
-    };
-
-
     return (
         <Box sx={{
             minHeight: '80vh',
@@ -147,12 +140,29 @@ const OrderDetailScreen = () => {
                     }}
                     created={created}
                     detailDataBound={async (args: any) => {
-                        // Fetch the child data when a row is expanded
                         if (args.data && args.data.salesId) {
-                            await getSalesLinesById(args.data.salesId);
+                            
+                            try {
+                                await getSalesLinesById(args.data.salesId);
+                            } finally {
+                                setTimeout(() => {
+                                    const grid = gridRef.current;
+                                    grid?.detailRowModule.expand(grid.getRowByIndex(args.rowIndex as number));
+                                }, 0);
+                            }
                         }
                     }}
-                    dataStateChange={handleDataStateChange}
+                    actionComplete={(args: any) => {
+                        if (args.requestType === 'expand' && args.rowData?.salesId) {
+                            setExpandedRows(prev => new Set(prev).add(args.rowData.salesId));
+                        } else if (args.requestType === 'collapse' && args.rowData?.salesId) {
+                            setExpandedRows(prev => {
+                                const newSet = new Set(prev);
+                                newSet.delete(args.rowData.salesId);
+                                return newSet;
+                            });
+                        }
+                    }}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
