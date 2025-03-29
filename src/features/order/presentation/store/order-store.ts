@@ -5,13 +5,20 @@ import { createSelectors } from "@/core/data";
 
 
 const useOrderStore = create<OrderState>((set) => ({
-    isLoading: false,    
+    isLoading: false,
     error: null,
     salesHeaders: [],
     salesHeader: null,
     salesLines: [],
     selectedSalesIds: [],
-    setSelectedSalesIds: (salesId: string) => {
+    setSelectedSalesIds: (salesId: string | string[]) => {
+        if (Array.isArray(salesId)) {
+            // Merge new IDs with existing ones (no duplicates)
+            set((state) => ({
+                selectedSalesIds: [...new Set([...state.selectedSalesIds, ...salesId])]
+            }));
+            return;
+        }
         set((state) => {
             const selectedSalesIds = state.selectedSalesIds.includes(salesId)
                 ? state.selectedSalesIds.filter((id) => id !== salesId)
@@ -22,7 +29,7 @@ const useOrderStore = create<OrderState>((set) => ({
     getSalesHeaders: async () => {
         set({ isLoading: true, error: null });
         try {
-            const response = await getSalesHeaders();            
+            const response = await getSalesHeaders();
             set({ salesHeaders: response.data, isLoading: false, error: null });
         } catch (error) {
             const errorMessage = (error as Error).message;
@@ -32,15 +39,15 @@ const useOrderStore = create<OrderState>((set) => ({
     },
     getSalesLinesById: async (salesId: string) => {
         set({ isLoading: true, error: null });
-        try {         
+        try {
             const response = await getSalesLinesById(salesId);
             set({ salesLines: response.data, isLoading: false, error: null });
         } catch (error) {
             const errorMessage = (error as Error).message;
             set({ isLoading: false, error: errorMessage });
         }
-    }, 
-   
+    },
+
 }));
 
 export default createSelectors(useOrderStore);

@@ -9,5 +9,5 @@ export type OrderState = {
     selectedSalesIds: string[];
     getSalesHeaders: () => Promise<void>;
     getSalesLinesById: (salesId: string) => Promise<void>;
-    setSelectedSalesIds: (salesId: string) => void;
+    setSelectedSalesIds: (salesId: string | string[]) => void;
 }

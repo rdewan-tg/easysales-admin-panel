@@ -31,8 +31,8 @@ const OrderDetailScreen = () => {
     const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
-    const selectionSettings: SelectionSettingsModel = {  mode: 'Row', type: 'Multiple' };
-  
+    const selectionSettings: SelectionSettingsModel = { mode: 'Row', type: 'Multiple' };
+
     const isLoading = useOrderStore(state => state.isLoading);
     const errorMessage = useOrderStore(state => state.error);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
@@ -93,7 +93,7 @@ const OrderDetailScreen = () => {
         if (gridRef.current) {
             gridRef.current.selectionSettings.enableSimpleMultiRowSelection = true;
         }
-        
+
         (document.getElementById((gridRef.current as GridComponent).element.id + "_searchbar") as HTMLElement).addEventListener('keyup', (event) => {
             (gridRef.current as GridComponent).search((event.target as HTMLInputElement).value)
         });
@@ -111,22 +111,38 @@ const OrderDetailScreen = () => {
             gridRef.current.hideSpinner();
         }
     }
-  
+
     // Fetch child data without collapsing
     const detailDataBound = async (args: any) => {
         if (args.data && args.data.salesId) {
             await getSalesLinesById(args.data.salesId);
-        }       
+        }
     };
-    
+
     const rowSelected = (args: RowSelectEventArgs) => {
-        if (args.data) {
-            console.log(args.data);
-           
+        if (!args.data) return;   
+ 
+    
+        if (!Array.isArray(args.data)) {
             const data = args.data as SalesHeaderData;
             setSelectedSalesIds(data.salesId);
+        } else {
+            const selectedSales = args.data as SalesHeaderData[];
+            const newSelection = new Set(selectedSalesIds); // Start with current state
+    
+            // Toggle each item in the selection
+            selectedSales.forEach(item => {
+                if (newSelection.has(item.salesId)) {
+                    newSelection.delete(item.salesId); // Unselect
+                } else {
+                    newSelection.add(item.salesId); // Select
+                }
+            });
+    
+            // Update Zustand
+           setSelectedSalesIds(Array.from(newSelection));
         }
-      }
+    };
 
     return (
         <Box sx={{
@@ -146,7 +162,7 @@ const OrderDetailScreen = () => {
                 sx={{
                     marginTop: '16px',
                 }}>
-                    
+
                 {selectedSalesIds.length > 0 && (
                     <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
                         <Typography variant="h6" color="primary" gutterBottom>
@@ -159,7 +175,7 @@ const OrderDetailScreen = () => {
                         </Stack>
                     </Paper>
                 )}
-               
+
 
                 <GridComponent
                     id='Grid'
@@ -178,9 +194,9 @@ const OrderDetailScreen = () => {
                         gridRef.current = g;
                     }}
                     created={created}
-                    detailDataBound={detailDataBound}                    
-                    selectionSettings={selectionSettings}  
-                    rowSelected={rowSelected}                  
+                    detailDataBound={detailDataBound}
+                    selectionSettings={selectionSettings}
+                    rowSelected={rowSelected}
                 >
                     <ColumnsDirective>
                         <ColumnDirective type='checkbox' width='50'></ColumnDirective>
