@@ -21,7 +21,7 @@ import {
     SelectionSettingsModel,
 } from '@syncfusion/ej2-react-grids';
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
-import { Try } from "@mui/icons-material";
+
 
 
 
@@ -39,8 +39,6 @@ const OrderDetailScreen = () => {
     const salesLines = useOrderStore((state) => state.salesLines);
     const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
-    const setExpandedRow = useOrderStore((state) => state.setExpandedRow);
-    const expandedRows = useOrderStore((state) => state.expandedRows);
 
     const childGrid: any = {
         dataSource: salesLines,
