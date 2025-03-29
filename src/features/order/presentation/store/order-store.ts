@@ -10,7 +10,7 @@ const useOrderStore = create<OrderState>((set) => ({
     salesHeaders: [],
     salesHeader: null,
     salesLines: [],
-    expandedRows: {},
+    expandedRows: null,
     getSalesHeaders: async () => {
         set({ isLoading: true, error: null });
         try {
@@ -32,12 +32,9 @@ const useOrderStore = create<OrderState>((set) => ({
             set({ isLoading: false, error: errorMessage });
         }
     }, 
-    setExpandedRow: (salesId: string, isExpanded: boolean) => {
+    setExpandedRow: (id: number) => {
         set((state) => ({
-            expandedRows: {
-                ...state.expandedRows,
-                [salesId]: isExpanded,
-            },
+            expandedRows: state.expandedRows === id ? null : id,
         }));
     }
         
