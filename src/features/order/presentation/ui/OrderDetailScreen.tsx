@@ -1,4 +1,4 @@
-import { Alert, Backdrop, Box, CircularProgress, Slide, Snackbar, SnackbarCloseReason } from "@mui/material"
+import { Alert, Backdrop, Box, Chip, CircularProgress, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, Typography } from "@mui/material"
 import { useOrderStore } from "..";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -27,7 +27,7 @@ import { SalesHeaderData } from "../../data/source";
 
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-    const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
+    const toolbar: ToolbarItems[] = ['Search'];
     const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
@@ -40,6 +40,7 @@ const OrderDetailScreen = () => {
     const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
     const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
+    const selectedSalesIds = useOrderStore((state) => state.selectedSalesIds);
 
     const childGrid: any = {
         dataSource: salesLines,
@@ -121,6 +122,7 @@ const OrderDetailScreen = () => {
     const rowSelected = (args: RowSelectEventArgs) => {
         if (args.data) {
             console.log(args.data);
+           
             const data = args.data as SalesHeaderData;
             setSelectedSalesIds(data.salesId);
         }
@@ -144,6 +146,20 @@ const OrderDetailScreen = () => {
                 sx={{
                     marginTop: '16px',
                 }}>
+                    
+                {selectedSalesIds.length > 0 && (
+                    <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
+                        <Typography variant="h6" color="primary" gutterBottom>
+                            Selected Sales IDs ({selectedSalesIds.length}):
+                        </Typography>
+                        <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+                            {selectedSalesIds.map((id) => (
+                                <Chip key={id} label={id} />
+                            ))}
+                        </Stack>
+                    </Paper>
+                )}
+               
 
                 <GridComponent
                     id='Grid'
