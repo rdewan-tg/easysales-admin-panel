@@ -28,6 +28,7 @@ export const createUserEndpoint: string = "/v1/api/admin/users";
 export const updateUserEndpoint: string = "/v1/api/admin/users/:id";
 export const deleteUserEndpoint: string = "/v1/api/admin/users";
 export const changeCompanyEndpoint: string = "/v1/api/admin/users/change-company";
+export const updatePasswordEndpoint: string = "/v1/api/admin/users/update-password";
 // me
 export const getMeEndpoint: string = "/v1/api/me";
 // role

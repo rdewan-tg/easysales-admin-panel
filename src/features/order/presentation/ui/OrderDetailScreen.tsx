@@ -199,7 +199,6 @@ const OrderDetailScreen = () => {
                     rowSelected={rowSelected}
                 >
                     <ColumnsDirective>
-                        <ColumnDirective type='checkbox' width='50'></ColumnDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
                         <ColumnDirective field='salesId' headerText='SalesId' width='200' textAlign="Left" />
                         <ColumnDirective field='customerId' headerText='CustomerId' width='150' textAlign="Left" />
