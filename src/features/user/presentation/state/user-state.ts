@@ -1,4 +1,4 @@
-import { SignupForm } from "@/common/types";
+import { SignupForm, UpdatePasswordForm } from "@/common/types";
 import { Company,  User, UserDetail } from "../../data";
 
 
@@ -8,6 +8,7 @@ export type UserState = {
     companies: Company[],
     isLoading: boolean,
     isUserDeleted: boolean | null,
+    isPasswordUpdated: boolean | null,
     error: string | null,
     deleteSnackbarOpen: boolean,
     isUserCreated: boolean | null,
@@ -18,5 +19,6 @@ export type UserState = {
     deleteUser: (id: number) => Promise<void>,
     setUserDeleted: (value: boolean) => void,
     getCompanies: () => Promise<void>,
+    updatePassword: (data: UpdatePasswordForm) => Promise<void>,
     reset: () => void
 }

@@ -1,4 +1,4 @@
-import { Alert, Backdrop, Box, CircularProgress, Slide, Snackbar, SnackbarCloseReason } from "@mui/material"
+import { Alert, Backdrop, Box, Chip, CircularProgress, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, Typography } from "@mui/material"
 import { useOrderStore } from "..";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -16,22 +16,50 @@ import {
     ToolbarItems,
     ExcelExport,
     Search,
+    FilterSettingsModel,
+    DetailRow,
+    SelectionSettingsModel,
+    RowSelectEventArgs,
 } from '@syncfusion/ej2-react-grids';
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
+import { SalesHeaderData } from "../../data/source";
 
 
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-    const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
+    const toolbar: ToolbarItems[] = ['Search'];
+    const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
+    const selectionSettings: SelectionSettingsModel = { mode: 'Row', type: 'Multiple' };
 
     const isLoading = useOrderStore(state => state.isLoading);
     const errorMessage = useOrderStore(state => state.error);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
+    const salesLines = useOrderStore((state) => state.salesLines);
+    const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
+    const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
+    const selectedSalesIds = useOrderStore((state) => state.selectedSalesIds);
+
+    const childGrid: any = {
+        dataSource: salesLines,
+        queryString: 'salesId',
+        columns: [
+            { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
+            { field: 'lineId', headerText: 'LineId', width: 120 },
+            { field: 'itemId', headerText: 'ItemId', width: 120 },
+            { field: 'productId', headerText: 'ProductId', width: 150 },
+            { field: 'productName', headerText: 'ProductName', width: 150 },
+            { field: 'packSize', headerText: 'PackSize', width: 150 },
+            { field: 'quantity', headerText: 'Quantity', width: 150 },
+            { field: 'salesUnit', headerText: 'SalesUnit', width: 150 },
+            { field: 'salesPrice', headerText: 'SalesPrice', width: 150 },
+        ],
+    };
 
     useEffect(() => {
+
         async function fetchSalesHeaders() {
             await getSalesHeaders();
         }
@@ -44,6 +72,7 @@ const OrderDetailScreen = () => {
             handleErrorSnackbarClick();
         }
     }, [errorMessage]);
+
     const handleErrorSnackbarClick = () => {
         setOpenErrorSnackBar(true);
     };
@@ -61,6 +90,10 @@ const OrderDetailScreen = () => {
     };
 
     const created = () => {
+        if (gridRef.current) {
+            gridRef.current.selectionSettings.enableSimpleMultiRowSelection = true;
+        }
+
         (document.getElementById((gridRef.current as GridComponent).element.id + "_searchbar") as HTMLElement).addEventListener('keyup', (event) => {
             (gridRef.current as GridComponent).search((event.target as HTMLInputElement).value)
         });
@@ -79,6 +112,37 @@ const OrderDetailScreen = () => {
         }
     }
 
+    // Fetch child data without collapsing
+    const detailDataBound = async (args: any) => {
+        if (args.data && args.data.salesId) {
+            await getSalesLinesById(args.data.salesId);
+        }
+    };
+
+    const rowSelected = (args: RowSelectEventArgs) => {
+        if (!args.data) return;   
+ 
+    
+        if (!Array.isArray(args.data)) {
+            const data = args.data as SalesHeaderData;
+            setSelectedSalesIds(data.salesId);
+        } else {
+            const selectedSales = args.data as SalesHeaderData[];
+            const newSelection = new Set(selectedSalesIds); // Start with current state
+    
+            // Toggle each item in the selection
+            selectedSales.forEach(item => {
+                if (newSelection.has(item.salesId)) {
+                    newSelection.delete(item.salesId); // Unselect
+                } else {
+                    newSelection.add(item.salesId); // Select
+                }
+            });
+    
+            // Update Zustand
+           setSelectedSalesIds(Array.from(newSelection));
+        }
+    };
 
     return (
         <Box sx={{
@@ -99,6 +163,20 @@ const OrderDetailScreen = () => {
                     marginTop: '16px',
                 }}>
 
+                {selectedSalesIds.length > 0 && (
+                    <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
+                        <Typography variant="h6" color="primary" gutterBottom>
+                            Selected Sales IDs ({selectedSalesIds.length}):
+                        </Typography>
+                        <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+                            {selectedSalesIds.map((id) => (
+                                <Chip key={id} label={id} />
+                            ))}
+                        </Stack>
+                    </Paper>
+                )}
+
+
                 <GridComponent
                     id='Grid'
                     dataSource={salesHeasers}
@@ -110,10 +188,15 @@ const OrderDetailScreen = () => {
                     allowExcelExport={true}
                     toolbarClick={toolbarClick}
                     excelExportComplete={excelExportComplete}
+                    childGrid={childGrid}
+                    filterSettings={filterSettings}
                     ref={g => {
                         gridRef.current = g;
                     }}
                     created={created}
+                    detailDataBound={detailDataBound}
+                    selectionSettings={selectionSettings}
+                    rowSelected={rowSelected}
                 >
                     <ColumnsDirective>
                         <ColumnDirective field='id' headerText='Id' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
@@ -133,7 +216,7 @@ const OrderDetailScreen = () => {
                         <ColumnDirective field='createAt' headerText='createAt' textAlign="Left" />
                         <ColumnDirective field='updatedAt' headerText='updatedAt' textAlign="Left" />
                     </ColumnsDirective>
-                    <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport, Search]} />
+                    <Inject services={[DetailRow, Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport, Search]} />
                 </GridComponent>
             </Box>
 

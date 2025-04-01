@@ -1,6 +1,6 @@
 import { SignupForm } from "@/common/types";
-import { UserDto, UsersDto } from "../../..";
-import { axiosAdminInstance, createUserEndpoint, deleteUserEndpoint, getUserByIdEndpoint, getUsersByCompanyEndpoint, } from "@/core/data";
+import { UpdatePasswordDto, UserDto, UsersDto } from "../../..";
+import { axiosAdminInstance, createUserEndpoint, deleteUserEndpoint, getUserByIdEndpoint, getUsersByCompanyEndpoint, updatePasswordEndpoint, } from "@/core/data";
 import { DeleteUserDto } from "../dto/delete-user.dto";
 
 export const createUser = async (data: any) => {
@@ -20,5 +20,10 @@ export const getUserById = async (id: number) => {
 
 export const deleteUser = async (id: number) => {
     const response = await axiosAdminInstance.delete<DeleteUserDto>(`${deleteUserEndpoint}/${id}`);
+    return response.data;
+}
+
+export const updatePassword = async(data: any) => {
+    const response = await axiosAdminInstance.post<UpdatePasswordDto>(`${updatePasswordEndpoint}`, data);
     return response.data;
 }

@@ -28,6 +28,7 @@ export const createUserEndpoint: string = "/v1/api/admin/users";
 export const updateUserEndpoint: string = "/v1/api/admin/users/:id";
 export const deleteUserEndpoint: string = "/v1/api/admin/users";
 export const changeCompanyEndpoint: string = "/v1/api/admin/users/change-company";
+export const updatePasswordEndpoint: string = "/v1/api/admin/users/update-password";
 // me
 export const getMeEndpoint: string = "/v1/api/me";
 // role
@@ -53,4 +54,10 @@ export const getPricesEndpoint: string = "/v1/api/prices";
 export const getSiteVisitReportByDateRangeEndpoint: string = "/v1/api/merchandiser/photos/report/site-visit-report-by-date-range";
 export const getPhotoTransDatesEndpoint: string = "/v1/api/merchandiser/photos/trans-dates";
 export const getPhotoCustomerChainsEndpoint: string = "/v1/api/merchandiser/photos/customer-chains";
+// sales
+export const getSalesHeadersByCompanyEndpoint: string = "/v1/api/sales-header/find/by-company-id";
+export const getSalesHeaderByIdEndpoint: string = "/v1/api/sales-header";
+export const getSalesLinesByIdEndpoint: string = "v1/api/sales-line";
+export const findSalesHeaderByCompanyDateRangeEndpoint: string = "/v1/api/sales-header/find/by-company-date-range";
+export const findSalesLineByCompanyDateRangeEndpoint: string = "v1/api/sales-line/find/by-company-date-range";
 

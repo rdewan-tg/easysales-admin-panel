@@ -6,6 +6,8 @@ export type OrderState = {
     salesHeaders: SalesHeaderData[];
     salesHeader: SalesHeaderData | null;
     salesLines: SalesLineData[];
+    selectedSalesIds: string[];
     getSalesHeaders: () => Promise<void>;
-    getSalesLines: (salesId: string) => Promise<void>;
+    getSalesLinesById: (salesId: string) => Promise<void>;
+    setSelectedSalesIds: (salesId: string | string[]) => void;
 }

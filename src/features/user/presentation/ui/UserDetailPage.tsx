@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import {
   DeleteMemberComponent,
   SetRoleComponent,
+  UpdatePasswordComponent,
   useUserStore,
 } from "..";
 import { useEffect, useState } from "react";
@@ -26,6 +27,8 @@ import {
   BaseConfirmDialog,
   BaseSnackBarComponent,
 } from "../../../../common/components";
+
+
 
 export const UserDetailPage = () => {
   const { id } = useParams();
@@ -43,9 +46,6 @@ export const UserDetailPage = () => {
 
   const getUserById = useUserStore.use.getUserById();
   const deleteUserRole = useRoleStore.use.deleteUserRole();
-
-
-
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -159,7 +159,17 @@ export const UserDetailPage = () => {
 
         <Divider sx={{ mt: 2, mb: 2 }} />
 
+        <UpdatePasswordComponent userId={Number(id)} />
+
+        <Divider sx={{ mt: 2, mb: 2 }} />
+
         {/* Display member delete button */}
+        < Typography variant="h5" gutterBottom>
+          Delete User
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          This action will permanently delete the user and all their data.
+        </Typography>
         <DeleteMemberComponent id={Number(id)} />
       </Card>
 
@@ -172,7 +182,7 @@ export const UserDetailPage = () => {
         onConfirm={handleDeleteUserRole}
       />
 
-      
+
       {/* Display global error */}
       {errorMessage && (
         <BaseSnackBarComponent
