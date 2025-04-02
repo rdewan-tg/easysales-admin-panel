@@ -170,8 +170,8 @@ const OrderDetailScreen = () => {
             <OrderFilterByDate
                 open={openFilterDialog}
                 close={handleClose}
-                title="Select Filters"
-                description="Choose the filter options to filter the orders"
+                title="Select Oder Dates"
+                description=""
             />
 
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>

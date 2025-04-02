@@ -47,6 +47,8 @@ const OrderFilterByDate = ({
                 endOfDay(new Date(data.endDate)).toISOString(), { representation: 'complete' }).replace(/\+\d{2}:\d{2}$/, 'Z')
         };
         await getSalesHeaderByCompanyDateRange(payload);
+        // close the dialog
+        close()
     }
 
     return (
