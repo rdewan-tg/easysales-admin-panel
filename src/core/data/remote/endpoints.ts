@@ -61,4 +61,5 @@ export const getSalesLinesByIdEndpoint: string = "/v1/api/sales-line";
 export const findSalesHeaderByCompanyDateRangeEndpoint: string = "/v1/api/sales-header/find/by-company-date-range";
 export const findSalesLineByCompanyDateRangeEndpoint: string = "/v1/api/sales-line/find/by-company-date-range";
 export const exportOrderToCSVEndpoint: string = "/v1/api/sales-header/export-sales-orders";
+export const OrderCreatedDateEndpoint: string = "/v1/api/sales-header/order-created-dates";
 

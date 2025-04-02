@@ -1,5 +1,5 @@
 import { Alert, Backdrop, Box, Button, Chip, CircularProgress, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, Typography } from "@mui/material"
-import { useOrderStore } from "..";
+import { OrderFilterByDate, useOrderStore } from "..";
 import { useEffect, useRef, useState } from "react";
 import {
     ColumnDirective,
@@ -27,6 +27,7 @@ import { SalesHeaderData } from "../../data/source";
 
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
+    const [openFilterDialog, setOpenFilterDialog] = useState(false);
     const toolbar: ToolbarItems[] = ['Search'];
     const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
@@ -47,7 +48,6 @@ const OrderDetailScreen = () => {
         dataSource: salesLines,
         queryString: 'salesId',
         columns: [
-            { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
             { field: 'lineId', headerText: 'LineId', width: 120 },
             { field: 'itemId', headerText: 'ItemId', width: 120 },
             { field: 'productId', headerText: 'ProductId', width: 150 },
@@ -56,6 +56,8 @@ const OrderDetailScreen = () => {
             { field: 'quantity', headerText: 'Quantity', width: 150 },
             { field: 'salesUnit', headerText: 'SalesUnit', width: 150 },
             { field: 'salesPrice', headerText: 'SalesPrice', width: 150 },
+            { field: 'lineAmount', headerText: 'LineAmount', width: 150 },
+            { field: 'deviceId', headerText: 'DeviceId', width: 150 },
         ],
     };
 
@@ -88,6 +90,10 @@ const OrderDetailScreen = () => {
         }
 
         setOpenErrorSnackBar(false);
+    };
+
+    const handleClose = () => {
+        setOpenFilterDialog(false);
     };
 
     const created = () => {
@@ -149,6 +155,10 @@ const OrderDetailScreen = () => {
         await exportOrderToCSV({ "salesIds": selectedSalesIds });
     };
 
+    const handleClickOpen = () => {
+        setOpenFilterDialog(true);
+    };
+
 
     return (
         <Box sx={{
@@ -164,13 +174,32 @@ const OrderDetailScreen = () => {
                 </Backdrop>
             ) : null}
 
+            {/* open a filter dialog */}
+            <OrderFilterByDate
+                open={openFilterDialog}
+                close={handleClose}
+                title="Select Filters"
+                description="Choose the filter options to filter the orders"
+            />
+
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
+
+                <Chip
+                    label="From & To Date"
+                    color="secondary"
+                    size="small" sx={{ margin: 1 }}
+                    onClick={() => handleClickOpen()}
+                />
+
+            </Box>
+
             <Box
                 sx={{
                     marginTop: '16px',
                 }}>
 
                 {selectedSalesIds.length > 0 && (
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: ' flex-start', marginBottom: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: ' center', justifyContent: 'flex-start', marginBottom: 2 }}>
                         <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
                             <Typography variant="h6" color="primary" gutterBottom>
                                 Selected Sales IDs ({selectedSalesIds.length}):
@@ -183,7 +212,7 @@ const OrderDetailScreen = () => {
                                 <Button
                                     variant="contained"
                                     color="secondary"
-                                    sx={{ alignItems: 'flex-start', marginLeft: 2 }}
+                                    sx={{ alignItems: 'center', marginLeft: 2 }}
                                     onClick={handleExportOrderToCSV}>
                                     Export Orders
                                 </Button>

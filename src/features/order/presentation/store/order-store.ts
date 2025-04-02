@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { OrderState } from "../state/order-state";
-import { exportOrderToCSV, getSalesHeaders, getSalesLinesById } from "../../data/source/api/order-api-service";
+import { exportOrderToCSV, getorderCreatedDates, getSalesHeaderByCompanyDateRange, getSalesHeaders, getSalesLinesById } from "../../data/source/api/order-api-service";
 import { createSelectors } from "@/core/data";
 import { ExportOrderToCSVDto } from "../../data/source";
+import { GetOrderCreatedDatesForm } from "@/common/types/get-order-created-date-form";
 
 
 const useOrderStore = create<OrderState>((set) => ({
@@ -12,6 +13,7 @@ const useOrderStore = create<OrderState>((set) => ({
     salesHeader: null,
     salesLines: [],
     selectedSalesIds: [],
+    orderCreatedDates: [],
     setSelectedSalesIds: (salesId: string | string[]) => {
         if (Array.isArray(salesId)) {
             // Merge new IDs with existing ones (no duplicates)
@@ -35,6 +37,19 @@ const useOrderStore = create<OrderState>((set) => ({
         } catch (error) {
             const errorMessage = (error as Error).message;
             set({ isLoading: false, error: errorMessage });
+        }
+
+    },
+    getSalesHeaderByCompanyDateRange: async (data: GetOrderCreatedDatesForm) => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await getSalesHeaderByCompanyDateRange(data);
+            set({ salesHeaders: response.data });
+        } catch (error) {
+            const errorMessage = (error as Error).message;
+            set({  error: errorMessage });
+        } finally {
+            set({ isLoading: false });
         }
 
     },
@@ -91,6 +106,20 @@ const useOrderStore = create<OrderState>((set) => ({
             set({ error: errorMessage });            
         } finally {
             // Regardless of success or failure, set loading to false
+            set({ isLoading: false });
+        }
+    },
+    getOrderCreatedDates: async () => {
+        try {
+            set({ isLoading: true, error: null });
+            const response = await getorderCreatedDates();
+            set({ orderCreatedDates: response.data})
+            
+        } catch (error) {
+            const errorMessage = (error as Error).message;
+            set({ isLoading: false, error: errorMessage });
+            
+        }finally {
             set({ isLoading: false });
         }
     }
