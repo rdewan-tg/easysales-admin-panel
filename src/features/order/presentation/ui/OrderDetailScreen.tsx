@@ -170,7 +170,7 @@ const OrderDetailScreen = () => {
                 }}>
 
                 {selectedSalesIds.length > 0 && (
-                    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems:' flex-start', marginBottom: 2}}>
                         <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
                             <Typography variant="h6" color="primary" gutterBottom>
                                 Selected Sales IDs ({selectedSalesIds.length}):
@@ -184,7 +184,7 @@ const OrderDetailScreen = () => {
                         <Button
                             variant="contained"
                             color="secondary"
-                            sx={{ marginLeft: 2 }}
+                            sx={{ alignItems: 'flex-start', marginLeft: 2 }}
                             onClick={handleExportOrderToCSV}>
                             Export Orders
                         </Button>
