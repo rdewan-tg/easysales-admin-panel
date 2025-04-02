@@ -1,4 +1,4 @@
-import { SalesHeaderData, SalesLineData } from "../../data/source";
+import { ExportOrderToCSVDto,  SalesHeaderData, SalesLineData } from "../../data/source";
 
 export type OrderState = {
     isLoading: boolean;    
@@ -10,5 +10,5 @@ export type OrderState = {
     getSalesHeaders: () => Promise<void>;
     getSalesLinesById: (salesId: string) => Promise<void>;
     setSelectedSalesIds: (salesId: string | string[]) => void;
-    exportOrderToCSV: (salesIds: string[]) => Promise<void>;
+    exportOrderToCSV: (data: ExportOrderToCSVDto) => Promise<void>;
 }

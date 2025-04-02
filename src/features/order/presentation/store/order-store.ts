@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { OrderState } from "../state/order-state";
 import { exportOrderToCSV, getSalesHeaders, getSalesLinesById } from "../../data/source/api/order-api-service";
 import { createSelectors } from "@/core/data";
+import { ExportOrderToCSVDto } from "../../data/source";
 
 
 const useOrderStore = create<OrderState>((set) => ({
@@ -47,11 +48,11 @@ const useOrderStore = create<OrderState>((set) => ({
             set({ isLoading: false, error: errorMessage });
         }
     },
-    exportOrderToCSV: async (salesIds: string[]) => {
+    exportOrderToCSV: async (data: ExportOrderToCSVDto) => {
         try {
             set({ isLoading: true, error: null });
             // call the api to export the sales orders to CSV
-            const response = await exportOrderToCSV(salesIds);
+            const response = await exportOrderToCSV(data);
             // Generate today's date in YYYY-MM-DD format
             const today = new Date().toISOString().split("T")[0];
 

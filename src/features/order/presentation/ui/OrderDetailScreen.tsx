@@ -146,7 +146,7 @@ const OrderDetailScreen = () => {
     };
 
     const handleExportOrderToCSV = async () => {
-        await exportOrderToCSV(selectedSalesIds);
+        await exportOrderToCSV({"salesIds": selectedSalesIds});
     };   
 
 
@@ -170,7 +170,7 @@ const OrderDetailScreen = () => {
                 }}>
 
                 {selectedSalesIds.length > 0 && (
-                    <Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                         <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
                             <Typography variant="h6" color="primary" gutterBottom>
                                 Selected Sales IDs ({selectedSalesIds.length}):
@@ -183,10 +183,10 @@ const OrderDetailScreen = () => {
                         </Paper>
                         <Button
                             variant="contained"
-                            color="primary"
-                            sx={{ marginTop: 2 }}
+                            color="secondary"
+                            sx={{ marginLeft: 2 }}
                             onClick={handleExportOrderToCSV}>
-                            Export  Sales Orders
+                            Export Orders
                         </Button>
                     </Box>
                 )}
