@@ -22,7 +22,7 @@ const OrderFilterByDate = ({
 
     const getOrderCreatedDates = useOrderStore.use.getOrderCreatedDates();
     const getSalesHeaderByCompanyDateRange = useOrderStore.use.getSalesHeaderByCompanyDateRange();
-    
+
     useEffect(() => {
 
         async function fetchCreatedDates() {
@@ -38,14 +38,15 @@ const OrderFilterByDate = ({
     const { control, handleSubmit, formState } = form;
     const { errors } = formState;
 
+
     const onSubmit: SubmitHandler<GetOrderCreatedDatesForm> = async (data: GetOrderCreatedDatesForm) => {
-        // Adjust dates to start of day and end of day
-        const adjustedData = {
-            ...data,
-            startDate: formatISO(startOfDay(data.startDate)), // "2025-04-01T00:00:00.000Z"
-            endDate: formatISO(endOfDay(data.endDate))       // "2025-04-12T23:59:59.999Z"
+        const payload = {
+            startDate: formatISO(
+                startOfDay(new Date(data.startDate)).toISOString(), { representation: 'complete' }).replace(/\+\d{2}:\d{2}$/, 'Z'),
+            endDate: formatISO(
+                endOfDay(new Date(data.endDate)).toISOString(), { representation: 'complete' }).replace(/\+\d{2}:\d{2}$/, 'Z')
         };
-        await getSalesHeaderByCompanyDateRange(adjustedData);
+        await getSalesHeaderByCompanyDateRange(payload);
     }
 
     return (
