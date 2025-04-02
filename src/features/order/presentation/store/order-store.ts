@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { OrderState } from "../state/order-state";
-import { exportOrderToCSV, getorderCreatedDates, getSalesHeaderByCompanyDateRange, getSalesHeaders, getSalesLinesById } from "../../data/source/api/order-api-service";
+import { exportOrderToCSV, getOrderCreatedDates, getSalesHeaderByCompanyDateRange, getSalesHeaders, getSalesLinesById } from "../../data/source/api/order-api-service";
 import { createSelectors } from "@/core/data";
 import { ExportOrderToCSVDto } from "../../data/source";
 import { GetOrderCreatedDatesForm } from "@/common/types/get-order-created-date-form";
@@ -112,7 +112,7 @@ const useOrderStore = create<OrderState>((set) => ({
     getOrderCreatedDates: async () => {
         try {
             set({ isLoading: true, error: null });
-            const response = await getorderCreatedDates();
+            const response = await getOrderCreatedDates();
             set({ orderCreatedDates: response.data})
             
         } catch (error) {

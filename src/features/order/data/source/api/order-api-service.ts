@@ -39,7 +39,7 @@ export const exportOrderToCSV = async (data: ExportOrderToCSVDto): Promise<any> 
     return response.data;
 }
 
-export const getorderCreatedDates = async () => {
+export const getOrderCreatedDates = async () => {
     const response = await axiosAdminInstance.get<OrderCreatedDateDto>(OrderCreatedDateEndpoint);
     return response.data;
 }
