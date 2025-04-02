@@ -10,4 +10,5 @@ export type OrderState = {
     getSalesHeaders: () => Promise<void>;
     getSalesLinesById: (salesId: string) => Promise<void>;
     setSelectedSalesIds: (salesId: string | string[]) => void;
+    exportOrderToCSV: (salesIds: string[]) => Promise<void>;
 }

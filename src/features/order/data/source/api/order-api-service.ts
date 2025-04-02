@@ -1,4 +1,4 @@
-import { axiosAdminInstance, findSalesHeaderByCompanyDateRangeEndpoint, findSalesLineByCompanyDateRangeEndpoint, getSalesHeaderByIdEndpoint, getSalesHeadersByCompanyEndpoint, getSalesLinesByIdEndpoint } from "@/core/data";
+import { axiosAdminInstance, exportOrderToCSVEndpoint, findSalesHeaderByCompanyDateRangeEndpoint, findSalesLineByCompanyDateRangeEndpoint, getSalesHeaderByIdEndpoint, getSalesHeadersByCompanyEndpoint, getSalesLinesByIdEndpoint } from "@/core/data";
 import { SalesHeaderDto, SalesHeadersDto, SalesLineDto } from "..";
 
 
@@ -25,5 +25,10 @@ export const exportSalesHeader = async (data: any): Promise<any> => {
 
 export const exportSalesLine = async (data: any): Promise<any> => {
     const response = await axiosAdminInstance.get(findSalesLineByCompanyDateRangeEndpoint, { params: data });
+    return response.data;
+}
+
+export const exportOrderToCSV = async (data: string[]): Promise<any> => {
+    const response  = await axiosAdminInstance.post(exportOrderToCSVEndpoint, data ,{ responseType: 'blob' });
     return response.data;
 }

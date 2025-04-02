@@ -1,4 +1,4 @@
-import { Alert, Backdrop, Box, Chip, CircularProgress, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, Typography } from "@mui/material"
+import { Alert, Backdrop, Box, Button, Chip, CircularProgress, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, Typography } from "@mui/material"
 import { useOrderStore } from "..";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -41,6 +41,7 @@ const OrderDetailScreen = () => {
     const getSalesHeaders = useOrderStore.use.getSalesHeaders();
     const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
     const selectedSalesIds = useOrderStore((state) => state.selectedSalesIds);
+    const exportOrderToCSV = useOrderStore.use.exportOrderToCSV();
 
     const childGrid: any = {
         dataSource: salesLines,
@@ -120,16 +121,16 @@ const OrderDetailScreen = () => {
     };
 
     const rowSelected = (args: RowSelectEventArgs) => {
-        if (!args.data) return;   
- 
-    
+        if (!args.data) return;
+
+
         if (!Array.isArray(args.data)) {
             const data = args.data as SalesHeaderData;
             setSelectedSalesIds(data.salesId);
         } else {
             const selectedSales = args.data as SalesHeaderData[];
             const newSelection = new Set(selectedSalesIds); // Start with current state
-    
+
             // Toggle each item in the selection
             selectedSales.forEach(item => {
                 if (newSelection.has(item.salesId)) {
@@ -138,11 +139,16 @@ const OrderDetailScreen = () => {
                     newSelection.add(item.salesId); // Select
                 }
             });
-    
+
             // Update Zustand
-           setSelectedSalesIds(Array.from(newSelection));
+            setSelectedSalesIds(Array.from(newSelection));
         }
     };
+
+    const handleExportOrderToCSV = async () => {
+        await exportOrderToCSV(selectedSalesIds);
+    };   
+
 
     return (
         <Box sx={{
@@ -164,16 +170,25 @@ const OrderDetailScreen = () => {
                 }}>
 
                 {selectedSalesIds.length > 0 && (
-                    <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
-                        <Typography variant="h6" color="primary" gutterBottom>
-                            Selected Sales IDs ({selectedSalesIds.length}):
-                        </Typography>
-                        <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
-                            {selectedSalesIds.map((id) => (
-                                <Chip key={id} label={id} />
-                            ))}
-                        </Stack>
-                    </Paper>
+                    <Box>
+                        <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
+                            <Typography variant="h6" color="primary" gutterBottom>
+                                Selected Sales IDs ({selectedSalesIds.length}):
+                            </Typography>
+                            <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+                                {selectedSalesIds.map((id) => (
+                                    <Chip key={id} label={id} />
+                                ))}
+                            </Stack>
+                        </Paper>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ marginTop: 2 }}
+                            onClick={handleExportOrderToCSV}>
+                            Export  Sales Orders
+                        </Button>
+                    </Box>
                 )}
 
 
@@ -209,7 +224,7 @@ const OrderDetailScreen = () => {
                         <ColumnDirective field='customerPriceGroup' headerText='CustomerPriceGroup' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='note' headerText='Note' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='deliveryAddressLocation' headerText='DeliveryAddressLocation' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='deliveryDate' headerText='DeliveryDate' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
+                        <ColumnDirective field='deliveryDate' headerText='DeliveryDate' minWidth='50' width='80' textAlign="Left" />
                         <ColumnDirective field='transactionDate' headerText='TransactionDate' minWidth='50' width='80' textAlign="Left" />
                         <ColumnDirective field='deviceId' headerText='DeviceId' textAlign="Left" />
                         <ColumnDirective field='syncStatus' headerText='syncStatus' textAlign="Left" />

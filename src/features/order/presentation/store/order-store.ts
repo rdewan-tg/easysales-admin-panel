@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { OrderState } from "../state/order-state";
-import { getSalesHeaders, getSalesLinesById } from "../../data/source/api/order-api-service";
+import { exportOrderToCSV, getSalesHeaders, getSalesLinesById } from "../../data/source/api/order-api-service";
 import { createSelectors } from "@/core/data";
 
 
@@ -47,6 +47,32 @@ const useOrderStore = create<OrderState>((set) => ({
             set({ isLoading: false, error: errorMessage });
         }
     },
+    exportOrderToCSV: async (salesIds: string[]) => {
+        try {
+            set({ isLoading: true, error: null });
+            // call the api to export the sales orders to CSV
+            const response = await exportOrderToCSV(salesIds);
+            // Generate today's date in YYYY-MM-DD format
+            const today = new Date().toISOString().split("T")[0];
+
+            // Define a custom filename
+            const filename = `sales_orders_${today}.zip`;
+
+            const bolb = new Blob([response], { type: "application/zip" });
+            const url = window.URL.createObjectURL(bolb);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            const errorMessage = (error as Error).message;
+            set({ error: errorMessage });            
+        } finally {
+            set({ isLoading: false });
+        }
+    }
 
 }));
 
