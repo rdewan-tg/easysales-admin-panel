@@ -1,9 +1,11 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useOrderStore } from "../..";
 import { GetOrderCreatedDatesForm, getOrderCreatedDatesSchema } from "@/common/types/get-order-created-date-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { startOfDay, endOfDay, formatISO } from 'date-fns';
 
 
 const OrderFilterByDate = ({
@@ -20,8 +22,7 @@ const OrderFilterByDate = ({
 
     const getOrderCreatedDates = useOrderStore.use.getOrderCreatedDates();
     const getSalesHeaderByCompanyDateRange = useOrderStore.use.getSalesHeaderByCompanyDateRange();
-    const orderCreatedDates = useOrderStore((state) => state.orderCreatedDates);
-
+    
     useEffect(() => {
 
         async function fetchCreatedDates() {
@@ -38,7 +39,13 @@ const OrderFilterByDate = ({
     const { errors } = formState;
 
     const onSubmit: SubmitHandler<GetOrderCreatedDatesForm> = async (data: GetOrderCreatedDatesForm) => {
-        await getSalesHeaderByCompanyDateRange(data);
+        // Adjust dates to start of day and end of day
+        const adjustedData = {
+            ...data,
+            startDate: formatISO(startOfDay(data.startDate)), // "2025-04-01T00:00:00.000Z"
+            endDate: formatISO(endOfDay(data.endDate))       // "2025-04-12T23:59:59.999Z"
+        };
+        await getSalesHeaderByCompanyDateRange(adjustedData);
     }
 
     return (
@@ -56,59 +63,43 @@ const OrderFilterByDate = ({
                     <DialogContentText>{description}</DialogContentText>
 
                     <Controller
-                        name="fromDate"
+                        name="startDate"
                         control={control}
                         render={({ field }) => (
-                            <TextField
+                            <DatePicker
                                 {...field}
-                                id="from-data"
-                                type="text"
-                                size="small"
-                                select
+                                label="From Date"
+                                format="dd/MM/yyyy"
                                 slotProps={{
-                                    select: {
-                                        native: true,
-                                    },
+                                    textField: {
+                                        size: 'small',
+                                        error: !!errors.startDate,
+                                        helperText: errors.startDate?.message,
+                                        sx: { width: '100%', maxWidth: 200, margin: 1 }
+                                    }
                                 }}
-                                helperText={errors.fromDate ? errors.fromDate.message : null}
-                                sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                            >
-                                <option aria-label="None" value="" >Select a FromDate</option>
-                                {orderCreatedDates.map((option) => (
-                                    <option key={option.createAt} value={option.createAt}>
-                                        {option.createAt}
-                                    </option>
-                                ))}
-                            </TextField>
+                            />
 
                         )}
                     />
 
                     <Controller
-                        name="toDate"
+                        name="endDate"
                         control={control}
                         render={({ field }) => (
-                            <TextField
+                            <DatePicker
                                 {...field}
-                                id="to-data"
-                                type="text"
-                                size="small"
-                                select
+                                label="To Date"
+                                format="yy/MM/yyyy"
                                 slotProps={{
-                                    select: {
-                                        native: true,
-                                    },
+                                    textField: {
+                                        size: 'small',
+                                        error: !!errors.endDate,
+                                        helperText: errors.endDate?.message,
+                                        sx: { width: '100%', maxWidth: 200, margin: 1 }
+                                    }
                                 }}
-                                helperText={errors.toDate ? errors.toDate.message : null}
-                                sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                            >
-                                <option aria-label="None" value="" >Select a ToDate</option>
-                                {orderCreatedDates.map((option) => (
-                                    <option key={option.createAt} value={option.createAt}>
-                                        {option.createAt}
-                                    </option>
-                                ))}
-                            </TextField>
+                            />
 
                         )}
                     />

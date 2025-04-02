@@ -38,7 +38,7 @@ const OrderDetailScreen = () => {
     const errorMessage = useOrderStore(state => state.error);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
     const salesLines = useOrderStore((state) => state.salesLines);
-    const getSalesLinesById = useOrderStore.use.getSalesLinesById();    
+    const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
     const selectedSalesIds = useOrderStore((state) => state.selectedSalesIds);
     const exportOrderToCSV = useOrderStore.use.exportOrderToCSV();
@@ -175,9 +175,11 @@ const OrderDetailScreen = () => {
             />
 
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
-
+                <Typography variant="h6" color="primary" gutterBottom>
+                    Filter:
+                </Typography>
                 <Chip
-                    label="From & To Date"
+                    label="Start & End Date"
                     color="secondary"
                     size="small" sx={{ margin: 1 }}
                     onClick={() => handleClickOpen()}
