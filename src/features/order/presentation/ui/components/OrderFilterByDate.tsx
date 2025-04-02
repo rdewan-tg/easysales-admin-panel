@@ -28,7 +28,7 @@ const OrderFilterByDate = ({
             await getOrderCreatedDates();
         }
         fetchCreatedDates();
-    })
+    }, []);
 
     const form = useForm<GetOrderCreatedDatesForm>({
         resolver: zodResolver(getOrderCreatedDatesSchema),
