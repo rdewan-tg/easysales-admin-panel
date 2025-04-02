@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useOrderStore } from "../..";
 import { GetOrderCreatedDatesForm, getOrderCreatedDatesSchema } from "@/common/types/get-order-created-date-form";
@@ -113,6 +113,11 @@ const OrderFilterByDate = ({
                         )}
                     />
                 </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={close}>Close</Button>
+                    <Button type="submit" onClick={() => handleSubmit(onSubmit)()}>Submit</Button>
+                </DialogActions>
 
             </Dialog>
         </Box>
