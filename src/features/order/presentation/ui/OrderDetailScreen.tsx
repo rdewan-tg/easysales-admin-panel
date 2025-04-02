@@ -38,8 +38,7 @@ const OrderDetailScreen = () => {
     const errorMessage = useOrderStore(state => state.error);
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
     const salesLines = useOrderStore((state) => state.salesLines);
-    const getSalesLinesById = useOrderStore.use.getSalesLinesById();
-    const getSalesHeaders = useOrderStore.use.getSalesHeaders();
+    const getSalesLinesById = useOrderStore.use.getSalesLinesById();    
     const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
     const selectedSalesIds = useOrderStore((state) => state.selectedSalesIds);
     const exportOrderToCSV = useOrderStore.use.exportOrderToCSV();
@@ -61,13 +60,6 @@ const OrderDetailScreen = () => {
         ],
     };
 
-    useEffect(() => {
-
-        async function fetchSalesHeaders() {
-            await getSalesHeaders();
-        }
-        fetchSalesHeaders();
-    }, []);
 
     // observe error state and display error message
     useEffect(() => {
