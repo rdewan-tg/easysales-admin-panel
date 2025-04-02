@@ -146,8 +146,8 @@ const OrderDetailScreen = () => {
     };
 
     const handleExportOrderToCSV = async () => {
-        await exportOrderToCSV({"salesIds": selectedSalesIds});
-    };   
+        await exportOrderToCSV({ "salesIds": selectedSalesIds });
+    };
 
 
     return (
@@ -170,24 +170,25 @@ const OrderDetailScreen = () => {
                 }}>
 
                 {selectedSalesIds.length > 0 && (
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems:' flex-start', marginBottom: 2}}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: ' flex-start', marginBottom: 2 }}>
                         <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
                             <Typography variant="h6" color="primary" gutterBottom>
                                 Selected Sales IDs ({selectedSalesIds.length}):
                             </Typography>
+
                             <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
                                 {selectedSalesIds.map((id) => (
                                     <Chip key={id} label={id} />
                                 ))}
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    sx={{ alignItems: 'flex-start', marginLeft: 2 }}
+                                    onClick={handleExportOrderToCSV}>
+                                    Export Orders
+                                </Button>
                             </Stack>
                         </Paper>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            sx={{ alignItems: 'flex-start', marginLeft: 2 }}
-                            onClick={handleExportOrderToCSV}>
-                            Export Orders
-                        </Button>
                     </Box>
                 )}
 
