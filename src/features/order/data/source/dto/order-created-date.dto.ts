@@ -4,5 +4,5 @@ export interface  OrderCreatedDateDto {
 }
 
 export interface OrderCreatedDate {
-    createdDate: string;
+    createAt: string;
 }
