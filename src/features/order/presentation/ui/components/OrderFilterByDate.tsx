@@ -93,7 +93,7 @@ const OrderFilterByDate = ({
                             <DatePicker
                                 {...field}
                                 label="To Date"
-                                format="yy/MM/yyyy"
+                                format="dd/MM/yyyy"
                                 slotProps={{
                                     textField: {
                                         size: 'small',
