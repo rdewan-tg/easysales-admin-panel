@@ -28,7 +28,7 @@ import { SalesHeaderData } from "../../data/source";
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
     const [openFilterDialog, setOpenFilterDialog] = useState(false);
-    const toolbar: ToolbarItems[] = ['Search'];
+    const toolbar: ToolbarItems[] = ['ExcelExport', 'Search'];
     const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
     const gridRef = useRef<GridComponent | null>(null);
@@ -36,7 +36,7 @@ const OrderDetailScreen = () => {
 
     const isLoading = useOrderStore(state => state.isLoading);
     const errorMessage = useOrderStore(state => state.error);
-    const salesHeasers = useOrderStore((state) => state.salesHeaders);
+    const salesHeaders = useOrderStore((state) => state.salesHeaders);
     const salesLines = useOrderStore((state) => state.salesLines);
     const getSalesLinesById = useOrderStore.use.getSalesLinesById();
     const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
@@ -101,7 +101,8 @@ const OrderDetailScreen = () => {
     const toolbarClick = (args: ClickEventArgs) => {
         if (gridRef.current && args.item.id === 'Grid_excelexport') {
             gridRef.current.showSpinner();
-            gridRef.current.excelExport();
+            //gridRef.current.excelExport();
+            exportOrderToCSV({ "salesIds": salesHeaders.map(x => x.salesId) });
         }
     }
 
@@ -218,7 +219,7 @@ const OrderDetailScreen = () => {
 
                 <GridComponent
                     id='Grid'
-                    dataSource={salesHeasers}
+                    dataSource={salesHeaders}
                     allowResizing={true}
                     autoFit={true}
                     allowPaging={true}
