@@ -41,13 +41,13 @@ const useOrderStore = create<OrderState>((set) => ({
 
     },
     getSalesHeaderByCompanyDateRange: async (data: GetOrderCreatedDatesForm) => {
-        set({ isLoading: true, error: null });
+        set({ isLoading: true, error: null, salesHeaders: [], salesLines: [], selectedSalesIds: [] });
         try {
             const response = await getSalesHeaderByCompanyDateRange(data);
             set({ salesHeaders: response.data });
         } catch (error) {
             const errorMessage = (error as Error).message;
-            set({  error: errorMessage });
+            set({ error: errorMessage });
         } finally {
             set({ isLoading: false });
         }
@@ -67,43 +67,43 @@ const useOrderStore = create<OrderState>((set) => ({
         try {
             // Set loading state to true and clear any previous errors
             set({ isLoading: true, error: null });
-            
+
             // Call the API endpoint to export the sales orders to CSV format
             const response = await exportOrderToCSV(data);
-            
+
             // Get current date and format it as YYYY-MM-DD
             const today = new Date().toISOString().split("T")[0];
-    
+
             // Create a filename with today's date and .zip extension
             const filename = `sales_orders_${today}.zip`;
-    
+
             // Create a Blob object from the response data with zip MIME type
             const bolb = new Blob([response], { type: "application/zip" });
-            
+
             // Create a temporary URL for the Blob
             const url = window.URL.createObjectURL(bolb);
-            
+
             // Create an anchor element for downloading
             const a = document.createElement("a");
-            
+
             // Set the anchor's href to the Blob URL
             a.href = url;
-            
+
             // Set the download attribute with our custom filename
             a.download = filename;
-            
+
             // Append the anchor to the document body (required for Firefox)
             document.body.appendChild(a);
-            
+
             // Programmatically click the anchor to trigger download
             a.click();
-            
+
             // Clean up by revoking the Blob URL
             window.URL.revokeObjectURL(url);
         } catch (error) {
             // If error occurs, extract the error message and set it in state
             const errorMessage = (error as Error).message;
-            set({ error: errorMessage });            
+            set({ error: errorMessage });
         } finally {
             // Regardless of success or failure, set loading to false
             set({ isLoading: false });
@@ -113,13 +113,13 @@ const useOrderStore = create<OrderState>((set) => ({
         try {
             set({ isLoading: true, error: null });
             const response = await getOrderCreatedDates();
-            set({ orderCreatedDates: response.data})
-            
+            set({ orderCreatedDates: response.data })
+
         } catch (error) {
             const errorMessage = (error as Error).message;
             set({ isLoading: false, error: errorMessage });
-            
-        }finally {
+
+        } finally {
             set({ isLoading: false });
         }
     }
