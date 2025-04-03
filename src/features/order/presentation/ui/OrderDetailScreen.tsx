@@ -1,5 +1,5 @@
-import { Alert, Backdrop, Box, Chip, CircularProgress, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, Typography } from "@mui/material"
-import { useOrderStore } from "..";
+import { Alert, Backdrop, Box, Button, Chip, CircularProgress, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, Typography } from "@mui/material"
+import { OrderFilterByDate, useOrderStore } from "..";
 import { useEffect, useRef, useState } from "react";
 import {
     ColumnDirective,
@@ -27,6 +27,7 @@ import { SalesHeaderData } from "../../data/source";
 
 const OrderDetailScreen = () => {
     const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
+    const [openFilterDialog, setOpenFilterDialog] = useState(false);
     const toolbar: ToolbarItems[] = ['Search'];
     const filterSettings: FilterSettingsModel = { type: 'Excel' };
     const pageSettings: PageSettingsModel = { pageSize: 15 };
@@ -38,15 +39,14 @@ const OrderDetailScreen = () => {
     const salesHeasers = useOrderStore((state) => state.salesHeaders);
     const salesLines = useOrderStore((state) => state.salesLines);
     const getSalesLinesById = useOrderStore.use.getSalesLinesById();
-    const getSalesHeaders = useOrderStore.use.getSalesHeaders();
     const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
     const selectedSalesIds = useOrderStore((state) => state.selectedSalesIds);
+    const exportOrderToCSV = useOrderStore.use.exportOrderToCSV();
 
     const childGrid: any = {
         dataSource: salesLines,
         queryString: 'salesId',
         columns: [
-            { field: 'salesId', headerText: 'Sales ID', textAlign: 'Right', width: 120 },
             { field: 'lineId', headerText: 'LineId', width: 120 },
             { field: 'itemId', headerText: 'ItemId', width: 120 },
             { field: 'productId', headerText: 'ProductId', width: 150 },
@@ -55,16 +55,11 @@ const OrderDetailScreen = () => {
             { field: 'quantity', headerText: 'Quantity', width: 150 },
             { field: 'salesUnit', headerText: 'SalesUnit', width: 150 },
             { field: 'salesPrice', headerText: 'SalesPrice', width: 150 },
+            { field: 'lineAmount', headerText: 'LineAmount', width: 150 },
+            { field: 'deviceId', headerText: 'DeviceId', width: 150 },
         ],
     };
 
-    useEffect(() => {
-
-        async function fetchSalesHeaders() {
-            await getSalesHeaders();
-        }
-        fetchSalesHeaders();
-    }, []);
 
     // observe error state and display error message
     useEffect(() => {
@@ -87,6 +82,10 @@ const OrderDetailScreen = () => {
         }
 
         setOpenErrorSnackBar(false);
+    };
+
+    const handleClose = () => {
+        setOpenFilterDialog(false);
     };
 
     const created = () => {
@@ -120,16 +119,16 @@ const OrderDetailScreen = () => {
     };
 
     const rowSelected = (args: RowSelectEventArgs) => {
-        if (!args.data) return;   
- 
-    
+        if (!args.data) return;
+
+
         if (!Array.isArray(args.data)) {
             const data = args.data as SalesHeaderData;
             setSelectedSalesIds(data.salesId);
         } else {
             const selectedSales = args.data as SalesHeaderData[];
             const newSelection = new Set(selectedSalesIds); // Start with current state
-    
+
             // Toggle each item in the selection
             selectedSales.forEach(item => {
                 if (newSelection.has(item.salesId)) {
@@ -138,11 +137,20 @@ const OrderDetailScreen = () => {
                     newSelection.add(item.salesId); // Select
                 }
             });
-    
+
             // Update Zustand
-           setSelectedSalesIds(Array.from(newSelection));
+            setSelectedSalesIds(Array.from(newSelection));
         }
     };
+
+    const handleExportOrderToCSV = async () => {
+        await exportOrderToCSV({ "salesIds": selectedSalesIds });
+    };
+
+    const handleClickOpen = () => {
+        setOpenFilterDialog(true);
+    };
+
 
     return (
         <Box sx={{
@@ -158,22 +166,53 @@ const OrderDetailScreen = () => {
                 </Backdrop>
             ) : null}
 
+            {/* open a filter dialog */}
+            <OrderFilterByDate
+                open={openFilterDialog}
+                close={handleClose}
+                title="Select Oder Dates"
+                description=""
+            />
+
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
+                <Typography variant="h6" color="primary" gutterBottom>
+                    Filter:
+                </Typography>
+                <Chip
+                    label="Start & End Date"
+                    color="secondary"
+                    size="small" sx={{ margin: 1 }}
+                    onClick={() => handleClickOpen()}
+                />
+
+            </Box>
+
             <Box
                 sx={{
                     marginTop: '16px',
                 }}>
 
                 {selectedSalesIds.length > 0 && (
-                    <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
-                        <Typography variant="h6" color="primary" gutterBottom>
-                            Selected Sales IDs ({selectedSalesIds.length}):
-                        </Typography>
-                        <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
-                            {selectedSalesIds.map((id) => (
-                                <Chip key={id} label={id} />
-                            ))}
-                        </Stack>
-                    </Paper>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: ' center', justifyContent: 'flex-start', marginBottom: 2 }}>
+                        <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
+                            <Typography variant="h6" color="primary" gutterBottom>
+                                Selected Sales IDs ({selectedSalesIds.length}):
+                            </Typography>
+
+                            <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+                                {selectedSalesIds.map((id) => (
+                                    <Chip key={id} label={id} />
+                                ))}
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    sx={{ alignItems: 'center', marginLeft: 2 }}
+                                    onClick={handleExportOrderToCSV}>
+                                    Export Orders
+                                </Button>
+                            </Stack>
+                        </Paper>
+                    </Box>
                 )}
 
 
@@ -209,7 +248,7 @@ const OrderDetailScreen = () => {
                         <ColumnDirective field='customerPriceGroup' headerText='CustomerPriceGroup' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='note' headerText='Note' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
                         <ColumnDirective field='deliveryAddressLocation' headerText='DeliveryAddressLocation' minWidth='100' width='150' maxWidth='200' textAlign="Left" />
-                        <ColumnDirective field='deliveryDate' headerText='DeliveryDate' minWidth='50' width='70' maxWidth='100' textAlign="Left" />
+                        <ColumnDirective field='deliveryDate' headerText='DeliveryDate' minWidth='50' width='80' textAlign="Left" />
                         <ColumnDirective field='transactionDate' headerText='TransactionDate' minWidth='50' width='80' textAlign="Left" />
                         <ColumnDirective field='deviceId' headerText='DeviceId' textAlign="Left" />
                         <ColumnDirective field='syncStatus' headerText='syncStatus' textAlign="Left" />

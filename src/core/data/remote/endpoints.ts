@@ -57,7 +57,9 @@ export const getPhotoCustomerChainsEndpoint: string = "/v1/api/merchandiser/phot
 // sales
 export const getSalesHeadersByCompanyEndpoint: string = "/v1/api/sales-header/find/by-company-id";
 export const getSalesHeaderByIdEndpoint: string = "/v1/api/sales-header";
-export const getSalesLinesByIdEndpoint: string = "v1/api/sales-line";
+export const getSalesLinesByIdEndpoint: string = "/v1/api/sales-line";
 export const findSalesHeaderByCompanyDateRangeEndpoint: string = "/v1/api/sales-header/find/by-company-date-range";
-export const findSalesLineByCompanyDateRangeEndpoint: string = "v1/api/sales-line/find/by-company-date-range";
+export const findSalesLineByCompanyDateRangeEndpoint: string = "/v1/api/sales-line/find/by-company-date-range";
+export const exportOrderToCSVEndpoint: string = "/v1/api/sales-header/export-sales-orders";
+export const OrderCreatedDateEndpoint: string = "/v1/api/sales-header/find/order-created-dates";
 
