@@ -100,7 +100,9 @@ const OrderDetailScreen = () => {
 
     const toolbarClick = (args: ClickEventArgs) => {
         if (gridRef.current && args.item.id === 'Grid_excelexport') {
-            gridRef.current.showSpinner();
+            // if sales headers is empty - do nothing
+            if (salesHeaders.length === 0) return;
+            //gridRef.current.showSpinner();
             //gridRef.current.excelExport();
             exportOrderToCSV({ "salesIds": salesHeaders.map(x => x.salesId) });
         }
