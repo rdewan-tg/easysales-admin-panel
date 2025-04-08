@@ -75,6 +75,18 @@ const PhotoGalleryScreen = () => {
                     <img
                         src={item.photo}
                         style={{ width: '100%', height: 'auto', alignItems: 'center', justifyContent: 'center' }} />
+
+                    <Box sx={{ padding: 1, textAlign: 'center' }}>
+                        <Typography variant="subtitle1" component="div">
+                            {item.deviceId} - {item.transDate}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            {item.customerName}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                            {item.customerAddress}
+                        </Typography>
+                    </Box>
                 </Box>
             );
         });
@@ -154,7 +166,7 @@ const PhotoGalleryScreen = () => {
                     showCloseIcon: false,
                     download: false,
                     rotate: false,
-                  }}
+                }}
             >
                 {renderPhotos()}
             </LightGallery>
