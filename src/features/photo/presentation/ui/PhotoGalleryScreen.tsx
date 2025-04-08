@@ -78,7 +78,7 @@ const PhotoGalleryScreen = () => {
 
                     <Box sx={{ padding: 1, textAlign: 'center' }}>
                         <Typography variant="subtitle1" component="div">
-                            {item.deviceId} - {item.transDate}
+                            {item.deviceId} : {item.transDate}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             {item.customerName}
