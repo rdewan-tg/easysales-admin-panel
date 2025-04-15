@@ -40,258 +40,261 @@ import { OrderDetailScreen, OrderScreen } from "@/features/order/presentation";
 
 
 export const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <MainLayout />,
-      errorElement: <NotFoundPage />,
-      children: [
-        {
-          element: <AuthChecker />,
-          children: [
-            {
-              element: <ProtectedRoute />, // Protect the dashboard route
-              children: [
-                {
-                  path: routeName.dashboard,
-                  element: <DashboardPage />,
-                  errorElement: <NotFoundPage />,
-                  children: [
-                    //Redirect from /dashboard to /dashboard/users
-                    {
-                      // default component  - This will match the exact /dashboard path
-                      index: true,
-                      // Redirects to /dashboard/users
-                      element: <Navigate to={routeName.users} replace={true} />,
-                    },
-                    //user
-                    {
-                      path: routeName.users,
-                      element: <UsersPage />,
-                      errorElement: <NotFoundPage />,
-                      children: [
-                        {
-                          index: true, // default component
-                          element: <UsersListPage />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        {
-                          path: ":id",
-                          element: <UserDetailPage />,
-                          errorElement: <NotFoundPage />,
-                          children: [
-                            {
-                              path: routeName.roles,
-                              element: <UserRolePage />,
-                              errorElement: <NotFoundPage />,
-                            },
-                          ]
-                        },
-                        {
-                          path: routeName.createUser,
-                          element: <CreateUserPage />,
-                          errorElement: <NotFoundPage />,
-                        }
-                      ],
-                    },
-                    //rols
-                    {
-                      path: routeName.roles,
-                      element: <UserRolePage />,
-                      errorElement: <NotFoundPage />,
-                    },
-                    // companies
-                    {
-                      path: routeName.companies,
-                      element: <CompanyPage />,
-                      errorElement: <NotFoundPage />,
-                      children: [
-                        {
-                          index: true,
-                          element: <CompanyListPage />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        {
-                          path: routeName.createCompany,
-                          element: <CreateCompanyPage />,
-                          errorElement: <NotFoundPage />,
-                        }
-                      ]
-                    },
-                    // countries
-                    {
-                      path: routeName.countries,
-                      element: <CountryPage />,
-                      children: [
-                        {
-                          index: true,
-                          element: <CountryListPage />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        {
-                          path: routeName.createCountry,
-                          element: <CreateCountryPage />,
-                          errorElement: <NotFoundPage />,
-                        }
-                      ]
-                    },
-                    // sales order
-                    {
-                      path: routeName.salesOrder,
-                      element: <OrderScreen />,
-                      children: [
-                        {
-                          index: true,
-                          element: <OrderDetailScreen />,
-                          errorElement: <NotFoundPage />,
-                        },                        
-                      ]
-                    },
-                    // me
-                    {
-                      path: routeName.me,
-                      element: <MePage />,
-                      children: [
-                        {
-                          index: true,
-                          element: <ProfilePage />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        
-                      ]
-                    },
-                    // photo
-                    {
-                      path: routeName.photo,
-                      element: <PhotoScreen />,
-                      children: [
-                        {
-                          index: true,
-                          element: <PhotoListScreen />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        {
-                          path: routeName.photoGallery,
-                          element: <PhotoGalleryScreen />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        {
-                          path: routeName.merchandiserReportByDaterange,
-                          element: <MerchandiserReportByDateRangeScreen />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        
-                      ]
-                    },
-                    // customer
-                    {
-                      path: routeName.customer,
-                      element: <CustomerScreen />,
-                      children: [
-                        {
-                          path: routeName.merchandiserCustomer,
-                          element: <MerchandiserCustomerScreen />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        {
-                          path: routeName.salesCustomer,
-                          element: <SalesCustomerScreen />,
-                          errorElement: <NotFoundPage />,
-                        },
-                      ]
-                    },
-                    // address
-                    {
-                      path: routeName.address,
-                      element: <AddressScreen />,
-                      children: [
-                        {
-                          index: true,
-                          element: <AddressListScreen />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        
-                      ]
-                    },
-                    // item
-                    {
-                      path: routeName.item,
-                      element: <ItemScreen />,
-                      children: [
-                        {
-                          path: routeName.itemList,
-                          element: <ItemListScreen />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        
-                      ]
-                    },
-                    // price
-                    {
-                      path: routeName.price,
-                      element: <PriceScreen />,
-                      children: [
-                        {
-                          path: routeName.priceList,
-                          element: <PriceListScreen />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        
-                      ]
-                    },
-                    // Activity Log
-                    {
-                      path: routeName.activityLog,
-                      element: <ActivityLogScreen />,                      
-                    },
-                    // device setting
-                    {
-                      path: routeName.deviceSetting,
-                      element: <DeviceSettingPage />,
-                      errorElement: <NotFoundPage />,
-                      children: [
-                        {
-                          index: true,
-                          element: <DeviceSettingListPage />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        { 
-                          path: routeName.createdeviceSetting,                        
-                          element: <CreateDeviceSettingPage />,
-                          errorElement: <NotFoundPage />,
-                        },
-                        
-                      ]
-                    },
-                    
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        // Publicly accessible routes - Login
-        {
-          // Prevent logged-in users from visiting login page
-          element: <PublicRoute />, 
-          children: [
-            {
-              path: routeName.login,
-              element: <LoginPage />,
-              errorElement: <NotFoundPage />,
-              children: [],
-            },
-          ],
-        },
-        // Publicly accessible route for Privacy Policy
-        {
-          path: routeName.privacyPolicy,
-          element: <PrivacyPolicyPage />,
-          errorElement: <NotFoundPage />,
-        },        
-        {
-          path: routeName.others,
-          element: <NotFoundPage />,
-        },
-      ],
-    },
-  ]);
+  {
+    path: "/",
+    element: <AuthChecker />,
+    errorElement: <NotFoundPage />,
+    children: [
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            element: <MainLayout />, // Protect the dashboard route
+            children: [
+              {
+                path: routeName.dashboard,
+                element: <DashboardPage />,
+                errorElement: <NotFoundPage />,
+                children: [
+                  //Redirect from /dashboard to /dashboard/users
+                  {
+                    // default component  - This will match the exact /dashboard path
+                    index: true,
+                    // Redirects to /dashboard/users
+                    element: <Navigate to={routeName.users} replace={true} />,
+                  },
+                  //user
+                  {
+                    path: routeName.users,
+                    element: <UsersPage />,
+                    errorElement: <NotFoundPage />,
+                    children: [
+                      {
+                        index: true, // default component
+                        element: <UsersListPage />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: ":id",
+                        element: <UserDetailPage />,
+                        errorElement: <NotFoundPage />,
+                        children: [
+                          {
+                            path: routeName.roles,
+                            element: <UserRolePage />,
+                            errorElement: <NotFoundPage />,
+                          },
+                        ]
+                      },
+                      {
+                        path: routeName.createUser,
+                        element: <CreateUserPage />,
+                        errorElement: <NotFoundPage />,
+                      }
+                    ],
+                  },
+                  //rols
+                  {
+                    path: routeName.roles,
+                    element: <UserRolePage />,
+                    errorElement: <NotFoundPage />,
+                  },
+                  // companies
+                  {
+                    path: routeName.companies,
+                    element: <CompanyPage />,
+                    errorElement: <NotFoundPage />,
+                    children: [
+                      {
+                        index: true,
+                        element: <CompanyListPage />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: routeName.createCompany,
+                        element: <CreateCompanyPage />,
+                        errorElement: <NotFoundPage />,
+                      }
+                    ]
+                  },
+                  // countries
+                  {
+                    path: routeName.countries,
+                    element: <CountryPage />,
+                    children: [
+                      {
+                        index: true,
+                        element: <CountryListPage />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: routeName.createCountry,
+                        element: <CreateCountryPage />,
+                        errorElement: <NotFoundPage />,
+                      }
+                    ]
+                  },
+                  // sales order
+                  {
+                    path: routeName.salesOrder,
+                    element: <OrderScreen />,
+                    children: [
+                      {
+                        index: true,
+                        element: <OrderDetailScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+                    ]
+                  },
+                  // me
+                  {
+                    path: routeName.me,
+                    element: <MePage />,
+                    children: [
+                      {
+                        index: true,
+                        element: <ProfilePage />,
+                        errorElement: <NotFoundPage />,
+                      },
+
+                    ]
+                  },
+                  // photo
+                  {
+                    path: routeName.photo,
+                    element: <PhotoScreen />,
+                    children: [
+                      {
+                        index: true,
+                        element: <PhotoListScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: routeName.photoGallery,
+                        element: <PhotoGalleryScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: routeName.merchandiserReportByDaterange,
+                        element: <MerchandiserReportByDateRangeScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+
+                    ]
+                  },
+                  // customer
+                  {
+                    path: routeName.customer,
+                    element: <CustomerScreen />,
+                    children: [
+                      {
+                        path: routeName.merchandiserCustomer,
+                        element: <MerchandiserCustomerScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: routeName.salesCustomer,
+                        element: <SalesCustomerScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+                    ]
+                  },
+                  // address
+                  {
+                    path: routeName.address,
+                    element: <AddressScreen />,
+                    children: [
+                      {
+                        index: true,
+                        element: <AddressListScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+
+                    ]
+                  },
+                  // item
+                  {
+                    path: routeName.item,
+                    element: <ItemScreen />,
+                    children: [
+                      {
+                        path: routeName.itemList,
+                        element: <ItemListScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+
+                    ]
+                  },
+                  // price
+                  {
+                    path: routeName.price,
+                    element: <PriceScreen />,
+                    children: [
+                      {
+                        path: routeName.priceList,
+                        element: <PriceListScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+
+                    ]
+                  },
+                  // Activity Log
+                  {
+                    path: routeName.activityLog,
+                    element: <ActivityLogScreen />,
+                  },
+                  // device setting
+                  {
+                    path: routeName.deviceSetting,
+                    element: <DeviceSettingPage />,
+                    errorElement: <NotFoundPage />,
+                    children: [
+                      {
+                        index: true,
+                        element: <DeviceSettingListPage />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: routeName.createdeviceSetting,
+                        element: <CreateDeviceSettingPage />,
+                        errorElement: <NotFoundPage />,
+                      },
+
+                    ]
+                  },
+
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      // Public routes (accessible without authentication)
+      {
+        element: <PublicRoute />,
+        children: [
+          {
+            path: routeName.login,
+            element: <LoginPage />,
+          },
+
+        ],
+      },
+      // Redirect root path to login if not authenticated
+      {
+        path: "/",
+        element: <Navigate to={routeName.login} replace />,
+      },
+      // Publicly accessible route for Privacy Policy
+      {
+        path: routeName.privacyPolicy,
+        element: <PrivacyPolicyPage />,
+        errorElement: <NotFoundPage />,
+      },
+      {
+        path: routeName.others,
+        element: <NotFoundPage />,
+      },
+    ],
+  },
+]);

@@ -22,7 +22,7 @@
     "@mui/x-date-pickers": "^7.28.2",
     "@syncfusion/ej2-react-grids": "^28.1.33",
     "@syncfusion/ej2-react-navigations": "^28.1.37",
-    "axios": "^1.7.8",
+    "axios": "^1.8.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

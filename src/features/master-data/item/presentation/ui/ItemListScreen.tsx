@@ -195,7 +195,7 @@ const ItemListScreen = () => {
                     allowExcelExport={true}
                     toolbarClick={toolbarClick}
                     excelExportComplete={excelExportComplete}
-                    ref={g => {
+                    ref={(g: GridComponent | null) => {
                         gridRef.current = g;
                     }}
                     created={created}

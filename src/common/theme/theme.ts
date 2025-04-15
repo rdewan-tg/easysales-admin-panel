@@ -2,109 +2,105 @@ import { createTheme } from '@mui/material/styles';
 
 const lightTheme = createTheme({
   palette: {
-      mode: 'light',
-      background: {
-          // is generally used for the default background color of the application or the main content areas
-          default: '#f0f5f3',
-          // is used for surfaces that are meant to stand out from the default background, such as cards, dialogs, and paper elements
-          paper: '#ffffff',
-      },
-      primary: {
-          main: '#40AD94',
-          light: '#72d5be',
-          dark: '#00785e',
-          contrastText: '#ffffff',
-      },
-      secondary: {
-          main: '#7F968E',
-          light: '#aabeb8',
-          dark: '#50655f',
-          contrastText: '#ffffff',
-      },
-      error: {
-          main: '#FF5449',
-          light: '#ff867a',
-          dark: '#c41e17',
-          contrastText: '#ffffff',
-      },
-      warning: {
-          main: '#ff9800',
-          light: '#ffc947',
-          dark: '#c66900',
-          contrastText: '#000000',
-      },
-      info: {
-          main: '#2196f3',
-          light: '#6ec6ff',
-          dark: '#0069c0',
-          contrastText: '#ffffff',
-      },
-      success: {
-          main: '#4caf50',
-          light: '#80e27e',
-          dark: '#087f23',
-          contrastText: '#ffffff',
-      },
-      text: {
-          primary: '#1b1b1b',
-          secondary: '#525252',
-          disabled: '#9e9e9e',          
-      },
-      divider: '#cfd8dc',
+    mode: 'light',
+    background: {
+      default: '#f4f0fa',
+      paper: '#ffffff',
+    },
+    primary: {
+      main: '#6750A4',
+      light: '#9f86ff',
+      dark: '#4f378b',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#625b71',
+      light: '#9e8ca0',
+      dark: '#44365a',
+      contrastText: '#ffffff',
+    },
+    error: {
+      main: '#b3261e',
+      light: '#ef5c4e',
+      dark: '#7f0000',
+      contrastText: '#ffffff',
+    },
+    warning: {
+      main: '#ffb300',
+      light: '#ffdd4b',
+      dark: '#c68400',
+      contrastText: '#000000',
+    },
+    info: {
+      main: '#4c6ef5',
+      light: '#7d9dff',
+      dark: '#003ecb',
+      contrastText: '#ffffff',
+    },
+    success: {
+      main: '#2e7d32',
+      light: '#60ad5e',
+      dark: '#005005',
+      contrastText: '#ffffff',
+    },
+    text: {
+      primary: '#1c1b1f',
+      secondary: '#49454f',
+      disabled: '#9e9e9e',
+    },
+    divider: '#d0cce3',
   },
 });
 
 const darkTheme = createTheme({
   palette: {
-      mode: 'dark',
-      background: {
-          // is generally used for the default background color of the application or the main content areas
-          default: '#303030',
-          //is used for surfaces that are meant to stand out from the default background, such as cards, dialogs, and paper elements
-          paper: '#424242',
-      },
-      primary: {
-          main: '#90caf9',
-          light: '#b3e5fc',
-          dark: '#42a5f5',
-          contrastText: '#000',
-        },
-        secondary: {
-          main: '#f48fb1',
-          light: '#f6c1c0',
-          dark: '#d81b60',
-          contrastText: '#000',
-        },
-        error: {
-          main: '#f44336',
-          light: '#e57373',
-          dark: '#d32f2f',
-          contrastText: '#fff',
-        },
-        warning: {
-          main: '#ff9800', 
-          light: '#ffb74d',
-          dark: '#f57c00',
-          contrastText: '#000',
-        },
-        info: {
-          main: '#64b5f6', 
-          light: '#90caf9',
-          dark: '#42a5f5',
-          contrastText: '#000',
-        },
-        success: {
-          main: '#66bb6a', 
-          light: '#81c784',
-          dark: '#388e3c',
-          contrastText: '#fff',
-        },          
-        text: {
-          primary: '#ffffff',
-          secondary: '#b0bec5',
-          disabled: '#757575',
-        },
-        divider: '#616161', 
+    mode: 'dark',
+    background: {
+      default: '#1c1b1f',
+      paper: '#2c2b31',
+    },
+    primary: {
+      main: '#d0bcff',
+      light: '#eaddff',
+      dark: '#a189c9',
+      contrastText: '#000000',
+    },
+    secondary: {
+      main: '#ccc2dc',
+      light: '#eee8f4',
+      dark: '#a89ab2',
+      contrastText: '#000000',
+    },
+    error: {
+      main: '#f2b8b5',
+      light: '#fdd8d5',
+      dark: '#b00020',
+      contrastText: '#000000',
+    },
+    warning: {
+      main: '#ffcc80',
+      light: '#ffe0b2',
+      dark: '#ffb74d',
+      contrastText: '#000000',
+    },
+    info: {
+      main: '#9fcaff',
+      light: '#cfe4ff',
+      dark: '#6fa7e0',
+      contrastText: '#000000',
+    },
+    success: {
+      main: '#81c784',
+      light: '#b2fab4',
+      dark: '#519657',
+      contrastText: '#000000',
+    },
+    text: {
+      primary: '#ffffff',
+      secondary: '#cfc6dc',
+      disabled: '#a0a0a0',
+    },
+    divider: '#49454f',
   },
 });
 
