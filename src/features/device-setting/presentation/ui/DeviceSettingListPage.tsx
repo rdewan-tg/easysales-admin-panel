@@ -201,7 +201,7 @@ const DeviceSettingListPage = () => {
         }}>
 
         <GridComponent
-          ref={g => grid = g}
+          ref={(g: GridComponent | null) => grid = g}
           dataSource={devices}
           allowResizing={true}
           autoFit={true}

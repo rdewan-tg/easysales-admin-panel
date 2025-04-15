@@ -232,7 +232,7 @@ const OrderDetailScreen = () => {
                     excelExportComplete={excelExportComplete}
                     childGrid={childGrid}
                     filterSettings={filterSettings}
-                    ref={g => {
+                    ref={(g: GridComponent | null) => {
                         gridRef.current = g;
                     }}
                     created={created}
