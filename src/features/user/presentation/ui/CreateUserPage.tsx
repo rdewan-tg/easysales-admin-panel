@@ -88,7 +88,7 @@ const CreateUserPage = () => {
             email: "",
             password: "",
             confirm_password: "",
-            companyId: undefined
+            companyId: ""
         }
     });
 
@@ -97,7 +97,7 @@ const CreateUserPage = () => {
     // destructure formState
     const { errors, isSubmitting, isValid } = formState;
 
-    const onSubmit: SubmitHandler<SignupForm> = async (data: SignupForm) => {
+    const onSubmit: SubmitHandler<any> = async (data: any) => {
         await createUser(data);
     };
 
@@ -136,7 +136,7 @@ const CreateUserPage = () => {
                         required={true}
                         autoComplete="name"
                         error={!!errors.name} // Set error state
-                        helperText={errors.name ? errors.name.message : null} // Display error message
+                        helperText={errors.name?.message || ''} // Display error message
                         sx={{ width: '100%', maxWidth: 400 }}
                     />
                 )}
@@ -155,7 +155,7 @@ const CreateUserPage = () => {
                         required={true}
                         autoComplete="email"
                         error={!!errors.email} // Set error state
-                        helperText={errors.email ? errors.email.message : null} // Display error message
+                        helperText={errors.email?.message} // Display error message
                         sx={{ width: '100%', maxWidth: 400 }}
                     />
                 )}
@@ -189,7 +189,7 @@ const CreateUserPage = () => {
                                 native: true,
                             },
                         }}
-                        helperText={errors.companyId ? errors.companyId.message : null}
+                        helperText={errors.companyId?.message}
                         sx={{ width: '100%', maxWidth: 400 }}
                     >
                         <option aria-label="None" value="" >Please select a company</option>
