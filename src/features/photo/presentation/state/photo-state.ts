@@ -1,15 +1,13 @@
-import { Photo, PhotoFilterCustomerChain, PhotoFilterDevice, PhotoFilterTransDate } from "../../data";
+import { Photo, PhotoFilterCustomerChain, PhotoFilterDevice } from "../../data";
 
 
 export type PhotoState = {
     isLoading: boolean;
     photos: Photo[];
-    devices: PhotoFilterDevice[];
-    transDates: PhotoFilterTransDate[];
+    devices: PhotoFilterDevice[];    
     customerChains: PhotoFilterCustomerChain[];
     error: string | null;
-    getDevices: () => Promise<void>;
-    getTransDates: () => Promise<void>;
+    getDevices: () => Promise<void>;   
     getCustomerChains: () => Promise<void>;
     getPhotos: () => Promise<void>;
     findPhotosByDeviceId: (fromDate: string, toDate: string, deviceId: string) => Promise<void>;

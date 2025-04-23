@@ -11,17 +11,18 @@ import 'lightgallery/css/lg-thumbnail.css';
 
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
-import FilterPhotoDialogForm from "./components/filter-photo-dialog-form";
+import FilterPhotoDialogForm from "./components/FilterPhotoDialogForm";
 import { PhotoFilterEnum } from "@/common/enum/photo-filter-enum";
+import PhotoFilterByDate from "./components/PhotoFilterByDate";
 
 
 const PhotoGalleryScreen = () => {
 
     const [openFilterDialog, setOpenFilterDialog] = useState(false);
+    const [openFilterByDateDialog, setOpenFilterByDateDialog] = useState(false);
     const [filterType, setFilterType] = useState(PhotoFilterEnum.byDeviceAndDate);
 
-    const getDevices = usePhotoStore.use.getDevices();
-    const getTransDates = usePhotoStore.use.getTransDates();
+    const getDevices = usePhotoStore.use.getDevices();    
     const getCustomerChains = usePhotoStore.use.getCustomerChains();
     const photos = usePhotoStore((state) => state.photos);
 
@@ -31,18 +32,13 @@ const PhotoGalleryScreen = () => {
         // fetch devices when the component mounts
         async function fetchDevices() {
             getDevices();
-        }
-        // fetch transDates when the component mounts
-        async function fetchTransDates() {
-            getTransDates();
-        }
+        }        
         // fetch the customer chains
         async function fetchCustomerChains() {
             getCustomerChains();
         }
 
         fetchDevices();
-        fetchTransDates();
         fetchCustomerChains();
     }, [])
 
@@ -53,6 +49,14 @@ const PhotoGalleryScreen = () => {
 
     const handleClose = () => {
         setOpenFilterDialog(false);
+    };
+
+    const handleClickOpenFilterByDate = () => {
+        setOpenFilterByDateDialog(true);
+    };
+
+    const handleCloseFilterByDate = () => {
+        setOpenFilterByDateDialog(false);
     };
 
 
@@ -105,6 +109,13 @@ const PhotoGalleryScreen = () => {
                 m: 0,
                 p: 0,
             }}>
+                {/* open a filter dialog */}
+            <PhotoFilterByDate
+                open={openFilterByDateDialog}
+                close={handleCloseFilterByDate}
+                title=""
+                description=""
+            />
             {/* open a filter dialog */}
             <FilterPhotoDialogForm
                 open={openFilterDialog}
@@ -140,7 +151,7 @@ const PhotoGalleryScreen = () => {
                     label="From & To Date"
                     color="secondary"
                     size="small" sx={{ margin: 1 }}
-                    onClick={() => handleClickOpen(PhotoFilterEnum.byFromAndToDate)}
+                    onClick={ handleClickOpenFilterByDate }
                 />
                 <Chip
                     label="Customer Chain"

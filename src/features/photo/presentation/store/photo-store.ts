@@ -1,5 +1,12 @@
 import { create } from "zustand";
-import { findPhotosByCustomerChain, findPhotosByDeviceId, findPhotosByFromToDate, getAllPhotos, getCustomerChains, getDevices, getTransDates } from "../../data";
+import {
+    findPhotosByCustomerChain,
+    findPhotosByDeviceId,
+    findPhotosByFromToDate,
+    getAllPhotos,
+    getCustomerChains,
+    getDevices,
+} from "../../data";
 import { PhotoState } from "../state/photo-state";
 import { createSelectors } from "@/core/data";
 
@@ -8,7 +15,6 @@ const usePhotoStore = create<PhotoState>((set) => ({
     isLoading: false,
     photos: [],
     devices: [],
-    transDates: [],
     customerChains: [],
     error: null,
     getDevices: async () => {
@@ -21,16 +27,6 @@ const usePhotoStore = create<PhotoState>((set) => ({
             set({ isLoading: false, error: errorMessage });
         }
 
-    },
-    getTransDates: async () => {
-        try {
-            set({ isLoading: true });
-            const response = await getTransDates();
-            set({ transDates: response.data, isLoading: false });
-        } catch (error) {
-            const errorMessage = (error as Error).message;
-            set({ isLoading: false, error: errorMessage });
-        }
     },
     getCustomerChains: async () => {
         try {

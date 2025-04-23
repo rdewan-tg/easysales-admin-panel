@@ -133,12 +133,12 @@ function LoginPage() {
         <Box
             component="div"
             sx={{
+                position: 'fixed', // lock to viewport
                 display: 'flex',
                 minHeight: '100vh',
                 width: '100vw',
                 background: 'linear-gradient(135deg, #4527a0 0%, #8e24aa 100%)',
                 overflow: 'hidden',
-                position: 'relative',
             }}
         >
             {/* Animated background elements */}
@@ -213,7 +213,7 @@ function LoginPage() {
                         variant="body1"
                         color="text.secondary"
                     >
-                        Sign in to continue to EasyHR
+                        Sign in to continue to EasySales
                     </Typography>
                 </Box>
 

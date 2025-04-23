@@ -1,6 +1,6 @@
 import { routeName } from "@/core/route";
 import { AddLocationOutlined } from "@mui/icons-material";
-import { Alert, Box, Card, CardContent, CardHeader, Grid2, IconButton, List, Slide, Snackbar, SnackbarCloseReason, Typography } from "@mui/material";
+import { Alert, Box, Card, CardContent, CardHeader, Grid, IconButton, List, Slide, Snackbar, SnackbarCloseReason, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCountryStore } from "..";
 import { useEffect, useState } from "react";
@@ -88,7 +88,7 @@ const CountryListPage = () => {
                 }}
             >
 
-                <Grid2>
+                <Grid>
                     <List
                         dense={true}>
                         {
@@ -114,7 +114,7 @@ const CountryListPage = () => {
                         }
 
                     </List>
-                </Grid2>
+                </Grid>
 
             </Box>
 

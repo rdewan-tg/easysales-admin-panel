@@ -1,7 +1,7 @@
 import { Box, Card, CardHeader, IconButton, List, Typography } from "@mui/material";
 import { useCompanyStore } from "@/features/company/presentation/index";
 import { useEffect } from "react";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import { AddBusinessOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { routeName } from "@/core/route";

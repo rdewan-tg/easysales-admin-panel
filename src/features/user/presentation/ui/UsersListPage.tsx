@@ -126,6 +126,7 @@ const UsersListPage = () => {
     <Box
       component={"main"}
       sx={{
+        position: 'fixed',
         height: "100vh", // Full viewport height
         display: "flex",
         flexDirection: "column",
