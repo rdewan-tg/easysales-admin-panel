@@ -13,7 +13,7 @@ import {
   SnackbarCloseReason,
   Typography,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 const UserRolePage = () => {
   const [open, setOpen] = useState(false);

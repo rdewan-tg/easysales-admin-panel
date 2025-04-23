@@ -73,11 +73,12 @@ export const MainLayout = (): JSX.Element => {
         <CssBaseline />
         <Box
           sx={{
+            position: 'fixed', // lock to viewport
             height: "100vh", // Full viewport height
             width: "100vw",  // Full viewport width
             display: "flex",
             flexDirection: "column",
-            overflow: "auto", // Prevent scrollbars
+            overflow: "hidden", // hide scrollbars
             boxSizing: "border-box", // Ensures padding is included in height/width
             m: 0,
             p: 0,
@@ -196,7 +197,9 @@ export const MainLayout = (): JSX.Element => {
           )}
 
           {/* Main content - renders the child routes */}
-          <Outlet />
+          <Box component="main" sx={{ flexGrow: 1, overflow: 'auto', p: 2}}>
+            <Outlet />
+          </Box>
         </Box>
       </LocalizationProvider>
     </ThemeProvider>

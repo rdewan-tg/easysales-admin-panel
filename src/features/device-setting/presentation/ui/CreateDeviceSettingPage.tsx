@@ -1,4 +1,5 @@
-import { CreateDeviceSettingForm, createDeviceSettingSchema } from "@/common/types";
+import { createDeviceSettingSchema, CreateDeviceSettingForm } from '@/common/types/create-device-setting-form';
+import type { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, Box, Slide, Snackbar, SnackbarCloseReason, TextField, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -7,8 +8,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useDeviceSettingStore } from "..";
 import { useEffect, useState } from "react";
 import { BaseSnackBarComponent } from "@/common/components";
-// import { DevTool } from "@hookform/devtools";
-
 
 const CreateDeviceSettingPage = () => {
     const [open, setOpen] = useState(false);
@@ -85,15 +84,15 @@ const CreateDeviceSettingPage = () => {
     }, [isDeviceSettingCreated]);
 
 
-    const form = useForm<CreateDeviceSettingForm>({
+    const form = useForm<z.input<typeof createDeviceSettingSchema>, any, CreateDeviceSettingForm>({
         resolver: zodResolver(createDeviceSettingSchema),
         defaultValues: {
             deviceId: "",
-            userId: undefined,
+            userId: "",
             userName: "",
             salesPersonCode: "",
             orderNumberFormat: "",
-            companyId: undefined,
+            companyId: "",
         }
     });
 
@@ -351,7 +350,6 @@ const CreateDeviceSettingPage = () => {
     
                 )}
     
-                {/* <DevTool control={control} /> */}
             </Box>
     
         );

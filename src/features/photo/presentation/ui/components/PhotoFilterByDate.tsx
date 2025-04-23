@@ -1,14 +1,13 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useOrderStore } from "../..";
-import { GetOrderCreatedDatesForm, getOrderCreatedDatesSchema } from "@/common/types/get-order-created-date-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { startOfDay, endOfDay, formatISO } from 'date-fns';
+import { GetPhotoByDatesForm, getPhotoByDatesSchema } from "@/common/types/get-photo-by-date-form";
+import { usePhotoStore } from "../..";
+import { formatISO } from "date-fns";
 
 
-const OrderFilterByDate = ({
+const PhotoFilterByDate = ({
     open,
     close,
     title,
@@ -19,34 +18,24 @@ const OrderFilterByDate = ({
     title: string,
     description: string,
 },) => {
+ 
+    const findPhotosByFromToDate = usePhotoStore.use.findPhotosByFromToDate();
 
-    const getOrderCreatedDates = useOrderStore.use.getOrderCreatedDates();
-    const getSalesHeaderByCompanyDateRange = useOrderStore.use.getSalesHeaderByCompanyDateRange();
 
-    useEffect(() => {
-
-        async function fetchCreatedDates() {
-            await getOrderCreatedDates();
-        }
-        fetchCreatedDates();
-    }, []);
-
-    const form = useForm<GetOrderCreatedDatesForm>({
-        resolver: zodResolver(getOrderCreatedDatesSchema),
+    const form = useForm<GetPhotoByDatesForm>({
+        resolver: zodResolver(getPhotoByDatesSchema),
     })
 
     const { control, handleSubmit, formState } = form;
     const { errors } = formState;
 
 
-    const onSubmit: SubmitHandler<GetOrderCreatedDatesForm> = async (data: GetOrderCreatedDatesForm) => {
+    const onSubmit: SubmitHandler<GetPhotoByDatesForm> = async (data: GetPhotoByDatesForm) => {
         const payload = {
-            startDate: formatISO(
-                startOfDay(new Date(data.startDate)).toISOString(), { representation: 'complete' }).replace(/\+\d{2}:\d{2}$/, 'Z'),
-            endDate: formatISO(
-                endOfDay(new Date(data.endDate)).toISOString(), { representation: 'complete' }).replace(/\+\d{2}:\d{2}$/, 'Z')
+            fromDate: formatISO(new Date(data.fromDate), { representation: 'date' }).split('-').reverse().join('-'),
+            toDate: formatISO(new Date(data.toDate), { representation: 'date' }).split('-').reverse().join('-')
         };
-        getSalesHeaderByCompanyDateRange(payload);
+        findPhotosByFromToDate(payload.fromDate, payload.toDate);
         // close the dialog
         close()
     }
@@ -66,7 +55,7 @@ const OrderFilterByDate = ({
                     <DialogContentText>{description}</DialogContentText>
 
                     <Controller
-                        name="startDate"
+                        name="fromDate"
                         control={control}
                         render={({ field }) => (
                             <DatePicker
@@ -76,8 +65,8 @@ const OrderFilterByDate = ({
                                 slotProps={{
                                     textField: {
                                         size: 'small',
-                                        error: !!errors.startDate,
-                                        helperText: errors.startDate?.message,
+                                        error: !!errors.fromDate,
+                                        helperText: errors.fromDate?.message,
                                         sx: { width: '100%', maxWidth: 200, margin: 1 }
                                     }
                                 }}
@@ -87,7 +76,7 @@ const OrderFilterByDate = ({
                     />
 
                     <Controller
-                        name="endDate"
+                        name="toDate"
                         control={control}
                         render={({ field }) => (
                             <DatePicker
@@ -97,8 +86,8 @@ const OrderFilterByDate = ({
                                 slotProps={{
                                     textField: {
                                         size: 'small',
-                                        error: !!errors.endDate,
-                                        helperText: errors.endDate?.message,
+                                        error: !!errors.toDate,
+                                        helperText: errors.toDate?.message,
                                         sx: { width: '100%', maxWidth: 200, margin: 1 }
                                     }
                                 }}
@@ -119,4 +108,4 @@ const OrderFilterByDate = ({
     );
 }
 
-export default OrderFilterByDate;
+export default PhotoFilterByDate;

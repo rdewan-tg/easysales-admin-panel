@@ -5,6 +5,8 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { usePhotoStore } from "../.."
 import { PhotoFilterEnum } from "@/common/enum/photo-filter-enum"
 import { useState } from "react"
+import { DatePicker } from "@mui/x-date-pickers"
+import { formatISO } from "date-fns"
 
 
 const FilterPhotoDialogForm = (
@@ -23,11 +25,9 @@ const FilterPhotoDialogForm = (
     },
 ) => {
     const [showAlert, setShowAlert] = useState(false);
-    const devices = usePhotoStore((state) => state.devices);
-    const transDates = usePhotoStore((state) => state.transDates);
+    const devices = usePhotoStore((state) => state.devices);    
     const customerChains = usePhotoStore((state) => state.customerChains);
     const findPhotosByDeviceId = usePhotoStore.use.findPhotosByDeviceId();
-    const findPhotosByFromToDate = usePhotoStore.use.findPhotosByFromToDate();
     const findPhotosByCustomerChain = usePhotoStore.use.findPhotosByCustomerChain();
 
     const form = useForm<GetPhotoForm>({
@@ -48,10 +48,13 @@ const FilterPhotoDialogForm = (
             if (data.deviceId != null && data.fromDate != null && data.toDate != null) {
                 // close dialog
                 close();
+                // format date
+                const fromDate = formatISO(new Date(data.fromDate), { representation: 'date' }).split('-').reverse().join('-');
+                const toDate = formatISO(new Date(data.toDate), { representation: 'date' }).split('-').reverse().join('-');
                 // call api
                 await findPhotosByDeviceId(
-                    data.fromDate,
-                    data.toDate,
+                    fromDate,
+                    toDate,
                     data.deviceId,
                 );
             } else {
@@ -66,10 +69,13 @@ const FilterPhotoDialogForm = (
             if (data.customerChain != null && data.fromDate != null && data.toDate != null) {
                 // close dialog
                 close();
+                // format date
+                const fromDate = formatISO(new Date(data.fromDate), { representation: 'date' }).split('-').reverse().join('-');
+                const toDate = formatISO(new Date(data.toDate), { representation: 'date' }).split('-').reverse().join('-');
                 // call api
                 await findPhotosByCustomerChain(
-                    data.fromDate,
-                    data.toDate,
+                    fromDate,
+                    toDate,
                     data.customerChain,
                 );
             } else {
@@ -79,24 +85,6 @@ const FilterPhotoDialogForm = (
                 setShowAlert(true);
             }
         }
-        // filter photos by fromDate and toDate
-        if (type === PhotoFilterEnum.byFromAndToDate) {
-            if (data.fromDate != null && data.toDate != null) {
-                // close dialog
-                close();
-                // call api
-                await findPhotosByFromToDate(
-                    data.fromDate,
-                    data.toDate
-                );
-            } else {
-               // close dialog
-               close();
-               // show alert
-               setShowAlert(true);
-            }
-        }
-
     };
 
     return (
@@ -104,7 +92,7 @@ const FilterPhotoDialogForm = (
             component={"form"}
             onSubmit={handleSubmit(onSubmit)}>
 
-            {/* show alert    */}            
+            {/* show alert    */}
             {showAlert && (
                 <Alert severity="error" onClose={() => setShowAlert(false)}>
                     Form is not valid, please select all the required fields
@@ -157,27 +145,19 @@ const FilterPhotoDialogForm = (
                                         name="fromDate"
                                         control={control}
                                         render={({ field }) => (
-                                            <TextField
+                                            <DatePicker
                                                 {...field}
-                                                id="from-data"
-                                                type="text"
-                                                size="small"
-                                                select
+                                                label="From Date"
+                                                format="dd/MM/yyyy"
                                                 slotProps={{
-                                                    select: {
-                                                        native: true,
-                                                    },
+                                                    textField: {
+                                                        size: 'small',
+                                                        error: !!errors.fromDate,
+                                                        helperText: errors.fromDate?.message,
+                                                        sx: { width: '100%', maxWidth: 200, margin: 1 }
+                                                    }
                                                 }}
-                                                helperText={errors.fromDate ? errors.fromDate.message : null}
-                                                sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                                            >
-                                                <option aria-label="None" value="" >Select a FromDate</option>
-                                                {transDates.map((option) => (
-                                                    <option key={option.transDate} value={option.transDate}>
-                                                        {option.transDate}
-                                                    </option>
-                                                ))}
-                                            </TextField>
+                                            />
 
                                         )}
                                     />
@@ -186,101 +166,24 @@ const FilterPhotoDialogForm = (
                                         name="toDate"
                                         control={control}
                                         render={({ field }) => (
-                                            <TextField
+                                            <DatePicker
                                                 {...field}
-                                                id="to-data"
-                                                type="text"
-                                                size="small"
-                                                select
+                                                label="To Date"
+                                                format="dd/MM/yyyy"
                                                 slotProps={{
-                                                    select: {
-                                                        native: true,
-                                                    },
+                                                    textField: {
+                                                        size: 'small',
+                                                        error: !!errors.toDate,
+                                                        helperText: errors.toDate?.message,
+                                                        sx: { width: '100%', maxWidth: 200, margin: 1 }
+                                                    }
                                                 }}
-                                                helperText={errors.toDate ? errors.toDate.message : null}
-                                                sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                                            >
-                                                <option aria-label="None" value="" >Select a ToDate</option>
-                                                {transDates.map((option) => (
-                                                    <option key={option.transDate} value={option.transDate}>
-                                                        {option.transDate}
-                                                    </option>
-                                                ))}
-                                            </TextField>
+                                            />
 
                                         )}
                                     />
 
                                 </Box>
-                            </>
-                        )
-                    }
-
-                    {
-                        (type === PhotoFilterEnum.byFromAndToDate) && (
-                            <>
-                                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-
-                                    <Controller
-                                        name="fromDate"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <TextField
-                                                {...field}
-                                                id="from-data"
-                                                type="text"
-                                                size="small"
-                                                select
-                                                slotProps={{
-                                                    select: {
-                                                        native: true,
-                                                    },
-                                                }}
-                                                helperText={errors.fromDate ? errors.fromDate.message : null}
-                                                sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                                            >
-                                                <option aria-label="None" value="" >Select a FromDate</option>
-                                                {transDates.map((option) => (
-                                                    <option key={option.transDate} value={option.transDate}>
-                                                        {option.transDate}
-                                                    </option>
-                                                ))}
-                                            </TextField>
-
-                                        )}
-                                    />
-
-                                    <Controller
-                                        name="toDate"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <TextField
-                                                {...field}
-                                                id="to-data"
-                                                type="text"
-                                                size="small"
-                                                select
-                                                slotProps={{
-                                                    select: {
-                                                        native: true,
-                                                    },
-                                                }}
-                                                helperText={errors.toDate ? errors.toDate.message : null}
-                                                sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                                            >
-                                                <option aria-label="None" value="" >Select a ToDate</option>
-                                                {transDates.map((option) => (
-                                                    <option key={option.transDate} value={option.transDate}>
-                                                        {option.transDate}
-                                                    </option>
-                                                ))}
-                                            </TextField>
-
-                                        )}
-                                    />
-                                </Box>
-
-
                             </>
                         )
                     }
@@ -324,27 +227,19 @@ const FilterPhotoDialogForm = (
                                         name="fromDate"
                                         control={control}
                                         render={({ field }) => (
-                                            <TextField
+                                            <DatePicker
                                                 {...field}
-                                                id="from-data"
-                                                type="text"
-                                                size="small"
-                                                select
+                                                label="From Date"
+                                                format="dd/MM/yyyy"
                                                 slotProps={{
-                                                    select: {
-                                                        native: true,
-                                                    },
+                                                    textField: {
+                                                        size: 'small',
+                                                        error: !!errors.fromDate,
+                                                        helperText: errors.fromDate?.message,
+                                                        sx: { width: '100%', maxWidth: 200, margin: 1 }
+                                                    }
                                                 }}
-                                                helperText={errors.fromDate ? errors.fromDate.message : null}
-                                                sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                                            >
-                                                <option aria-label="None" value="" >Select a FromDate</option>
-                                                {transDates.map((option) => (
-                                                    <option key={option.transDate} value={option.transDate}>
-                                                        {option.transDate}
-                                                    </option>
-                                                ))}
-                                            </TextField>
+                                            />
 
                                         )}
                                     />
@@ -353,27 +248,19 @@ const FilterPhotoDialogForm = (
                                         name="toDate"
                                         control={control}
                                         render={({ field }) => (
-                                            <TextField
+                                            <DatePicker
                                                 {...field}
-                                                id="to-data"
-                                                type="text"
-                                                size="small"
-                                                select
+                                                label="To Date"
+                                                format="dd/MM/yyyy"
                                                 slotProps={{
-                                                    select: {
-                                                        native: true,
-                                                    },
+                                                    textField: {
+                                                        size: 'small',
+                                                        error: !!errors.toDate,
+                                                        helperText: errors.toDate?.message,
+                                                        sx: { width: '100%', maxWidth: 200, margin: 1 }
+                                                    }
                                                 }}
-                                                helperText={errors.toDate ? errors.toDate.message : null}
-                                                sx={{ width: '100%', maxWidth: 200, margin: 1 }}
-                                            >
-                                                <option aria-label="None" value="" >Select a ToDate</option>
-                                                {transDates.map((option) => (
-                                                    <option key={option.transDate} value={option.transDate}>
-                                                        {option.transDate}
-                                                    </option>
-                                                ))}
-                                            </TextField>
+                                            />
 
                                         )}
                                     />

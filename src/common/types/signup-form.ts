@@ -18,13 +18,10 @@ export const signupSchema = z.object({
         .regex(/[0-9]/, "Password must contain at least one digit")
         .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character"),
     companyId: z.string()
-        .transform((value) => {
-            return parseInt(value, 10);
-        })
-        .refine((value) => !isNaN(value), {
+        .refine((val) => !isNaN(parseInt(val, 10)), {
             message: "Invalid company ID",
             path: ["companyId"],
-        })
+        }),
 })
     .refine((data) => data.password === data.confirm_password, {
         message: "Passwords do not match",
