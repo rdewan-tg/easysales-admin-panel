@@ -1,6 +1,6 @@
 import { SignupForm, signupSchema } from "@/common/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Box, Container, Grid, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Container, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Paper, Select, Slide, Snackbar, SnackbarCloseReason, Stack, TextField, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import PasswordFieldComponent from "./components/PasswordFieldComponent";
 import { PersonAdd } from "@mui/icons-material";
@@ -108,37 +108,33 @@ const CreateUserPage = () => {
                     Create User
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
-                    <Grid container spacing={2}>
-                        <Grid size={12}>
-                            <Controller name="name" control={control} render={({ field }) => (
-                                <TextField {...field} label="Name" variant="outlined" fullWidth error={!!errors.name} helperText={errors.name?.message} />
-                            )} />
-                        </Grid>
-                        <Grid size={12}>
-                            <PasswordFieldComponent control={control} errors={errors} id="password" lable="Password" />
-                        </Grid>
-                        <Grid size={12}>
-                            <PasswordConfirmFieldComponent control={control} errors={errors} id="confirm_password" lable="Confirm Password" />
-                        </Grid>
-                        <Grid size={12}>
-                            <Controller name="companyId" control={control} render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    select
+                    <Stack spacing={2}>
+                        <Controller name="name" control={control} render={({ field }) => (
+                            <TextField {...field} label="Name" variant="outlined" fullWidth error={!!errors.name} helperText={errors.name?.message} />
+                        )} />
+                        <Controller name="email" control={control} render={({ field }) => (
+                            <TextField {...field} label="Email" type="email" variant="outlined" fullWidth error={!!errors.email} helperText={errors.email?.message} />
+                        )} />
+                        <PasswordFieldComponent control={control} errors={errors} id="password" lable="Password" />
+                        <PasswordConfirmFieldComponent control={control} errors={errors} id="confirm_password" lable="Confirm Password" />
+                        <Controller name="companyId" control={control} render={({ field }) => (
+                            <FormControl fullWidth error={!!errors.companyId}>
+                                <InputLabel id="company-label">Company</InputLabel>
+                                <Select
+                                    labelId="company-label"
+                                    id="companyId"
                                     label="Company"
-                                    variant="outlined"
-                                    fullWidth
-                                    InputLabelProps={{ shrink: true }}
-                                    error={!!errors.companyId}
-                                    helperText={errors.companyId?.message}
-                                    SelectProps={{ native: true }}
+                                    {...field}
                                 >
-                                    <option value="">Please select a company</option>
-                                    {companies.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
-                                </TextField>
-                            )} />
-                        </Grid>
-                    </Grid>
+                                    <MenuItem value=""><em>Please select a company</em></MenuItem>
+                                    {companies.map(opt => (
+                                        <MenuItem key={opt.id} value={opt.id}>{opt.name}</MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.companyId && <FormHelperText>{errors.companyId.message}</FormHelperText>}
+                            </FormControl>
+                        )} />
+                    </Stack>
                     <Stack direction="row" justifyContent="flex-end" sx={{ mt: 3 }}>
                         <LoadingButton loading={isSubmitting} startIcon={<PersonAdd />} variant={variant} disabled={!isValid || isSubmitting} type="submit">
                             Create User
