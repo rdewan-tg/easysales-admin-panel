@@ -97,6 +97,7 @@ const CreateUserPage = () => {
 
   const form = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
+    mode: "onChange",
   });
 
   // destructure form

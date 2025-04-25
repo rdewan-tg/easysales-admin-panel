@@ -29,7 +29,7 @@ export const signupSchema = z
         /[^a-zA-Z0-9]/,
         "Password must contain at least one special character",
       ),
-    companyId: z.string(),
+    companyId: z.number(),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: "Passwords do not match",
