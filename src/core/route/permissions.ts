@@ -34,6 +34,6 @@ export const permissions: Record<Role["name"], string[]> = {
         "item",
         "price",
     ],
-    manager: ["dashboard", "photo","merchandiser-report-by-date-range", "master-data", "address", "item", "price"],
-    supervisor: ["dashboard", 'photo', "master-data", "address", "item", "price"],
+    manager: ["dashboard", "sales-order", "photo","merchandiser-report-by-date-range", "master-data", "address", "item", "price"],
+    supervisor: ["dashboard", 'photo', "sales-order", "master-data", "address", "item", "price"],
 };

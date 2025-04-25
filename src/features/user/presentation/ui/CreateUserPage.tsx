@@ -1,6 +1,6 @@
 import { SignupForm, signupSchema } from "@/common/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Box, Slide, Snackbar, SnackbarCloseReason, TextField, Typography } from "@mui/material";
+import { Alert, Box, Container, Grid, Paper, Slide, Snackbar, SnackbarCloseReason, Stack, TextField, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import PasswordFieldComponent from "./components/PasswordFieldComponent";
 import { PersonAdd } from "@mui/icons-material";
@@ -82,14 +82,7 @@ const CreateUserPage = () => {
     }, [isLoading, companies.length, getCompanies]);
 
     const form = useForm<SignupForm>({
-        resolver: zodResolver(signupSchema),
-        defaultValues: {
-            name: "",
-            email: "",
-            password: "",
-            confirm_password: "",
-            companyId: ""
-        }
+        resolver: zodResolver(signupSchema),        
     });
 
     // destructure form
@@ -98,168 +91,72 @@ const CreateUserPage = () => {
     const { errors, isSubmitting, isValid } = formState;
 
     const onSubmit: SubmitHandler<any> = async (data: any) => {
-        await createUser(data);
+        // Convert companyId from string to number before sending to API
+        const formattedData = {
+            ...data,
+            companyId: data.companyId ? parseInt(data.companyId, 10) : undefined
+        };
+        await createUser(formattedData);
     };
 
     const variant = isSubmitting ? "outlined" : "contained";
 
     return (
-        <Box
-            component={"form"}
-            onSubmit={handleSubmit(onSubmit)}
-            sx={
-                {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'start',
-                    justifyContent: 'start',
-                    height: '100vh',
-                    width: '100vw',
-                    gap: 1.4,
-                    p: 2,
-                    backgroundColor: (theme) => theme.palette.background.default,
-                }
-            }
-        >
-            <Typography variant="h5">Create Users</Typography>
-
-            <Controller
-                name="name"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="name"
-                        label="Name"
-                        type="name"
-                        variant="outlined"
-                        required={true}
-                        autoComplete="name"
-                        error={!!errors.name} // Set error state
-                        helperText={errors.name?.message || ''} // Display error message
-                        sx={{ width: '100%', maxWidth: 400 }}
-                    />
+        <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
+            <Paper elevation={3} sx={{ p: 4 }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                    Create User
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
+                    <Grid container spacing={2}>
+                        <Grid size={12}>
+                            <Controller name="name" control={control} render={({ field }) => (
+                                <TextField {...field} label="Name" variant="outlined" fullWidth error={!!errors.name} helperText={errors.name?.message} />
+                            )} />
+                        </Grid>
+                        <Grid size={12}>
+                            <PasswordFieldComponent control={control} errors={errors} id="password" lable="Password" />
+                        </Grid>
+                        <Grid size={12}>
+                            <PasswordConfirmFieldComponent control={control} errors={errors} id="confirm_password" lable="Confirm Password" />
+                        </Grid>
+                        <Grid size={12}>
+                            <Controller name="companyId" control={control} render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    select
+                                    label="Company"
+                                    variant="outlined"
+                                    fullWidth
+                                    InputLabelProps={{ shrink: true }}
+                                    error={!!errors.companyId}
+                                    helperText={errors.companyId?.message}
+                                    SelectProps={{ native: true }}
+                                >
+                                    <option value="">Please select a company</option>
+                                    {companies.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
+                                </TextField>
+                            )} />
+                        </Grid>
+                    </Grid>
+                    <Stack direction="row" justifyContent="flex-end" sx={{ mt: 3 }}>
+                        <LoadingButton loading={isSubmitting} startIcon={<PersonAdd />} variant={variant} disabled={!isValid || isSubmitting} type="submit">
+                            Create User
+                        </LoadingButton>
+                    </Stack>
+                </Box>
+                {errorMessage && (
+                    <Snackbar open={open} autoHideDuration={6000} TransitionComponent={Slide} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} onClose={handleSnackbarClose}>
+                        <Alert onClose={handleSnackbarClose} severity="error" variant="filled">
+                            {errorMessage}
+                        </Alert>
+                    </Snackbar>
                 )}
-            />
-
-            <Controller
-                name="email"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="email"
-                        label="Email"
-                        type="email"
-                        variant="outlined"
-                        required={true}
-                        autoComplete="email"
-                        error={!!errors.email} // Set error state
-                        helperText={errors.email?.message} // Display error message
-                        sx={{ width: '100%', maxWidth: 400 }}
-                    />
+                {isUserCreated && (
+                    <BaseSnackBarComponent message="User is added successfully." autoHideDuration={6000} severity="success" open={openUserCreatedSnackBar} onClose={handleUserCreatedSnackbarClose} />
                 )}
-            />
-
-            <PasswordFieldComponent
-                control={control}
-                errors={errors}
-                id="password"
-                lable="Password"
-            />
-
-            <PasswordConfirmFieldComponent
-                control={control}
-                errors={errors}
-                id="confirm_password"
-                lable="Confirm Password"
-            />
-
-            <Controller
-                name="companyId"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        id="companyId"
-                        type="text"
-                        select
-                        slotProps={{
-                            select: {
-                                native: true,
-                            },
-                        }}
-                        helperText={errors.companyId?.message}
-                        sx={{ width: '100%', maxWidth: 400 }}
-                    >
-                        <option aria-label="None" value="" >Please select a company</option>
-                        {companies.map((option) => (
-                            <option key={option.id} value={option.id}>
-                                {option.name}
-                            </option>
-                        ))}
-                    </TextField>
-
-                )}
-            />
-
-
-            <LoadingButton
-                loading={isSubmitting}
-                loadingPosition="center"
-                startIcon={<PersonAdd />}
-                variant={variant}
-                disabled={!isValid || isSubmitting}
-                type="submit"
-                sx={
-                    {
-                        width: '100%',
-                        maxWidth: 180,
-                        marginTop: 2,
-                        backgroundColor: 'primary.main',
-                        '&:hover': {
-                            backgroundColor: 'secondary.main',
-                        }
-                    }
-                }
-            >
-                Create User
-            </LoadingButton>
-
-            {/* Display global error */}
-            {errorMessage && (
-                <Snackbar
-                    open={open}
-                    autoHideDuration={6000}
-                    TransitionComponent={Slide}
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                    onClose={handleSnackbarClose}>
-                    <Alert
-                        onClose={handleSnackbarClose}
-                        severity="error"
-                        variant="filled"
-                        sx={{ width: '100%' }}
-                    >
-                        {errorMessage}
-                    </Alert>
-                </Snackbar>
-
-            )}
-
-            {isUserCreated && (
-                <BaseSnackBarComponent
-                    message={"User is added successfully."}
-                    autoHideDuration={6000}
-                    severity="success"
-                    open={openUserCreatedSnackBar}
-                    onClose={handleUserCreatedSnackbarClose}
-                />
-
-            )}
-
-            {/* <DevTool control={control} /> */}
-        </Box>
-
+            </Paper>
+        </Container>
     );
 };
 
