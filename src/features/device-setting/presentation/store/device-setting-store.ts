@@ -2,19 +2,18 @@ import { create } from "zustand";
 import { createSelectors } from "../../../../core/data";
 import { DeviceSettingState } from "../state/device-setting-state";
 
-import { CreateDeviceSettingForm} from "@/common/types";
-import { 
-  createDeviceSetting, 
-  deleteDeviceSetting, 
-  getDeviceSettings, 
-  findByDeviceId, 
-  getDeviceSettingById, 
-  getCompanies, 
-  getUsers, 
+import { CreateDeviceSettingForm } from "@/common/types";
+import {
+  createDeviceSetting,
+  deleteDeviceSetting,
+  getDeviceSettings,
+  findByDeviceId,
+  getDeviceSettingById,
+  getCompanies,
+  getUsers,
   updateDeviceSetting,
- } from "@/features/device-setting/data";
+} from "@/features/device-setting/data";
 import { UpdateDeviceSettingForm } from "@/common/types/update-device-setting-form";
-
 
 const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
   devices: [],
@@ -26,7 +25,7 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
   isDeviceSettingUpdated: null,
   isDeviceSettingDeleted: null,
   error: null,
-  createDeviceSetting: async (data: CreateDeviceSettingForm) : Promise<void> => {
+  createDeviceSetting: async (data: CreateDeviceSettingForm): Promise<void> => {
     try {
       set({ isLoading: true, isDeviceSettingCreated: null, error: null });
       await createDeviceSetting(data);
@@ -36,9 +35,9 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
       set({ isLoading: false, error: errorMessage });
     }
   },
-  updateDeviceSetting: async (data: UpdateDeviceSettingForm) : Promise<void> => {
+  updateDeviceSetting: async (data: UpdateDeviceSettingForm): Promise<void> => {
     try {
-      set({ isLoading: true, isDeviceSettingUpdated: null, error: null });      
+      set({ isLoading: true, isDeviceSettingUpdated: null, error: null });
       await updateDeviceSetting(data);
       set({ isLoading: false, isDeviceSettingUpdated: true, error: null });
     } catch (error) {
@@ -49,7 +48,7 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
   findAll: async () => {
     try {
       set({ isLoading: true, error: null });
-      const  response = await getDeviceSettings();
+      const response = await getDeviceSettings();
       set({ devices: response.data, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;
@@ -63,7 +62,7 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
       set({ device: response.data, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;
-      set({isLoading: false, error: errorMessage });
+      set({ isLoading: false, error: errorMessage });
     }
   },
   findByDeviceId: async (deviceId: String) => {
@@ -82,7 +81,7 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
       await deleteDeviceSetting(id);
       set({ isDeviceSettingDeleted: true, isLoading: false, error: null });
     } catch (error) {
-      const errorMessage = (error as Error).message;      
+      const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage });
     }
   },
@@ -91,7 +90,6 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
       set({ isLoading: true, error: null });
       const response = await getCompanies();
       set({ companies: response.data, isLoading: false, error: null });
-      
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage });
@@ -106,9 +104,7 @@ const useDeviceSettingStore = create<DeviceSettingState>((set) => ({
       const errorMessage = (error as Error).message;
       set({ users: [], isLoading: false, error: errorMessage });
     }
-    
   },
- 
 }));
 
 export default createSelectors(useDeviceSettingStore);

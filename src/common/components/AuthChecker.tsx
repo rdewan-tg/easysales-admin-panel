@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import { useAuthStore } from "../../features/auth/login/presentation";
 import { useEffect } from "react";
 
-
 const AuthChecker = () => {
   const checkAuthState = useAuthStore.use.checkAuthState();
   const getMyRoles = useAuthStore.use.getMyRoles();
@@ -15,7 +14,7 @@ const AuthChecker = () => {
     // fetch roles
     const fetchRoles = async () => {
       await getMyRoles();
-    }
+    };
     // fetch roles
     fetchRoles();
     // Render the nested routes

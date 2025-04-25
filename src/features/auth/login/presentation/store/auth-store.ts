@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import { AuthState } from "..";
 import { LoginForm } from "../../../../../common/types";
-import { checkAuthState, getMyRoles, login, logout} from "@/features/auth/login/data";
+import {
+  checkAuthState,
+  getMyRoles,
+  login,
+  logout,
+} from "@/features/auth/login/data";
 import { createSelectors } from "../../../../../core/data/index";
 import { Role } from "@/common/interface";
 
@@ -52,14 +57,14 @@ const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ isLoading: true, error: null });
       const response = await getMyRoles();
-      set({        
+      set({
         roles: response.data,
       });
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ error: errorMessage });
     }
-  }
+  },
 }));
 
 export default createSelectors(useAuthStore);

@@ -1,6 +1,4 @@
-
-
-export interface UpdateUserRoleDto{
-    userId: number;
-    roleId: number;
+export interface UpdateUserRoleDto {
+  userId: number;
+  roleId: number;
 }

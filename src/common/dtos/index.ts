@@ -1,5 +1,3 @@
-
-
-export * from './company.dto';
-export * from './role.dto';
-export * from './trans-date.dto';
+export * from "./company.dto";
+export * from "./role.dto";
+export * from "./trans-date.dto";

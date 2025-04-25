@@ -1,8 +1,8 @@
 export interface PhotoFilterDeviceDto {
-    status: string;
-    data:   PhotoFilterDevice[];
+  status: string;
+  data: PhotoFilterDevice[];
 }
 
 export interface PhotoFilterDevice {
-    deviceId: string;
+  deviceId: string;
 }

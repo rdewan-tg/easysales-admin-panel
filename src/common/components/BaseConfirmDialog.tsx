@@ -35,7 +35,9 @@ const BaseConfirmDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel}>Cancel</Button>
-        <Button onClick={onConfirm} autoFocus>Yes</Button>        
+        <Button onClick={onConfirm} autoFocus>
+          Yes
+        </Button>
       </DialogActions>
     </Dialog>
   );

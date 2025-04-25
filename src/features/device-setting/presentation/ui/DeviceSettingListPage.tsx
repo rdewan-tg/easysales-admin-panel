@@ -28,25 +28,23 @@ import {
   Sort,
   Edit,
   SaveEventArgs,
-} from '@syncfusion/ej2-react-grids';
-import { L10n } from '@syncfusion/ej2-base';
-import { ClickEventArgs } from '@syncfusion/ej2-react-navigations';
+} from "@syncfusion/ej2-react-grids";
+import { L10n } from "@syncfusion/ej2-base";
+import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 import { DeviceSetting } from "../../data";
 
 L10n.load({
-  'en-US': {
+  "en-US": {
     grid: {
-      'OKButton': 'YES',
-      'CancelButton': 'Discard',
-      'ConfirmDelete': 'Are you sure you want to delete the selected Record?'
-    }
-  }
+      OKButton: "YES",
+      CancelButton: "Discard",
+      ConfirmDelete: "Are you sure you want to delete the selected Record?",
+    },
+  },
 });
-
 
 const DeviceSettingListPage = () => {
   const navigate = useNavigate();
-  
 
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
@@ -60,15 +58,20 @@ const DeviceSettingListPage = () => {
   const updateDeviceSetting = useDeviceSettingStore.use.updateDeviceSetting();
 
   let grid: GridComponent | null;
-  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, showDeleteConfirmDialog: true };
-  const toolbar: ToolbarItems[] = ['Edit', 'Delete', 'Update', 'Cancel'];
+  const editSettings = {
+    allowEditing: true,
+    allowAdding: true,
+    allowDeleting: true,
+    showDeleteConfirmDialog: true,
+  };
+  const toolbar: ToolbarItems[] = ["Edit", "Delete", "Update", "Cancel"];
   const userRules: Object = { required: true };
   const stringParams = {
     params: {
-      showClearButton: true
-    }
+      showClearButton: true,
+    },
   };
- 
+
   const pageSettings: PageSettingsModel = { pageSize: 15 };
 
   // fetch userswhen the component mounts
@@ -79,7 +82,7 @@ const DeviceSettingListPage = () => {
       }
     }
     fetchUsers();
-  }, [])
+  }, []);
 
   // fetch device setting when the component mounts
   useEffect(() => {
@@ -93,14 +96,13 @@ const DeviceSettingListPage = () => {
     fetchDeviceSettings();
   }, []);
 
-
   const handleErrorSnackbarOpen = () => {
     setOpenErrorSnackbar(true);
   };
 
   const handleSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason?: SnackbarCloseReason,
   ) => {
     // do not close the snackbar if the reason is 'clickaway'
     if (reason === "clickaway") {
@@ -112,36 +114,36 @@ const DeviceSettingListPage = () => {
 
   // observe error state and display error message
   useEffect(() => {
-    if (errorMessage) {      
+    if (errorMessage) {
       handleErrorSnackbarOpen();
     }
   }, [errorMessage]);
 
-
   const navigateToDeviceSetting = () => {
-    navigate(`/${routeName.dashboard}/${routeName.deviceSetting}/${routeName.createdeviceSetting}`);
-  }
+    navigate(
+      `/${routeName.dashboard}/${routeName.deviceSetting}/${routeName.createdeviceSetting}`,
+    );
+  };
 
   const handleDeleteDeviceSetting = (id: number) => {
     deleteDevicesetting(id);
-  }
+  };
 
-  const toolbarClick = (args: ClickEventArgs) => {    
-    if ((args.item as any).properties.text === 'Delete') {
+  const toolbarClick = (args: ClickEventArgs) => {
+    if ((args.item as any).properties.text === "Delete") {
       const dialogObj = (grid as GridComponent).editModule.dialogObj;
-      dialogObj.header = 'Delete Confirmation Dialog';
+      dialogObj.header = "Delete Confirmation Dialog";
       dialogObj.showCloseIcon = true;
     }
-  }
+  };
   const actionComplete = (args: SaveEventArgs) => {
-
     // check if the request type is delete
-    if (args.requestType === 'delete') {
-      const data = args.data as DeviceSetting[];      
-      handleDeleteDeviceSetting(data[0].id);          
+    if (args.requestType === "delete") {
+      const data = args.data as DeviceSetting[];
+      handleDeleteDeviceSetting(data[0].id);
     }
     // check if the request type is save
-    if (args.requestType === 'save') {      
+    if (args.requestType === "save") {
       const data = args.data as DeviceSetting;
 
       const setting: UpdateDeviceSettingForm = {
@@ -152,11 +154,11 @@ const DeviceSettingListPage = () => {
         orderNumberFormat: data.orderNumberFormat,
         userName: data.userName,
         companyId: data.companyId,
-      }
+      };
 
-      updateDeviceSetting(setting);      
+      updateDeviceSetting(setting);
     }
-  }
+  };
 
   return (
     <Box
@@ -186,22 +188,21 @@ const DeviceSettingListPage = () => {
           display: "flex",
           justifyContent: "flex-end",
           alignItems: "center",
-          marginRight: '16px',
-        }}>
-
+          marginRight: "16px",
+        }}
+      >
         <IconButton color="primary" onClick={navigateToDeviceSetting}>
           <AddCircleOutlineOutlined />
         </IconButton>
-
       </Box>
 
       <Box
         sx={{
-          marginTop: '16px',
-        }}>
-
+          marginTop: "16px",
+        }}
+      >
         <GridComponent
-          ref={(g: GridComponent | null) => grid = g}
+          ref={(g: GridComponent | null) => (grid = g)}
           dataSource={devices}
           allowResizing={true}
           autoFit={true}
@@ -213,26 +214,61 @@ const DeviceSettingListPage = () => {
           actionComplete={actionComplete}
         >
           <ColumnsDirective>
-            <ColumnDirective field='id' headerText='Id' width='70' textAlign="Left" isPrimaryKey={true} />
-            <ColumnDirective field='deviceId' headerText='DeviceId' width='150' textAlign="Left" edit={stringParams} />
             <ColumnDirective
-              field='userId'
-              headerText='UserId'
-              width='150'
+              field="id"
+              headerText="Id"
+              width="70"
+              textAlign="Left"
+              isPrimaryKey={true}
+            />
+            <ColumnDirective
+              field="deviceId"
+              headerText="DeviceId"
+              width="150"
+              textAlign="Left"
+              edit={stringParams}
+            />
+            <ColumnDirective
+              field="userId"
+              headerText="UserId"
+              width="150"
               validationRules={userRules}
               textAlign="Left"
               allowEditing={false}
             />
-            <ColumnDirective field='userName' headerText='UserName' textAlign="Left" allowEditing={false} />
-            <ColumnDirective field='salesPersonCode' headerText='SalesPersonCode' width='150' textAlign="Left" edit={stringParams} />
-            <ColumnDirective field='orderNumberFormat' headerText='OrderNumberFormat' width='150' textAlign="Left" edit={stringParams} />
-            <ColumnDirective field='companyId' headerText='CompanyId' width='150' textAlign="Left" allowEditing={false} />
+            <ColumnDirective
+              field="userName"
+              headerText="UserName"
+              textAlign="Left"
+              allowEditing={false}
+            />
+            <ColumnDirective
+              field="salesPersonCode"
+              headerText="SalesPersonCode"
+              width="150"
+              textAlign="Left"
+              edit={stringParams}
+            />
+            <ColumnDirective
+              field="orderNumberFormat"
+              headerText="OrderNumberFormat"
+              width="150"
+              textAlign="Left"
+              edit={stringParams}
+            />
+            <ColumnDirective
+              field="companyId"
+              headerText="CompanyId"
+              width="150"
+              textAlign="Left"
+              allowEditing={false}
+            />
           </ColumnsDirective>
-          <Inject services={[Edit, Page, Sort, Filter, Group, Resize, Toolbar]} />
+          <Inject
+            services={[Edit, Page, Sort, Filter, Group, Resize, Toolbar]}
+          />
         </GridComponent>
       </Box>
-
-
 
       {/* Display global error */}
       {errorMessage && (
@@ -244,8 +280,6 @@ const DeviceSettingListPage = () => {
           onClose={handleSnackbarClose}
         />
       )}
-
-
     </Box>
   );
 };

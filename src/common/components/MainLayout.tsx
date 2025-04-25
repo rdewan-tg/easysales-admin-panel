@@ -21,8 +21,8 @@ import { darkTheme, lightTheme } from "../theme/theme";
 import { Brightness7, Brightness4 } from "@mui/icons-material";
 import { useAuthStore } from "../../features/auth/login/presentation/index";
 import { routeName } from "@/core/route";
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 
 import Sidebar from "./Sidebar";
 
@@ -73,9 +73,9 @@ export const MainLayout = (): JSX.Element => {
         <CssBaseline />
         <Box
           sx={{
-            position: 'fixed', // lock to viewport
+            position: "fixed", // lock to viewport
             height: "100vh", // Full viewport height
-            width: "100vw",  // Full viewport width
+            width: "100vw", // Full viewport width
             display: "flex",
             flexDirection: "column",
             overflow: "hidden", // hide scrollbars
@@ -89,7 +89,10 @@ export const MainLayout = (): JSX.Element => {
             id="app-bar"
             position="fixed"
             elevation={0}
-            sx={{ boxShadow: "none", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{
+              boxShadow: "none",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
           >
             <Toolbar>
               {/* App name on the left */}
@@ -188,7 +191,6 @@ export const MainLayout = (): JSX.Element => {
                 <Box sx={{ overflow: "auto" }}>
                   <List>
                     <Sidebar roles={roles} theme={theme} />
-
                   </List>
                   <Divider />
                 </Box>
@@ -197,7 +199,7 @@ export const MainLayout = (): JSX.Element => {
           )}
 
           {/* Main content - renders the child routes */}
-          <Box component="main" sx={{ flexGrow: 1, overflow: 'auto', p: 2}}>
+          <Box component="main" sx={{ flexGrow: 1, overflow: "auto", p: 2 }}>
             <Outlet />
           </Box>
         </Box>

@@ -1,4 +1,4 @@
 export interface UpdatePasswordDto {
-    status: string
-    data: boolean
+  status: string;
+  data: boolean;
 }

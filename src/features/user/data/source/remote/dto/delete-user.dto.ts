@@ -1,5 +1,4 @@
-
 export interface DeleteUserDto {
-    status: string
-    data: null
+  status: string;
+  data: null;
 }

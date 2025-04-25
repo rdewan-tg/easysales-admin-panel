@@ -1,5 +1,3 @@
-
-
 export interface ExportOrderToCSVDto {
-    salesIds: string[];
+  salesIds: string[];
 }

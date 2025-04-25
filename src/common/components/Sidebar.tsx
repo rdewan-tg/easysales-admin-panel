@@ -14,10 +14,8 @@ import { getIconComponent, menuConfig, permissions } from "@/core/route";
 import { useState } from "react";
 import { Role } from "../interface";
 
-
 // Define the Sidebar component
-const Sidebar = ({ roles, theme }: { roles: Role[] | null, theme: Theme}) => { 
-
+const Sidebar = ({ roles, theme }: { roles: Role[] | null; theme: Theme }) => {
   // Get the current location using the useLocation hook
   const location = useLocation();
 
@@ -36,13 +34,15 @@ const Sidebar = ({ roles, theme }: { roles: Role[] | null, theme: Theme}) => {
   // Get the list of roles assigned to the user
   const userRoleNames = roles?.map((role) => role.name) || [];
   // Get allowed routes based on the user's roles (check if any of the user's roles match the permission roles)
-  const allowedRoutes = userRoleNames.flatMap((roleName) => permissions[roleName] || []);
+  const allowedRoutes = userRoleNames.flatMap(
+    (roleName) => permissions[roleName] || [],
+  );
 
   // Remove duplicates (if a user has multiple roles with access to the same route)
   const uniqueAllowedRoutes = Array.from(new Set(allowedRoutes));
 
   // Define a function to render a single menu item
-  const renderMenuItem = (menu: typeof menuConfig[0]) => {
+  const renderMenuItem = (menu: (typeof menuConfig)[0]) => {
     // Check if the menu item has children
     const hasChildren = menu.children && menu.children.length > 0;
 
@@ -62,10 +62,14 @@ const Sidebar = ({ roles, theme }: { roles: Role[] | null, theme: Theme}) => {
           {/* Render a ListItemButton component with an onClick handler */}
           <ListItemButton
             // Call the handleToggle function if the menu item has children, otherwise navigate to the menu item's path
-            onClick={() => (hasChildren ? handleToggle(menu.label) : navigate(menu.path))}
+            onClick={() =>
+              hasChildren ? handleToggle(menu.label) : navigate(menu.path)
+            }
             // Set the background color based on whether the menu item is active
             style={{
-              backgroundColor: isActive ? theme.palette.action.selected : "transparent",
+              backgroundColor: isActive
+                ? theme.palette.action.selected
+                : "transparent",
             }}
           >
             {/* Render a ListItemIcon component with the menu item's icon */}
@@ -76,10 +80,20 @@ const Sidebar = ({ roles, theme }: { roles: Role[] | null, theme: Theme}) => {
             <ListItemText
               primary={menu.label}
               // Set the text color based on whether the menu item is active
-              style={{ color: isActive ? theme.palette.primary.main : theme.palette.text.primary }}
+              style={{
+                color: isActive
+                  ? theme.palette.primary.main
+                  : theme.palette.text.primary,
+              }}
             />
             {/* Render an ExpandLess or ExpandMore icon if the menu item has children */}
-            {hasChildren ? openSubmenus[menu.label] ? <ExpandLess /> : <ExpandMore /> : null}
+            {hasChildren ? (
+              openSubmenus[menu.label] ? (
+                <ExpandLess />
+              ) : (
+                <ExpandMore />
+              )
+            ) : null}
           </ListItemButton>
         </ListItem>
         {/* Render a Collapse component with the submenu if the menu item has children */}
@@ -145,7 +159,7 @@ const Sidebar = ({ roles, theme }: { roles: Role[] | null, theme: Theme}) => {
           </div>
         ) : (
           renderMenuItem(menu)
-        )
+        ),
       )}
     </List>
   );
