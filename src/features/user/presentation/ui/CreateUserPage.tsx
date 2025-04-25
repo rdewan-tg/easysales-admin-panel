@@ -1,6 +1,6 @@
 import { SignupForm, signupSchema } from "@/common/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Box, Container, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Paper, Select, Slide, Snackbar, SnackbarCloseReason, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Container, FormControl, FormHelperText, InputLabel, MenuItem, Paper, Select, Slide, Snackbar, SnackbarCloseReason, Stack, TextField, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import PasswordFieldComponent from "./components/PasswordFieldComponent";
 import { PersonAdd } from "@mui/icons-material";
@@ -82,7 +82,7 @@ const CreateUserPage = () => {
     }, [isLoading, companies.length, getCompanies]);
 
     const form = useForm<SignupForm>({
-        resolver: zodResolver(signupSchema),        
+        resolver: zodResolver(signupSchema),
     });
 
     // destructure form
