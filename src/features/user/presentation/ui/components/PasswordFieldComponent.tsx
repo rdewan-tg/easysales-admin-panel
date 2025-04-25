@@ -38,7 +38,7 @@ const PasswordFieldComponent = (props: {
           label={lable}
           type={showPassword ? "text" : "password"}
           variant="outlined"
-          sx={{ width: "100%", maxWidth: 400 }}
+          fullWidth
           slotProps={{
             input: {
               endAdornment: (
