@@ -8,7 +8,6 @@ import {
 } from "../../data";
 import { createSelectors } from "../../../../core/data";
 
-
 const useRoleStore = create<RoleState>((set) => ({
   isLoading: false,
   roles: [],
@@ -32,14 +31,14 @@ const useRoleStore = create<RoleState>((set) => ({
       // update state after api call
       set({ roles: roles.data, isLoading: false, error: null });
     } catch (error) {
-        // update error state after api call
+      // update error state after api call
       const errorMessage = (error as Error).message;
       set({ roles: [], isLoading: false, error: errorMessage });
     }
   },
   setUserRole: async (userRole: UpdateUserRoleDto, selectedRole: string) => {
     try {
-        // update state before api call
+      // update state before api call
       set({
         isLoading: true,
         error: null,
@@ -56,21 +55,21 @@ const useRoleStore = create<RoleState>((set) => ({
         isRoleAdded: true,
       });
     } catch (error) {
-        // update error state after api call
+      // update error state after api call
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage, selectedRole: null });
     }
   },
   deleteUserRole: async (data: UpdateUserRoleDto) => {
     try {
-        // update state before api call
+      // update state before api call
       set({ isLoading: true, error: null, isRoleDeleted: null });
       // make api call
       await deleteUserRole(data);
       // update state after api call
       set({ isLoading: false, error: null, isRoleDeleted: true });
     } catch (error) {
-        // update error state after api call
+      // update error state after api call
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage });
     }

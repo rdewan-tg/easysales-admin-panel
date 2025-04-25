@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../..";
 
-
 const UpdateuserPasswordComponent = ({ id }: { id: number }) => {
   const navigate = useNavigate();
-  const [isDeleteMemberDialogOpen, setIsDeleteMemberDialogOpen] = useState(false);
-  
+  const [isDeleteMemberDialogOpen, setIsDeleteMemberDialogOpen] =
+    useState(false);
+
   const deleteUser = useUserStore.use.deleteUser();
   const setUserDeleted = useUserStore.use.setUserDeleted();
   const isUserDeleted = useUserStore((state) => state.isUserDeleted);
@@ -27,7 +27,7 @@ const UpdateuserPasswordComponent = ({ id }: { id: number }) => {
   }, [isUserDeleted, navigate]);
 
   const handleDeleteMemberDialogOpen = async () => {
-    setIsDeleteMemberDialogOpen(true);    
+    setIsDeleteMemberDialogOpen(true);
   };
 
   const handleDeleteDialogClose = () => {
@@ -36,7 +36,7 @@ const UpdateuserPasswordComponent = ({ id }: { id: number }) => {
 
   const handleDeleteMember = async () => {
     await deleteUser(Number(id));
-  }
+  };
 
   return (
     <>
@@ -58,7 +58,7 @@ const UpdateuserPasswordComponent = ({ id }: { id: number }) => {
         open={isDeleteMemberDialogOpen}
         onCancel={handleDeleteDialogClose}
         onConfirm={handleDeleteMember}
-      />      
+      />
     </>
   );
 };

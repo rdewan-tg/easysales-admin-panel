@@ -3,23 +3,20 @@ import { CustomerAddressState } from "../index";
 import { getCustomerAddress } from "../../data";
 import { createSelectors } from "@/core/data";
 
-
-
-
 const useCustomerAddressStore = create<CustomerAddressState>((set) => ({
-    isLoading: false,
-    addresses: [],
-    error: null,
-    getCustomerAddress: async (dataAreaId: string) => {
-        try {
-            set({ isLoading: true, error: null });
-            const response = await getCustomerAddress(dataAreaId);
-            set({ addresses: response.data, isLoading: false, error: null });
-        } catch (error) {
-            const errorMessage = (error as Error).message;
-            set({ isLoading: false, error: errorMessage });
-        }
-    },
+  isLoading: false,
+  addresses: [],
+  error: null,
+  getCustomerAddress: async (dataAreaId: string) => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await getCustomerAddress(dataAreaId);
+      set({ addresses: response.data, isLoading: false, error: null });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    }
+  },
 }));
 
 export default createSelectors(useCustomerAddressStore);

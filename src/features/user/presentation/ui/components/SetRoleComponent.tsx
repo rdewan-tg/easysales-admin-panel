@@ -13,11 +13,10 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "../..";
 import { BaseSnackBarComponent } from "../../../../../common/components";
 
-
 const SetRoleComponent = () => {
   const [roleAddedSnackBarOpen, setRoleAddedSnackBarOpen] = useState(false);
   const [roleRemovedSnackBarOpen, setRoleRemovedSnackBarOpen] = useState(false);
-  
+
   const roles = useRoleStore((state) => state.roles);
   const selectedRole = useRoleStore((state) => state.selectedRole);
   const setUserRole = useRoleStore.use.setUserRole();
@@ -58,13 +57,13 @@ const SetRoleComponent = () => {
         userId: Number(user?.id),
         roleId: Number(newRole),
       },
-      newRole
+      newRole,
     );
   };
 
   const handleSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason?: SnackbarCloseReason,
   ) => {
     // do not close the snackbar if the reason is 'clickaway'
     if (reason === "clickaway") {
@@ -79,7 +78,12 @@ const SetRoleComponent = () => {
       <Typography variant="h6" component="div" gutterBottom>
         Set Member Roles
       </Typography>
-      <FormControl id="role-form" required sx={{ m: 1, minWidth: 160 }} size="small">
+      <FormControl
+        id="role-form"
+        required
+        sx={{ m: 1, minWidth: 160 }}
+        size="small"
+      >
         <InputLabel id="select-role-label">Role</InputLabel>
         <Select
           id="role-select"
@@ -98,30 +102,26 @@ const SetRoleComponent = () => {
       </FormControl>
 
       {/* Snackbar component  when role is added to user */}
-      {
-        isRoleAdded && (
-          <BaseSnackBarComponent
-            message={"Role is added to this user."}
-            autoHideDuration={6000}
-            severity="success"
-            open={roleAddedSnackBarOpen}
-            onClose={handleSnackbarClose}
-          />        
-        )
-      }
+      {isRoleAdded && (
+        <BaseSnackBarComponent
+          message={"Role is added to this user."}
+          autoHideDuration={6000}
+          severity="success"
+          open={roleAddedSnackBarOpen}
+          onClose={handleSnackbarClose}
+        />
+      )}
 
       {/* Snackbar component  when role is deleted from user */}
-      {
-        isRoleDeleted && (
-          <BaseSnackBarComponent
-            message={"Role is deleted from this user."}
-            autoHideDuration={6000}
-            severity="success"
-            open={roleRemovedSnackBarOpen}
-            onClose={handleSnackbarClose}
-          />        
-        )        
-      }
+      {isRoleDeleted && (
+        <BaseSnackBarComponent
+          message={"Role is deleted from this user."}
+          autoHideDuration={6000}
+          severity="success"
+          open={roleRemovedSnackBarOpen}
+          onClose={handleSnackbarClose}
+        />
+      )}
     </Box>
   );
 };

@@ -28,8 +28,6 @@ import {
   BaseSnackBarComponent,
 } from "../../../../common/components";
 
-
-
 export const UserDetailPage = () => {
   const { id } = useParams();
 
@@ -70,7 +68,7 @@ export const UserDetailPage = () => {
 
   const handleSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason?: SnackbarCloseReason,
   ) => {
     // do not close the snackbar if the reason is 'clickaway'
     if (reason === "clickaway") {
@@ -94,7 +92,6 @@ export const UserDetailPage = () => {
     await deleteUserRole({ userId: Number(id), roleId: roleId ?? 0 });
     setIsRoleDialogOpen(false);
   };
-
 
   return (
     <Box component="main" sx={{ flexGrow: 1, m: 2 }}>
@@ -164,7 +161,7 @@ export const UserDetailPage = () => {
         <Divider sx={{ mt: 2, mb: 2 }} />
 
         {/* Display member delete button */}
-        < Typography variant="h5" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           Delete User
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -181,7 +178,6 @@ export const UserDetailPage = () => {
         onCancel={handleRoleCloseDialog}
         onConfirm={handleDeleteUserRole}
       />
-
 
       {/* Display global error */}
       {errorMessage && (

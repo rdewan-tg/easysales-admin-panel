@@ -1,4 +1,4 @@
 export enum PhotoFilterEnum {
-    byDeviceAndDate,
-    byCustomerChainAndDate,
+  byDeviceAndDate,
+  byCustomerChainAndDate,
 }

@@ -1,14 +1,25 @@
-import { Box, Typography, Container, Card, CardContent, Avatar, Chip, Stack, Backdrop, CircularProgress, IconButton } from "@mui/material";
-import Grid from '@mui/material/Grid';
+import {
+  Box,
+  Typography,
+  Container,
+  Card,
+  CardContent,
+  Avatar,
+  Chip,
+  Stack,
+  Backdrop,
+  CircularProgress,
+  IconButton,
+} from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { useMeStore } from "..";
 import { useEffect, useState } from "react";
 
-import BusinessIcon from '@mui/icons-material/Business';
-import PhoneIcon from '@mui/icons-material/Phone';
-import EmailIcon from '@mui/icons-material/Email';
+import BusinessIcon from "@mui/icons-material/Business";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
 import { ExitToAppOutlined, PublicOutlined } from "@mui/icons-material";
 import SelectCompanyDialog from "./components/select-company-dialog";
-
 
 const ProfilePage = () => {
   const [openCompanyDialog, setOpenCompanyDialog] = useState(false);
@@ -20,18 +31,17 @@ const ProfilePage = () => {
   // change company
   const changeCompany = useMeStore.use.changeCompany();
 
-
   useEffect(() => {
     async function fetchMe() {
       getMe();
     }
 
-
     fetchMe();
-
   }, []);
 
-  const hasSuperAdminRole = data?.role?.some(r => r.name.includes("superAdmin"));
+  const hasSuperAdminRole = data?.role?.some((r) =>
+    r.name.includes("superAdmin"),
+  );
 
   const handleClickOpenCompanyDialog = () => {
     setOpenCompanyDialog(true);
@@ -46,16 +56,14 @@ const ProfilePage = () => {
     changeCompany({ userId: data?.id ?? 0, companyId: value });
   };
 
-
-
   return (
     <Box
       component={"main"}
       sx={{
-        minHeight: '80vh',
-        margin: '16px',
-      }}>
-
+        minHeight: "80vh",
+        margin: "16px",
+      }}
+    >
       {isLoading ? (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -67,25 +75,27 @@ const ProfilePage = () => {
 
       <Typography variant="h3">Profile</Typography>
 
-
-
-      <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
+      <Container maxWidth="sm" style={{ marginTop: "2rem" }}>
         <Card>
           <CardContent>
             <Stack direction="column" alignItems="center" spacing={2}>
               <Avatar
                 alt={data?.name}
-                sx={{ width: 80, height: 80, fontSize: '2rem', bgcolor: 'primary.main' }}
+                sx={{
+                  width: 80,
+                  height: 80,
+                  fontSize: "2rem",
+                  bgcolor: "primary.main",
+                }}
               >
                 {data?.name[0]}
               </Avatar>
               <Typography variant="h5" gutterBottom>
                 {data?.name}
               </Typography>
-
             </Stack>
 
-            <Grid container spacing={2} style={{ marginTop: '1rem' }}>
+            <Grid container spacing={2} style={{ marginTop: "1rem" }}>
               <Grid size={12}>
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <EmailIcon color="secondary" />
@@ -97,7 +107,7 @@ const ProfilePage = () => {
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <PhoneIcon color="secondary" />
                   <Typography variant="body1">
-                    {data?.phoneNumber || 'No phone number provided'}
+                    {data?.phoneNumber || "No phone number provided"}
                   </Typography>
                 </Stack>
               </Grid>
@@ -106,10 +116,17 @@ const ProfilePage = () => {
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <BusinessIcon color="secondary" />
                   <Typography variant="body1">{data?.company.name}</Typography>
-                  {hasSuperAdminRole && <>
-                    <IconButton color="primary" aria-label="change company" onClick={handleClickOpenCompanyDialog}>
-                      <ExitToAppOutlined />
-                    </IconButton></>}
+                  {hasSuperAdminRole && (
+                    <>
+                      <IconButton
+                        color="primary"
+                        aria-label="change company"
+                        onClick={handleClickOpenCompanyDialog}
+                      >
+                        <ExitToAppOutlined />
+                      </IconButton>
+                    </>
+                  )}
                 </Stack>
               </Grid>
 
@@ -142,8 +159,6 @@ const ProfilePage = () => {
         onClose={handleCloseCompanyDialog}
         onSelected={handleSelectedCompany}
       />
-
-
     </Box>
   );
 };

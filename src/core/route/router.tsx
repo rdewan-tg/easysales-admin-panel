@@ -7,7 +7,11 @@ import PublicRoute from "./PublicRoute";
 import LoginPage from "../../features/auth/login/presentation/ui/LoginPage";
 import PrivacyPolicyPage from "../../features/privacy-policy/presentation/ui/PrivacyPolicyPage";
 import DashboardPage from "../../features/dashboard/presentation/ui/DashboardPage";
-import { UserDetailPage, UsersListPage, UsersPage } from "@/features/user/presentation";
+import {
+  UserDetailPage,
+  UsersListPage,
+  UsersPage,
+} from "@/features/user/presentation";
 import { routeName } from "./route-name";
 import UserRolePage from "@/features/role/presentation/ui/RolePage";
 import CreateUserPage from "@/features/user/presentation/ui/CreateUserPage";
@@ -37,7 +41,6 @@ import AddressScreen from "@/features/master-data/address/presentation/ui/Addres
 import AddressListScreen from "@/features/master-data/address/presentation/ui/AddressListScreen";
 import MerchandiserReportByDateRangeScreen from "@/features/report/merchandiser/presentation/ui/MerchandiserReportByDateRangeScreen";
 import { OrderDetailScreen, OrderScreen } from "@/features/order/presentation";
-
 
 export const router = createBrowserRouter([
   {
@@ -84,13 +87,13 @@ export const router = createBrowserRouter([
                             element: <UserRolePage />,
                             errorElement: <NotFoundPage />,
                           },
-                        ]
+                        ],
                       },
                       {
                         path: routeName.createUser,
                         element: <CreateUserPage />,
                         errorElement: <NotFoundPage />,
-                      }
+                      },
                     ],
                   },
                   //rols
@@ -114,8 +117,8 @@ export const router = createBrowserRouter([
                         path: routeName.createCompany,
                         element: <CreateCompanyPage />,
                         errorElement: <NotFoundPage />,
-                      }
-                    ]
+                      },
+                    ],
                   },
                   // countries
                   {
@@ -131,8 +134,8 @@ export const router = createBrowserRouter([
                         path: routeName.createCountry,
                         element: <CreateCountryPage />,
                         errorElement: <NotFoundPage />,
-                      }
-                    ]
+                      },
+                    ],
                   },
                   // sales order
                   {
@@ -144,7 +147,7 @@ export const router = createBrowserRouter([
                         element: <OrderDetailScreen />,
                         errorElement: <NotFoundPage />,
                       },
-                    ]
+                    ],
                   },
                   // me
                   {
@@ -156,8 +159,7 @@ export const router = createBrowserRouter([
                         element: <ProfilePage />,
                         errorElement: <NotFoundPage />,
                       },
-
-                    ]
+                    ],
                   },
                   // photo
                   {
@@ -179,8 +181,7 @@ export const router = createBrowserRouter([
                         element: <MerchandiserReportByDateRangeScreen />,
                         errorElement: <NotFoundPage />,
                       },
-
-                    ]
+                    ],
                   },
                   // customer
                   {
@@ -197,7 +198,7 @@ export const router = createBrowserRouter([
                         element: <SalesCustomerScreen />,
                         errorElement: <NotFoundPage />,
                       },
-                    ]
+                    ],
                   },
                   // address
                   {
@@ -209,8 +210,7 @@ export const router = createBrowserRouter([
                         element: <AddressListScreen />,
                         errorElement: <NotFoundPage />,
                       },
-
-                    ]
+                    ],
                   },
                   // item
                   {
@@ -222,8 +222,7 @@ export const router = createBrowserRouter([
                         element: <ItemListScreen />,
                         errorElement: <NotFoundPage />,
                       },
-
-                    ]
+                    ],
                   },
                   // price
                   {
@@ -235,8 +234,7 @@ export const router = createBrowserRouter([
                         element: <PriceListScreen />,
                         errorElement: <NotFoundPage />,
                       },
-
-                    ]
+                    ],
                   },
                   // Activity Log
                   {
@@ -259,10 +257,8 @@ export const router = createBrowserRouter([
                         element: <CreateDeviceSettingPage />,
                         errorElement: <NotFoundPage />,
                       },
-
-                    ]
+                    ],
                   },
-
                 ],
               },
             ],
@@ -277,7 +273,6 @@ export const router = createBrowserRouter([
             path: routeName.login,
             element: <LoginPage />,
           },
-
         ],
       },
       // Redirect root path to login if not authenticated

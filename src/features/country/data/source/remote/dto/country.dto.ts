@@ -1,15 +1,12 @@
-
-
-
 export interface CountryDto {
-    status: string,
-    data: Country[],
+  status: string;
+  data: Country[];
 }
 export interface Country {
-    id: number;
-    name: string;
-    countryCode: string;
-    companyCode: string;
-    currencyCode: string;
-    timeZone: string;
+  id: number;
+  name: string;
+  countryCode: string;
+  companyCode: string;
+  currencyCode: string;
+  timeZone: string;
 }

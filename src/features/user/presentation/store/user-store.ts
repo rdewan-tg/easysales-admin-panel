@@ -1,7 +1,14 @@
 import { create } from "zustand";
 import { createSelectors } from "../../../../core/data";
 import { UserState } from "../state/user-state";
-import { createUser, deleteUser, getCompanies, getUserById, getUsersByCompany, updatePassword } from "../../data";
+import {
+  createUser,
+  deleteUser,
+  getCompanies,
+  getUserById,
+  getUsersByCompany,
+  updatePassword,
+} from "../../data";
 import { SignupForm, UpdatePasswordForm } from "@/common/types";
 
 const useUserStore = create<UserState>((set, get) => ({
@@ -14,7 +21,7 @@ const useUserStore = create<UserState>((set, get) => ({
   isUserCreated: null,
   error: null,
   deleteSnackbarOpen: false,
-  createUser: async (data: SignupForm) : Promise<void> => {
+  createUser: async (data: SignupForm): Promise<void> => {
     try {
       set({ isLoading: true, isUserCreated: null, error: null });
       await createUser(data);
@@ -66,7 +73,6 @@ const useUserStore = create<UserState>((set, get) => ({
       set({ isLoading: true, error: null });
       const response = await getCompanies();
       set({ companies: response.data, isLoading: false, error: null });
-      
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage });
@@ -74,7 +80,7 @@ const useUserStore = create<UserState>((set, get) => ({
   },
   updatePassword: async (data: UpdatePasswordForm) => {
     try {
-      set ({ isLoading: true, error: null, isPasswordUpdated: null });
+      set({ isLoading: true, error: null, isPasswordUpdated: null });
       // call the api to update the password
       await updatePassword(data);
       // update state
@@ -82,15 +88,12 @@ const useUserStore = create<UserState>((set, get) => ({
       // after 5 sec update the isPasswordUpdated to false
       setTimeout(() => {
         set({ isPasswordUpdated: false });
-      }, 5000);     
-      
+      }, 5000);
     } catch (error) {
       // Better error handling
-    const errorMessage = error instanceof Error 
-      ? error.message 
-      : 'Failed to update password';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to update password";
       set({ isLoading: false, error: errorMessage });
-      
     }
   },
   reset: () => {

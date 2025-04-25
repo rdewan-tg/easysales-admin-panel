@@ -28,24 +28,23 @@ import {
   SortSettingsModel,
   Toolbar,
   ToolbarItems,
-} from '@syncfusion/ej2-react-grids';
+} from "@syncfusion/ej2-react-grids";
 
 const UsersListPage = () => {
   const navigate = useNavigate();
   const gridRef = useRef<GridComponent | null>(null);
-  const selectionSettings: SelectionSettingsModel = { mode: 'Row', type: 'Single' };
-  const toolbarOptions: ToolbarItems[] = ['Search'];
-  const pageSettings: PageSettingsModel = { pageSize: 20 }
+  const selectionSettings: SelectionSettingsModel = {
+    mode: "Row",
+    type: "Single",
+  };
+  const toolbarOptions: ToolbarItems[] = ["Search"];
+  const pageSettings: PageSettingsModel = { pageSize: 20 };
   const sortSettings: SortSettingsModel = {
-    columns: [
-      { field: 'name', direction: 'Ascending' }
-    ]
-  }
+    columns: [{ field: "name", direction: "Ascending" }],
+  };
 
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
-  const deleteSnackbarOpen = useUserStore(
-    (state) => state.deleteSnackbarOpen
-  );
+  const deleteSnackbarOpen = useUserStore((state) => state.deleteSnackbarOpen);
   const setDeleteMemberSnackbarOpen =
     useUserStore.use.setDeleteUserSnackbarOpen();
 
@@ -57,10 +56,16 @@ const UsersListPage = () => {
   const getUsersByCompany = useUserStore.use.getUsersByCompany();
 
   const created = () => {
-    (document.getElementById((gridRef.current as GridComponent).element.id + "_searchbar") as HTMLElement).addEventListener('keyup', (event) => {
-      (gridRef.current as GridComponent).search((event.target as HTMLInputElement).value)
+    (
+      document.getElementById(
+        (gridRef.current as GridComponent).element.id + "_searchbar",
+      ) as HTMLElement
+    ).addEventListener("keyup", (event) => {
+      (gridRef.current as GridComponent).search(
+        (event.target as HTMLInputElement).value,
+      );
     });
-  }
+  };
 
   useEffect(() => {
     // fetch members when the component mounts
@@ -78,7 +83,6 @@ const UsersListPage = () => {
     if (isUserDeleted) {
       setDeleteMemberSnackbarOpen(true);
     }
-
   }, [isUserDeleted]);
 
   const handleErrorSnackbarOpen = () => {
@@ -87,7 +91,7 @@ const UsersListPage = () => {
 
   const handleSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason?: SnackbarCloseReason,
   ) => {
     // do not close the snackbar if the reason is 'clickaway'
     if (reason === "clickaway") {
@@ -106,12 +110,12 @@ const UsersListPage = () => {
   }, [errorMessage]);
 
   const rowSelected = (args: RowSelectEventArgs) => {
-    console.log(args.data)
+    console.log(args.data);
     if (!args.data) {
       return;
     }
-    navigateToUserDetails((args.data as any)['id'])    
-  }
+    navigateToUserDetails((args.data as any)["id"]);
+  };
 
   const navigateToUserDetails = (id: number) => {
     // navigate to the member details page
@@ -119,14 +123,16 @@ const UsersListPage = () => {
   };
 
   const navigateToCreateUser = () => {
-    navigate(`/${routeName.dashboard}/${routeName.users}/${routeName.createUser}`);
-  }
+    navigate(
+      `/${routeName.dashboard}/${routeName.users}/${routeName.createUser}`,
+    );
+  };
 
   return (
     <Box
       component={"main"}
       sx={{
-        position: 'fixed',
+        position: "fixed",
         height: "100vh", // Full viewport height
         display: "flex",
         flexDirection: "column",
@@ -151,8 +157,8 @@ const UsersListPage = () => {
           display: "flex",
           justifyContent: "flex-end",
           alignItems: "center",
-        }}>
-
+        }}
+      >
         <IconButton color="primary" onClick={getUsersByCompany}>
           <RefreshOutlined />
         </IconButton>
@@ -160,7 +166,6 @@ const UsersListPage = () => {
         <IconButton color="primary" onClick={navigateToCreateUser}>
           <PersonAdd />
         </IconButton>
-
       </Box>
 
       <Box
@@ -185,17 +190,20 @@ const UsersListPage = () => {
           }}
         >
           <ColumnsDirective>
-            <ColumnDirective field='id' headerText="Id" width={50} />
-            <ColumnDirective field='name' headerText="Name" />
-            <ColumnDirective field='email' headerText="Email" />
-            <ColumnDirective field='companyId' headerText="CompanyCode" width={100} />
-            <ColumnDirective field='createAt' headerText="CreatedAt" />
-            <ColumnDirective field='updatedAt' headerText="UpdatedAt" />
+            <ColumnDirective field="id" headerText="Id" width={50} />
+            <ColumnDirective field="name" headerText="Name" />
+            <ColumnDirective field="email" headerText="Email" />
+            <ColumnDirective
+              field="companyId"
+              headerText="CompanyCode"
+              width={100}
+            />
+            <ColumnDirective field="createAt" headerText="CreatedAt" />
+            <ColumnDirective field="updatedAt" headerText="UpdatedAt" />
           </ColumnsDirective>
           <Inject services={[Page, Sort, Filter, Group, Search, Toolbar]} />
         </GridComponent>
       </Box>
-
 
       {/* Display global error */}
       {errorMessage && (

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import { useRoleStore } from "../index";
 import {
-    Alert,
+  Alert,
   Backdrop,
   Card,
   CardHeader,
@@ -38,7 +38,7 @@ const UserRolePage = () => {
 
   const handleSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason?: SnackbarCloseReason,
   ) => {
     // do not close the snackbar if the reason is 'clickaway'
     if (reason === "clickaway") {
@@ -57,7 +57,7 @@ const UserRolePage = () => {
 
   return (
     <Box component="main" sx={{ flexGrow: 1, m: 2 }}>
-       <Typography variant="h3">Roles</Typography>
+      <Typography variant="h3">Roles</Typography>
       {isLoading ? (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -102,7 +102,6 @@ const UserRolePage = () => {
           </Alert>
         </Snackbar>
       )}
-      
     </Box>
   );
 };

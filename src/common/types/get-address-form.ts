@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const getAddressSchema = z.object({
-    companyCode: z.string(),
-})
+  companyCode: z.string(),
+});
 
-export type GetAddressForm = z.infer<typeof getAddressSchema>
+export type GetAddressForm = z.infer<typeof getAddressSchema>;
