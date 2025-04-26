@@ -32,7 +32,7 @@ import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
 
 const AddressListScreen = () => {
   const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-  const pageSettings: PageSettingsModel = { pageSize: 15 };
+  const pageSettings: PageSettingsModel = { pageSize: 20 };
   const gridRef = useRef<GridComponent | null>(null);
   const toolbar: ToolbarItems[] = ["ExcelExport", "Search"];
 
@@ -83,7 +83,7 @@ const AddressListScreen = () => {
   const onSubmit: SubmitHandler<GetCustomerForm> = async (
     data: GetCustomerForm,
   ) => {
-    await getCustomerAddress(data.companyCode);
+    await getCustomerAddress(data.companyCode, 1, 20);
   };
 
   // when the component mounts- get the companies

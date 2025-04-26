@@ -50,6 +50,20 @@ const CreateCompanyPage = () => {
 
   const form = useForm<CreateCompanyForm>({
     resolver: zodResolver(createCompanySchema),
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      address: "",
+      email: "",
+      phone: "",
+      country: "",
+      countryCode: "",
+      companyCode: "",
+      companySetting: {
+        currencyCode: "",
+        timeZone: "",
+      },
+    },
   });
 
   const handleErrorSnackbarClick = () => {
