@@ -42,6 +42,14 @@ const CreateCountryPage = () => {
 
   const form = useForm<CreateCountryForm>({
     resolver: zodResolver(createCountrySchema),
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      countryCode: "",
+      companyCode: "",
+      currencyCode: "",
+      timeZone: "",
+    },
   });
   // destructure form
   const { handleSubmit, formState, control } = form;

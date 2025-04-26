@@ -98,6 +98,13 @@ const CreateUserPage = () => {
   const form = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
     mode: "onChange",
+    defaultValues: {
+        name: "",
+        email: "",
+        password: "",
+        confirm_password: "",
+        companyId: 0,        
+    }
   });
 
   // destructure form
