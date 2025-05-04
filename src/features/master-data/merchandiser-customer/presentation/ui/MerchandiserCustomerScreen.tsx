@@ -54,7 +54,7 @@ const MerchandiserCustomerScreen = () => {
   const toolbarClick = (args: ClickEventArgs) => {
     if (gridRef.current && args.item.id === "Grid_excelexport") {
       gridRef.current.showSpinner();
-      gridRef.current.excelExport();
+      gridRef.current.excelExport({fileName: "MerchandiserCustomers"});
     }
   };
 
