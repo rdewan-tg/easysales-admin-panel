@@ -1,5 +1,6 @@
-import { axiosAdminInstance, getCustomerAddressEndpoint } from "@/core/data";
+import { axiosAdminInstance, getCustomerAddressEndpoint, importAddressesFromAzureDbEndpoint } from "@/core/data";
 import { CustomerAddressDto } from "../../..";
+import { ImportDataFromAzureDbDto } from "@/common/dtos";
 
 export async function getCustomerAddress(dataAreaId: string, page: number, size: number) {
   const response = await axiosAdminInstance.get<CustomerAddressDto>(
@@ -7,3 +8,8 @@ export async function getCustomerAddress(dataAreaId: string, page: number, size:
   );
   return response.data;
 }
+
+export const importAddressesFromAzureDb = async () => {
+  const response = await axiosAdminInstance.get<ImportDataFromAzureDbDto>(importAddressesFromAzureDbEndpoint);
+  return response.data;
+};

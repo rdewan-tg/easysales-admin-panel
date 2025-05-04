@@ -5,4 +5,5 @@ export type ItemState = {
   isLoading: boolean;
   error: string | null;
   getItems: (dataAreaId: string) => Promise<void>;
+  importFromAzureDb: () => Promise<void>;
 };

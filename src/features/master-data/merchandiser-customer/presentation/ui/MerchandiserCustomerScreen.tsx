@@ -7,6 +7,8 @@ import {
   Snackbar,
   SnackbarCloseReason,
   TextField,
+  Button,
+  MenuItem,
 } from "@mui/material";
 import { useMerchandiserCustomerStore } from "..";
 import {
@@ -29,10 +31,9 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GetCustomerForm, getCustomerSchema } from "@/common/types";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { SendOutlined } from "@mui/icons-material";
+import { SendOutlined, CloudDownload } from "@mui/icons-material";
 import { useCompanyStore } from "@/features/company/presentation";
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
-//import { DevTool } from "@hookform/devtools";
 
 const MerchandiserCustomerScreen = () => {
   const gridRef = useRef<GridComponent | null>(null);
@@ -45,6 +46,7 @@ const MerchandiserCustomerScreen = () => {
   const customers = useMerchandiserCustomerStore((state) => state.customers);
   const getMerchandiserCustomers =
     useMerchandiserCustomerStore.use.getMerchandiserCustomers();
+  const importFromAzureDb = useMerchandiserCustomerStore.use.importFromAzureDb();
 
   const companies = useCompanyStore((state) => state.companies);
   const getCompanies = useCompanyStore.use.getCompanies();
@@ -141,51 +143,56 @@ const MerchandiserCustomerScreen = () => {
             <TextField
               {...field}
               id="company-code"
-              type="text"
-              size="small"
               select
+              label="Company Code"
               defaultValue=""
-              slotProps={{
-                select: {
-                  native: true,
-                },
-              }}
-              helperText={
-                errors.companyCode ? errors.companyCode.message : null
-              }
-              sx={{ width: "100%", maxWidth: 300 }}
+              variant="outlined"
+              size="small"
+              error={!!errors.companyCode}
+              helperText={errors.companyCode?.message}
+              sx={{ minWidth: 200, marginRight: 2 }}
             >
-              <option aria-label="None" value="">
-                Select a company
-              </option>
-              {companies.map((option) => (
-                <option key={option.id} value={option.companyCode}>
-                  {option.companyCode}
-                </option>
+              {companies.map((company) => (
+                <MenuItem
+                  key={company.companyCode}
+                  value={company.companyCode}
+                >
+                  {company.companyCode} - {company.name}
+                </MenuItem>
               ))}
             </TextField>
           )}
         />
-
         <LoadingButton
-          loading={isSubmitting}
-          loadingPosition="center"
-          startIcon={<SendOutlined />}
-          variant="contained"
-          disabled={!isValid || isSubmitting}
           type="submit"
+          variant="contained"
+          loading={isSubmitting}
+          loadingPosition="start"
+          startIcon={<SendOutlined />}
+          disabled={!isValid}
+          sx={{ marginRight: 2 }}
+        >
+          Submit
+        </LoadingButton>
+        
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<CloudDownload />}
+          onClick={() => importFromAzureDb()}
           sx={{
-            width: "100%",
-            maxWidth: 180,
-            marginLeft: 2,
-            backgroundColor: "primary.main",
-            "&:hover": {
-              backgroundColor: "secondary.main",
-            },
+            backgroundColor: 'primary.main',
+            borderRadius: '8px',
+            textTransform: 'none',
+            boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
+            '&:hover': {
+              backgroundColor: 'primary.dark',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
+            }
           }}
         >
-          Get Customers
-        </LoadingButton>
+          Refresh from Azure
+        </Button>
       </Box>
 
       <Box

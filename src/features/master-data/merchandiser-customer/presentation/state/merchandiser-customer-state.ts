@@ -5,4 +5,5 @@ export type MerchandiserCustomerState = {
   isLoading: boolean;
   error: string | null;
   getMerchandiserCustomers: (dataAreaId: string) => Promise<void>;
+  importFromAzureDb: () => Promise<void>;
 };

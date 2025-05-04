@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { ItemState } from "../state/item-state";
 import { createSelectors } from "@/core/data";
-import { getItems } from "../../data";
+import { getItems, importItemsFromAzureDb } from "../../data";
 
 const useItemStore = create<ItemState>((set) => ({
   items: [],
@@ -17,6 +17,16 @@ const useItemStore = create<ItemState>((set) => ({
       set({ isLoading: false, error: errorMessage });
     }
   },
+  importFromAzureDb: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      await importItemsFromAzureDb();
+      set({ isLoading: false, error: null });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    }
+  }
 }));
 
 export default createSelectors(useItemStore);
