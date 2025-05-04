@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { PriceState } from "../state/price-state";
 import { createSelectors } from "@/core/data";
-import { getPrices } from "../../data";
+import { getPrices, importPricesFromAzureDb } from "../../data";
 
 const usePriceStore = create<PriceState>((set) => ({
   prices: [],
@@ -17,6 +17,16 @@ const usePriceStore = create<PriceState>((set) => ({
       set({ isLoading: false, error: errorMessage });
     }
   },
+  importFromAzureDb: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      await importPricesFromAzureDb();
+      set({ isLoading: false, error: null });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    }
+  }
 }));
 
 export default createSelectors(usePriceStore);

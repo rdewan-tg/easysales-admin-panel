@@ -5,4 +5,5 @@ export type PriceState = {
   isLoading: boolean;
   error: string | null;
   getprices: (dataAreaId: string) => Promise<void>;
+  importFromAzureDb: () => Promise<void>;
 };

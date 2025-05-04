@@ -81,3 +81,11 @@ export const exportOrderToCSVEndpoint: string =
   "/v1/api/sales-header/export-sales-orders";
 export const OrderCreatedDateEndpoint: string =
   "/v1/api/sales-header/find/order-created-dates";
+
+//master data
+export const importItemsFromAzureDbEndpoint: string = "/v1/api/items/import/from-azure-db";
+export const importPricesFromAzureDbEndpoint: string = "/v1/api/prices/import/from-azure-db";
+export const importCustomersFromAzureDbEndpoint: string = "/v1/api/customers/import/from-azure-db";
+export const importMerchandiserCustomersFromAzureDbEndpoint: string = "/v1/api/merchandiser-customers/import/from-azure-db";
+export const importAddressesFromAzureDbEndpoint: string = "/v1/api/addresses/import/from-azure-db";
+

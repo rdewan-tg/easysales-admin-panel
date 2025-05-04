@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { CustomerAddressState } from "../index";
-import { getCustomerAddress } from "../../data";
+import { getCustomerAddress, importAddressesFromAzureDb } from "../../data";
 import { createSelectors } from "@/core/data";
 
 const useCustomerAddressStore = create<CustomerAddressState>((set) => ({
@@ -17,6 +17,16 @@ const useCustomerAddressStore = create<CustomerAddressState>((set) => ({
       set({ isLoading: false, error: errorMessage });
     }
   },
+  importFromAzureDb: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      await importAddressesFromAzureDb();
+      set({ isLoading: false, error: null });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    }
+  }
 }));
 
 export default createSelectors(useCustomerAddressStore);

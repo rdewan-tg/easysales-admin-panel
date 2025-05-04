@@ -6,11 +6,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { SendOutlined } from "@mui/icons-material";
+import { SendOutlined, CloudDownload } from "@mui/icons-material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GetCustomerForm, getCustomerSchema } from "@/common/types";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
-import { Slide, Alert } from "@mui/material";
+import { Slide, Alert, Button, MenuItem } from "@mui/material";
 import {
   ColumnDirective,
   ColumnsDirective,
@@ -40,6 +40,7 @@ const AddressListScreen = () => {
   const addresses = useCustomerAddressStore((state) => state.addresses);
   const errorMessage = useCustomerAddressStore((state) => state.error);
   const getCustomerAddress = useCustomerAddressStore.use.getCustomerAddress();
+  const importFromAzureDb = useCustomerAddressStore.use.importFromAzureDb();
 
   const companies = useCompanyStore((state) => state.companies);
   const getCompanies = useCompanyStore.use.getCompanies();
@@ -150,51 +151,56 @@ const AddressListScreen = () => {
             <TextField
               {...field}
               id="company-code"
-              type="text"
-              size="small"
               select
+              label="Company Code"
               defaultValue=""
-              slotProps={{
-                select: {
-                  native: true,
-                },
-              }}
-              helperText={
-                errors.companyCode ? errors.companyCode.message : null
-              }
-              sx={{ width: "100%", maxWidth: 300 }}
+              variant="outlined"
+              size="small"
+              error={!!errors.companyCode}
+              helperText={errors.companyCode?.message}
+              sx={{ minWidth: 200, marginRight: 2 }}
             >
-              <option aria-label="None" value="">
-                Select a company
-              </option>
-              {companies.map((option) => (
-                <option key={option.id} value={option.companyCode}>
-                  {option.companyCode}
-                </option>
+              {companies.map((company) => (
+                <MenuItem
+                  key={company.companyCode}
+                  value={company.companyCode}
+                >
+                  {company.companyCode} - {company.name}
+                </MenuItem>
               ))}
             </TextField>
           )}
         />
-
         <LoadingButton
-          loading={isSubmitting}
-          loadingPosition="center"
-          startIcon={<SendOutlined />}
-          variant="contained"
-          disabled={!isValid || isSubmitting}
           type="submit"
+          variant="contained"
+          loading={isSubmitting}
+          loadingPosition="start"
+          startIcon={<SendOutlined />}
+          disabled={!isValid}
+          sx={{ marginRight: 2 }}
+        >
+          Submit
+        </LoadingButton>
+        
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<CloudDownload />}
+          onClick={() => importFromAzureDb()}
           sx={{
-            width: "100%",
-            maxWidth: 180,
-            marginLeft: 2,
-            backgroundColor: "primary.main",
-            "&:hover": {
-              backgroundColor: "secondary.main",
-            },
+            backgroundColor: 'primary.main',
+            borderRadius: '8px',
+            textTransform: 'none',
+            boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
+            '&:hover': {
+              backgroundColor: 'primary.dark',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
+            }
           }}
         >
-          Get Addresses
-        </LoadingButton>
+          Refresh from Azure
+        </Button>
       </Box>
 
       {/* Display addresses in a table */}

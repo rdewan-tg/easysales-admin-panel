@@ -5,4 +5,5 @@ export type CustomerAddressState = {
   addresses: CustomerAddress[];
   error: string | null;
   getCustomerAddress: (dataAreaId: string, page: number, size: number) => Promise<void>;
+  importFromAzureDb: () => Promise<void>;
 };

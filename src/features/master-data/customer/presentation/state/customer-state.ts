@@ -4,5 +4,6 @@ export type CustomerState = {
   customers: Customer[];
   isLoading: boolean;
   error: string | null;
-  geCustomers: (dataAreaId: string) => Promise<void>;
+  getCustomers: (dataAreaId: string) => Promise<void>;
+  importFromAzureDb: () => Promise<void>;
 };
