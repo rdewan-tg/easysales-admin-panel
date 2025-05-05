@@ -145,7 +145,7 @@ const SalesHeaderListScreen = () => {
         created={gridCreated}
       >
         <ColumnsDirective>
-          <ColumnDirective field="id" headerText="ID" width="50" />
+          <ColumnDirective field="id" headerText="ID" width="80" />
           <ColumnDirective field="salesId" headerText="Sales ID" width="120" />
           <ColumnDirective field="customerName" headerText="Customer Name" width="150" />
           <ColumnDirective field="customerAddress" headerText="Address" width="200" />
