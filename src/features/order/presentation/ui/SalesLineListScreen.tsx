@@ -112,6 +112,7 @@ const SalesLineListScreen = () => {
         allowSorting={true}
         allowFiltering={false}
         allowExcelExport={true}
+        allowResizing={true}
         toolbar={toolbar}
         pageSettings={pageSettings}
         searchSettings={searchSettings}
@@ -119,6 +120,7 @@ const SalesLineListScreen = () => {
         created={gridCreated}
       >
         <ColumnsDirective>
+          <ColumnDirective field="id" headerText="ID" width="80" />
           <ColumnDirective field="salesId" headerText="Sales ID" width="120" />
           <ColumnDirective field="lineId" headerText="Line ID" width="80" />
           <ColumnDirective field="productId" headerText="Product ID" width="120" />
