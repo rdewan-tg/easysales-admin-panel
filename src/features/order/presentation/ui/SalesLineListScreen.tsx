@@ -112,6 +112,7 @@ const SalesLineListScreen = () => {
         allowSorting={true}
         allowFiltering={false}
         allowExcelExport={true}
+        allowResizing={true}
         toolbar={toolbar}
         pageSettings={pageSettings}
         searchSettings={searchSettings}
