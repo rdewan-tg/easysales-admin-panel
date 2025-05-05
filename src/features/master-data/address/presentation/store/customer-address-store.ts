@@ -7,10 +7,10 @@ const useCustomerAddressStore = create<CustomerAddressState>((set) => ({
   isLoading: false,
   addresses: [],
   error: null,
-  getCustomerAddress: async (dataAreaId: string, page: number, size: number) => {
+  getCustomerAddress: async (dataAreaId: string) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await getCustomerAddress(dataAreaId, page, size);
+      const response = await getCustomerAddress(dataAreaId);
       set({ addresses: response.data, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;

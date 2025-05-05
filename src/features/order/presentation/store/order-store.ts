@@ -1,15 +1,9 @@
 import { create } from "zustand";
 import { OrderState } from "../state/order-state";
-import {
-  exportOrderToCSV,
-  getOrderCreatedDates,
-  getSalesHeaderByCompanyDateRange,
-  getSalesHeaders,
-  getSalesLinesById,
-} from "../../data/source/api/order-api-service";
+
 import { createSelectors } from "@/core/data";
-import { ExportOrderToCSVDto } from "../../data/source";
 import { GetOrderCreatedDatesForm } from "@/common/types/get-order-created-date-form";
+import { exportOrderToCSV, ExportOrderToCSVDto, getOrderCreatedDates, getSalesHeaderByCompanyDateRange, getSalesHeadersByCompany, getSalesLinesByCompany, getSalesLinesById } from "../../data";
 
 const useOrderStore = create<OrderState>((set) => ({
   isLoading: false,
@@ -19,6 +13,8 @@ const useOrderStore = create<OrderState>((set) => ({
   salesLines: [],
   selectedSalesIds: [],
   orderCreatedDates: [],
+  filteredSalesHeaders: [],
+  filteredSalesLines: [],
   setSelectedSalesIds: (salesId: string | string[]) => {
     if (Array.isArray(salesId)) {
       // Merge new IDs with existing ones (no duplicates)
@@ -33,28 +29,18 @@ const useOrderStore = create<OrderState>((set) => ({
         : [...state.selectedSalesIds, salesId];
       return { selectedSalesIds };
     });
-  },
-  getSalesHeaders: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await getSalesHeaders();
-      set({ salesHeaders: response.data, isLoading: false, error: null });
-    } catch (error) {
-      const errorMessage = (error as Error).message;
-      set({ isLoading: false, error: errorMessage });
-    }
-  },
+  }, 
   getSalesHeaderByCompanyDateRange: async (data: GetOrderCreatedDatesForm) => {
     set({
       isLoading: true,
       error: null,
-      salesHeaders: [],
-      salesLines: [],
+      filteredSalesHeaders: [],
+      filteredSalesLines: [],
       selectedSalesIds: [],
     });
     try {
       const response = await getSalesHeaderByCompanyDateRange(data);
-      set({ salesHeaders: response.data });
+      set({ filteredSalesHeaders: response.data });
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ error: errorMessage });
@@ -66,7 +52,7 @@ const useOrderStore = create<OrderState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await getSalesLinesById(salesId);
-      set({ salesLines: response.data, isLoading: false, error: null });
+      set({ filteredSalesLines: response.data, isLoading: false, error: null });
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage });
@@ -123,6 +109,30 @@ const useOrderStore = create<OrderState>((set) => ({
       set({ isLoading: true, error: null });
       const response = await getOrderCreatedDates();
       set({ orderCreatedDates: response.data });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  getSalesHeadersByCompany: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await getSalesHeadersByCompany();
+      set({ salesHeaders: response.data });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  getSalesLinesByCompany: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await getSalesLinesByCompany();
+      set({ salesLines: response.data });
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage });

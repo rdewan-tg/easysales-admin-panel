@@ -32,5 +32,9 @@ export const routeName = {
   merchandiserReport: "merchandiser-report",
   merchandiserReportByDaterange: "merchandiser-report-by-date-range",
   salesOrder: "sales-order",
+  salesHeader: "sales-header",
+  salesHeaderList: "sales-header-list",
+  salesLine: "sales-line",
+  salesLineList: "sales-line-list",
   others: "*",
 };

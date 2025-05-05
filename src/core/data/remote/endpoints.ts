@@ -71,6 +71,8 @@ export const getPhotoCustomerChainsEndpoint: string =
 // sales
 export const getSalesHeadersByCompanyEndpoint: string =
   "/v1/api/sales-header/find/by-company-id";
+export const getSalesLinesByCompanyEndpoint: string =
+  "/v1/api/sales-line/find/all/by-company-id";
 export const getSalesHeaderByIdEndpoint: string = "/v1/api/sales-header";
 export const getSalesLinesByIdEndpoint: string = "/v1/api/sales-line";
 export const findSalesHeaderByCompanyDateRangeEndpoint: string =

@@ -1,20 +1,19 @@
 import { GetOrderCreatedDatesForm } from "@/common/types/get-order-created-date-form";
-import {
-  ExportOrderToCSVDto,
-  OrderCreatedDate,
-  SalesHeaderData,
-  SalesLineData,
-} from "../../data/source";
+import { ExportOrderToCSVDto, OrderCreatedDate, SalesHeaderData, SalesLineData } from "../../data";
+
 
 export type OrderState = {
   isLoading: boolean;
   error: string | null;
   salesHeaders: SalesHeaderData[];
+  filteredSalesHeaders: SalesHeaderData[];
   salesHeader: SalesHeaderData | null;
   salesLines: SalesLineData[];
+  filteredSalesLines: SalesLineData[];
   selectedSalesIds: string[];
   orderCreatedDates: OrderCreatedDate[];
-  getSalesHeaders: () => Promise<void>;
+  getSalesHeadersByCompany: () => Promise<void>;
+  getSalesLinesByCompany: () => Promise<void>;
   getSalesHeaderByCompanyDateRange: (
     data: GetOrderCreatedDatesForm,
   ) => Promise<void>;

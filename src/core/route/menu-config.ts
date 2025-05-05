@@ -66,12 +66,32 @@ export const menuConfig: MenuItemConfig[] = [
     label: "Countries",
     path: "/dashboard/countries",
     iconKey: "countries",
-  },
+  }, 
   {
-    key: "sales-order",
-    label: "Sales Order",
+    key: "order-detail",
+    label: "Order Detail",
     path: "/dashboard/sales-order",
-    iconKey: "shoppingBagOutlined",
+    iconKey: "list",
+    children: [      
+      {
+        key: "sales-order",
+        label: "Order",
+        path: "/dashboard/sales-order",
+        iconKey: "shoppingBagOutlined",
+      },
+      {
+        key: "sales-header",
+        label: "Sales Header",
+        path: "/dashboard/sales-header",
+        iconKey: "list",
+      },
+      {
+        key: "sales-line",
+        label: "Sales Line",
+        path: "/dashboard/sales-line",
+        iconKey: "list",
+      },
+    ],
   },
   {
     key: "photo",

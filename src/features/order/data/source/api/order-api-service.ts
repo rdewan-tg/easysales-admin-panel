@@ -5,21 +5,24 @@ import {
   findSalesLineByCompanyDateRangeEndpoint,
   getSalesHeaderByIdEndpoint,
   getSalesHeadersByCompanyEndpoint,
+  getSalesLinesByCompanyEndpoint,
   getSalesLinesByIdEndpoint,
   OrderCreatedDateEndpoint,
 } from "@/core/data";
-import {
-  ExportOrderToCSVDto,
-  OrderCreatedDateDto,
-  SalesHeaderDto,
-  SalesHeadersDto,
-  SalesLineDto,
-} from "..";
-import { GetOrderCreatedDatesForm } from "@/common/types/get-order-created-date-form";
 
-export const getSalesHeaders = async (): Promise<SalesHeadersDto> => {
+import { GetOrderCreatedDatesForm } from "@/common/types/get-order-created-date-form";
+import { ExportOrderToCSVDto, OrderCreatedDateDto, SalesHeaderDto, SalesHeadersDto, SalesLineDto } from "../..";
+
+export const getSalesHeadersByCompany = async (): Promise<SalesHeadersDto> => {
   const response = await axiosAdminInstance.get<SalesHeadersDto>(
     getSalesHeadersByCompanyEndpoint,
+  );
+  return response.data;
+};
+
+export const getSalesLinesByCompany = async (): Promise<SalesLineDto> => {
+  const response = await axiosAdminInstance.get<SalesLineDto>(
+    getSalesLinesByCompanyEndpoint,
   );
   return response.data;
 };
