@@ -7,6 +7,7 @@ export const permissions: Record<Role["name"], string[]> = {
     "roles",
     "companies",
     "countries",
+    "order-detail",
     "sales-order",
     "sales-header",
     "sales-line",

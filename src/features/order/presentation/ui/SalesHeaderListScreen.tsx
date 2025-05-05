@@ -3,6 +3,7 @@ import {
   Backdrop,
   Box,
   CircularProgress,
+  IconButton,
   Slide,
   Snackbar,
   SnackbarCloseReason,
@@ -23,6 +24,8 @@ import {
   Sort,
   ToolbarItems,
 } from "@syncfusion/ej2-react-grids";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 
 const SalesHeaderListScreen = () => {
   const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
@@ -36,6 +39,10 @@ const SalesHeaderListScreen = () => {
   const errorMessage = useOrderStore((state) => state.error);
   const salesHeaders = useOrderStore((state) => state.salesHeaders);
   const getSalesHeadersByCompany = useOrderStore.use.getSalesHeadersByCompany();
+  const deleteSalesHeader = useOrderStore.use.deleteSalesHeader();
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [salesIdToDelete, setSalesIdToDelete] = useState<string>('');
 
   useEffect(() => {
     const fetchSalesHeaders = async () => {
@@ -72,6 +79,24 @@ const SalesHeaderListScreen = () => {
       handleErrorSnackbarClick();
     }
   }, [errorMessage]);
+
+  const handleDeleteClick = (salesId: string) => {
+    setSalesIdToDelete(salesId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (salesIdToDelete) {
+      await deleteSalesHeader(salesIdToDelete);
+      setDeleteDialogOpen(false);
+      setSalesIdToDelete('');
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setSalesIdToDelete('');
+  };
 
   const handleErrorSnackbarClick = () => {
     setOpenErrorSnackBar(true);
@@ -119,6 +144,7 @@ const SalesHeaderListScreen = () => {
         created={gridCreated}
       >
         <ColumnsDirective>
+          <ColumnDirective field="id" headerText="ID" width="50" />
           <ColumnDirective field="salesId" headerText="Sales ID" width="120" />
           <ColumnDirective field="customerName" headerText="Customer Name" width="150" />
           <ColumnDirective field="customerAddress" headerText="Address" width="200" />
@@ -127,9 +153,42 @@ const SalesHeaderListScreen = () => {
           <ColumnDirective field="deliveryDate" headerText="Delivery Date" width="120" format="yMd" />
           <ColumnDirective field="transactionDate" headerText="Transaction Date" width="120" format="yMd" />
           <ColumnDirective field="note" headerText="Note" width="150" />
+          <ColumnDirective headerText="Actions" width="100" template={(props: any) => (
+            <IconButton 
+              color="error" 
+              size="small" 
+              onClick={() => handleDeleteClick(props.id)}
+              aria-label="delete"
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          )} />
         </ColumnsDirective>
         <Inject services={[Page, Sort, Search, Resize, ExcelExport]} />
       </GridComponent>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm Delete"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this sales header? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel}>Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Display global error */}
       {errorMessage && (

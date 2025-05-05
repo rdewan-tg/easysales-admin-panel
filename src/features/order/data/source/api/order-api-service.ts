@@ -1,5 +1,6 @@
 import {
   axiosAdminInstance,
+  deleteSalesHeaderEndpoint,
   exportOrderToCSVEndpoint,
   findSalesHeaderByCompanyDateRangeEndpoint,
   findSalesLineByCompanyDateRangeEndpoint,
@@ -85,6 +86,15 @@ export const exportOrderToCSV = async (
 export const getOrderCreatedDates = async () => {
   const response = await axiosAdminInstance.get<OrderCreatedDateDto>(
     OrderCreatedDateEndpoint,
+  );
+  return response.data;
+};
+
+export const deleteSalesHeader = async (
+  id: string
+): Promise<any> => {
+  const response = await axiosAdminInstance.delete(
+    `${deleteSalesHeaderEndpoint}/${id}`
   );
   return response.data;
 };

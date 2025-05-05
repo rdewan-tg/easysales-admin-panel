@@ -3,7 +3,7 @@ import { OrderState } from "../state/order-state";
 
 import { createSelectors } from "@/core/data";
 import { GetOrderCreatedDatesForm } from "@/common/types/get-order-created-date-form";
-import { exportOrderToCSV, ExportOrderToCSVDto, getOrderCreatedDates, getSalesHeaderByCompanyDateRange, getSalesHeadersByCompany, getSalesLinesByCompany, getSalesLinesById } from "../../data";
+import { deleteSalesHeader, exportOrderToCSV, ExportOrderToCSVDto, getOrderCreatedDates, getSalesHeaderByCompanyDateRange, getSalesHeadersByCompany, getSalesLinesByCompany, getSalesLinesById } from "../../data";
 
 const useOrderStore = create<OrderState>((set) => ({
   isLoading: false,
@@ -133,6 +133,20 @@ const useOrderStore = create<OrderState>((set) => ({
       set({ isLoading: true, error: null });
       const response = await getSalesLinesByCompany();
       set({ salesLines: response.data });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      set({ isLoading: false, error: errorMessage });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  deleteSalesHeader: async (salesId: string) => {
+    try {
+      set({ isLoading: true, error: null });
+      await deleteSalesHeader(salesId);
+      // After successful deletion, refresh the sales headers list
+      const response = await getSalesHeadersByCompany();
+      set({ salesHeaders: response.data });
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage });
