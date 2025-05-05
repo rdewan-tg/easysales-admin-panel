@@ -72,9 +72,10 @@ export const getPhotoCustomerChainsEndpoint: string =
 export const getSalesHeadersByCompanyEndpoint: string =
   "/v1/api/sales-header/find/by-company-id";
 export const getSalesLinesByCompanyEndpoint: string =
-  "/v1/api/sales-line/find/all/by-company-id";
+  "/v1/api/sales-line/find-by-company-id";
 export const getSalesHeaderByIdEndpoint: string = "/v1/api/sales-header";
 export const getSalesLinesByIdEndpoint: string = "/v1/api/sales-line";
+export const deleteSalesHeaderEndpoint: string = "/v1/api/sales-header";
 export const findSalesHeaderByCompanyDateRangeEndpoint: string =
   "/v1/api/sales-header/find/by-company-date-range";
 export const findSalesLineByCompanyDateRangeEndpoint: string =
@@ -90,4 +91,3 @@ export const importPricesFromAzureDbEndpoint: string = "/v1/api/prices/import/fr
 export const importCustomersFromAzureDbEndpoint: string = "/v1/api/customers/import/from-azure-db";
 export const importMerchandiserCustomersFromAzureDbEndpoint: string = "/v1/api/merchandiser-customers/import/from-azure-db";
 export const importAddressesFromAzureDbEndpoint: string = "/v1/api/addresses/import/from-azure-db";
-

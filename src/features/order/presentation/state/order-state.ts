@@ -21,4 +21,5 @@ export type OrderState = {
   setSelectedSalesIds: (salesId: string | string[]) => void;
   exportOrderToCSV: (data: ExportOrderToCSVDto) => Promise<void>;
   getOrderCreatedDates: () => Promise<void>;
+  deleteSalesHeader: (id: string) => Promise<void>;
 };

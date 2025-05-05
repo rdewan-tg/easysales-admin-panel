@@ -105,8 +105,6 @@ const SalesLineListScreen = () => {
         </Backdrop>
       ) : null}
 
-      <h1>Sales Line List</h1>
-
       <GridComponent
         id="salesLineGrid"
         dataSource={salesLines}
