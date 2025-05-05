@@ -84,7 +84,7 @@ const AddressListScreen = () => {
   const onSubmit: SubmitHandler<GetCustomerForm> = async (
     data: GetCustomerForm,
   ) => {
-    await getCustomerAddress(data.companyCode, 1, 20);
+    await getCustomerAddress(data.companyCode);
   };
 
   // when the component mounts- get the companies

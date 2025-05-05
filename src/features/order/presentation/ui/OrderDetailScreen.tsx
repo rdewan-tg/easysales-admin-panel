@@ -35,7 +35,8 @@ import {
   RowSelectEventArgs,
 } from "@syncfusion/ej2-react-grids";
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
-import { SalesHeaderData } from "../../data/source";
+import { SalesHeaderData } from "../../data";
+
 
 const OrderDetailScreen = () => {
   const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
@@ -51,8 +52,8 @@ const OrderDetailScreen = () => {
 
   const isLoading = useOrderStore((state) => state.isLoading);
   const errorMessage = useOrderStore((state) => state.error);
-  const salesHeaders = useOrderStore((state) => state.salesHeaders);
-  const salesLines = useOrderStore((state) => state.salesLines);
+  const salesHeaders = useOrderStore((state) => state.filteredSalesHeaders);
+  const salesLines = useOrderStore((state) => state.filteredSalesLines);
   const getSalesLinesById = useOrderStore.use.getSalesLinesById();
   const setSelectedSalesIds = useOrderStore.use.setSelectedSalesIds();
   const selectedSalesIds = useOrderStore((state) => state.selectedSalesIds);

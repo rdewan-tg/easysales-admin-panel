@@ -40,7 +40,14 @@ import CreateDeviceSettingPage from "@/features/device-setting/presentation/ui/C
 import AddressScreen from "@/features/master-data/address/presentation/ui/AddressScreen";
 import AddressListScreen from "@/features/master-data/address/presentation/ui/AddressListScreen";
 import MerchandiserReportByDateRangeScreen from "@/features/report/merchandiser/presentation/ui/MerchandiserReportByDateRangeScreen";
-import { OrderDetailScreen, OrderScreen } from "@/features/order/presentation";
+import {
+  OrderDetailScreen,
+  OrderScreen,
+  SalesLineScreen,
+  SalesLineListScreen,
+} from "@/features/order/presentation";
+import SalesHeaderListScreen from "@/features/order/presentation/ui/SalesHeaderListScreen";
+import SalesHeaderScreen from "@/features/order/presentation/ui/SalesHeaderScreen";
 
 export const router = createBrowserRouter([
   {
@@ -145,6 +152,32 @@ export const router = createBrowserRouter([
                       {
                         index: true,
                         element: <OrderDetailScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+                    ],
+                  },
+                  // sales header
+                  {
+                    path: routeName.salesHeader,
+                    element: <SalesHeaderScreen />,
+                    errorElement: <NotFoundPage />,  
+                    children: [
+                      {
+                        index: true,
+                        element: <SalesHeaderListScreen />,  
+                        errorElement: <NotFoundPage />,
+                      },
+                    ],
+                  },
+                  // sales line
+                  {
+                    path: routeName.salesLine,
+                    element: <SalesLineScreen />,
+                    errorElement: <NotFoundPage />,
+                    children: [
+                      {
+                        index: true,
+                        element: <SalesLineListScreen />,
                         errorElement: <NotFoundPage />,
                       },
                     ],
