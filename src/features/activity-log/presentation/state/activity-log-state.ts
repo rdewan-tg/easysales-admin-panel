@@ -4,6 +4,9 @@ export type ActivityLogState = {
   logs: ActivityLog[];
   isLoading: boolean;
   error: string | null;
-  getActivityLogs: () => Promise<void>;
+  currentPage: number;
+  pageSize: number;
+  totalRecords: number;
+  getActivityLogs: (page?: number, pageSize?: number) => Promise<void>;
   createActivityLog: (activityLog: ActivityLog) => Promise<void>;
 };

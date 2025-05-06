@@ -22,6 +22,8 @@ import {
   Inject,
   Page,
   PageSettingsModel,
+  Search,
+  SearchSettingsModel,
   Sort,
   ToolbarItems,
   ExcelExport,
@@ -39,7 +41,8 @@ const MerchandiserCustomerScreen = () => {
   const gridRef = useRef<GridComponent | null>(null);
   const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
   const pageSettings: PageSettingsModel = { pageSize: 15 };
-  const toolbar: ToolbarItems[] = ["ExcelExport"];
+  const toolbar: ToolbarItems[] = ["Search", "ExcelExport"];
+  const searchSettings: SearchSettingsModel = { ignoreCase: true };
 
   const isLoading = useMerchandiserCustomerStore((state) => state.isLoading);
   const errorMessage = useMerchandiserCustomerStore((state) => state.error);
@@ -61,6 +64,27 @@ const MerchandiserCustomerScreen = () => {
   const excelExportComplete = (): void => {
     if (gridRef.current) {
       gridRef.current.hideSpinner();
+    }
+  };
+
+  const gridCreated = () => {
+    if (gridRef.current) {
+      // Get the search bar element after a short delay to ensure it's rendered
+      setTimeout(() => {
+        const searchElement = document.getElementById(
+          `${gridRef.current?.element.id}_searchbar`
+        ) as HTMLInputElement;
+        
+        if (searchElement) {
+          // Add input event listener to trigger search on each keystroke
+          searchElement.addEventListener("input", (event) => {
+            if (gridRef.current) {
+              const searchValue = (event.target as HTMLInputElement).value;
+              gridRef.current.search(searchValue);
+            }
+          });
+        }
+      }, 100);
     }
   };
 
@@ -208,9 +232,11 @@ const MerchandiserCustomerScreen = () => {
           allowPaging={true}
           pageSettings={pageSettings}
           toolbar={toolbar}
+          searchSettings={searchSettings}
           allowExcelExport={true}
           toolbarClick={toolbarClick}
           excelExportComplete={excelExportComplete}
+          created={gridCreated}
           ref={(g: GridComponent | null) => {
             gridRef.current = g;
           }}
@@ -368,7 +394,7 @@ const MerchandiserCustomerScreen = () => {
             />
           </ColumnsDirective>
           <Inject
-            services={[Page, Sort, Filter, Group, Resize, Toolbar, ExcelExport]}
+            services={[Page, Sort, Filter, Group, Resize, Toolbar, Search, ExcelExport]}
           />
         </GridComponent>
       </Box>

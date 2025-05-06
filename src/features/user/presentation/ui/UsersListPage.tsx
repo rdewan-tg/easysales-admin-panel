@@ -4,7 +4,6 @@ import {
   CircularProgress,
   IconButton,
   SnackbarCloseReason,
-  Typography,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import useUserStore from "../store/user-store";
@@ -15,14 +14,12 @@ import { routeName } from "@/core/route";
 import {
   ColumnDirective,
   ColumnsDirective,
-  Filter,
   GridComponent,
-  Group,
   Inject,
   Page,
   PageSettingsModel,
+  Resize,
   RowSelectEventArgs,
-  Search,
   SelectionSettingsModel,
   Sort,
   SortSettingsModel,
@@ -141,8 +138,7 @@ const UsersListPage = () => {
         p: 0,
       }}
     >
-      <Typography variant="h3">Users</Typography>
-
+      
       {isLoading ? (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -157,6 +153,12 @@ const UsersListPage = () => {
           display: "flex",
           justifyContent: "flex-end",
           alignItems: "center",
+          padding: { xs: "8px", sm: "12px", md: "16px" },
+          flexWrap: "wrap",
+          gap: 1,
+          width: "100%",
+          maxWidth: "100%",
+          overflow: "hidden"
         }}
       >
         <IconButton color="primary" onClick={getUsersByCompany}>
@@ -179,6 +181,7 @@ const UsersListPage = () => {
           dataSource={users}
           toolbar={toolbarOptions}
           allowPaging={true}
+          allowResizing={true}
           selectionSettings={selectionSettings}
           pageSettings={pageSettings}
           allowSorting={true}
@@ -190,7 +193,7 @@ const UsersListPage = () => {
           }}
         >
           <ColumnsDirective>
-            <ColumnDirective field="id" headerText="Id" width={50} />
+            <ColumnDirective field="id" headerText="Id" width={80} />
             <ColumnDirective field="name" headerText="Name" />
             <ColumnDirective field="email" headerText="Email" />
             <ColumnDirective
@@ -201,7 +204,14 @@ const UsersListPage = () => {
             <ColumnDirective field="createAt" headerText="CreatedAt" />
             <ColumnDirective field="updatedAt" headerText="UpdatedAt" />
           </ColumnsDirective>
-          <Inject services={[Page, Sort, Filter, Group, Search, Toolbar]} />
+          <Inject
+            services={[
+              Page,
+              Sort,
+              Toolbar,
+              Resize
+            ]}
+          />
         </GridComponent>
       </Box>
 
