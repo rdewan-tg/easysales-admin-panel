@@ -4,7 +4,6 @@ import {
   CircularProgress,
   IconButton,
   SnackbarCloseReason,
-  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { UpdateDeviceSettingForm } from "@/common/types";
@@ -72,7 +71,7 @@ const DeviceSettingListPage = () => {
     },
   };
 
-  const pageSettings: PageSettingsModel = { pageSize: 15 };
+  const pageSettings: PageSettingsModel = { pageSize: 50 };
 
   // fetch userswhen the component mounts
   useEffect(() => {
@@ -171,8 +170,7 @@ const DeviceSettingListPage = () => {
         m: 0,
         p: 0,
       }}
-    >
-      <Typography variant="h3">Device Settings</Typography>
+    > 
 
       {isLoading ? (
         <Backdrop

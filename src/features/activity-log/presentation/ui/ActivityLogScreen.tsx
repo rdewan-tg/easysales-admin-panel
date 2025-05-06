@@ -27,12 +27,21 @@ import { useEffect, useState } from "react";
 
 const ActivityLogScreen = () => {
   const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-  const pageSettings: PageSettingsModel = { pageSize: 15 };
-
+  
   const isLoading = useActivityLogStore((state) => state.isLoading);
   const errorMessage = useActivityLogStore((state) => state.error);
   const logs = useActivityLogStore((state) => state.logs);
+  const currentPage = useActivityLogStore((state) => state.currentPage);
+  const pageSize = useActivityLogStore((state) => state.pageSize);
+  const totalRecords = useActivityLogStore((state) => state.totalRecords);
   const getActivityLogs = useActivityLogStore.use.getActivityLogs();
+
+  // Create pageSettings with the current state values
+  const pageSettings: PageSettingsModel = { 
+    pageSize: pageSize,
+    pageCount: Math.ceil(totalRecords / pageSize),
+    currentPage: currentPage
+  };
 
   // observe error state and display error message
   useEffect(() => {
@@ -43,11 +52,19 @@ const ActivityLogScreen = () => {
 
   useEffect(() => {
     async function fetchActivityLogs() {
-      await getActivityLogs();
+      await getActivityLogs(currentPage, pageSize);
     }
 
     fetchActivityLogs();
   }, []);
+
+  // Handle page change events
+  const onPageChange = (event: any) => {
+    const newPage = event.currentPage || 1;
+    if (newPage !== currentPage) {
+      getActivityLogs(newPage, pageSize);
+    }
+  };
 
   const handleErrorSnackbarClick = () => {
     setOpenErrorSnackBar(true);
@@ -92,6 +109,20 @@ const ActivityLogScreen = () => {
           autoFit={true}
           allowPaging={true}
           pageSettings={pageSettings}
+          allowSorting={true}
+          dataBound={(args) => {
+            // This event fires after data is bound to the grid
+            // We can use it to set up event listeners
+            const grid = args.target;
+            if (grid) {
+              grid.on('actionComplete', (e: any) => {
+                // Check if this is a paging action
+                if (e.requestType === 'paging') {
+                  onPageChange(e);
+                }
+              });
+            }
+          }}
         >
           <ColumnsDirective>
             <ColumnDirective

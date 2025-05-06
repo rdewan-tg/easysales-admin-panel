@@ -5,9 +5,9 @@ import {
 } from "@/core/data";
 import { ActivityLog, ActivityLogDto } from "../../..";
 
-export const getActivityLogs = async () => {
+export const getActivityLogs = async (page: number = 1, pageSize: number = 100) => {
   const response = await axiosAdminInstance.get<ActivityLogDto>(
-    getActivityLogsEndpoint,
+    `${getActivityLogsEndpoint}?page=${page}&pageSize=${pageSize}`,
   );
   return response.data;
 };
