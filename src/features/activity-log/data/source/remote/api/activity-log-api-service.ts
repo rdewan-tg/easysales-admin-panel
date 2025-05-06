@@ -5,9 +5,12 @@ import {
 } from "@/core/data";
 import { ActivityLog, ActivityLogDto } from "../../..";
 
-export const getActivityLogs = async (page: number = 1, pageSize: number = 100) => {
+export const getActivityLogs = async (
+  page: number = 1,
+  pageSize: number = 100
+) => {
   const response = await axiosAdminInstance.get<ActivityLogDto>(
-    `${getActivityLogsEndpoint}?page=${page}&pageSize=${pageSize}`,
+    `${getActivityLogsEndpoint}?page=${page}&pageSize=${pageSize}`
   );
   return response.data;
 };
@@ -15,7 +18,7 @@ export const getActivityLogs = async (page: number = 1, pageSize: number = 100) 
 export const createActivityLog = async (data: ActivityLog) => {
   const response = await axiosAdminInstance.post<ActivityLogDto>(
     createActivityLogEndpoint,
-    data,
+    data
   );
   return response.data;
 };

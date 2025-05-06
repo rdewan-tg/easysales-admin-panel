@@ -13,35 +13,49 @@ import {
   ColumnsDirective,
   Resize,
   Toolbar,
-  Filter,
-  GridComponent,
-  Group,
   Inject,
   Page,
-  PageSettingsModel,
   Sort,
+  Search,
+  SearchSettingsModel,
+  ToolbarItems,
+  GridComponent,
+  PageSettingsModel,
 } from "@syncfusion/ej2-react-grids";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-//import { DevTool } from "@hookform/devtools";
-
-const ActivityLogScreen = () => {
+function ActivityLogScreen(this: any) {
   const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-  
+  const gridRef = useRef<GridComponent | null>(null);
+
   const isLoading = useActivityLogStore((state) => state.isLoading);
   const errorMessage = useActivityLogStore((state) => state.error);
   const logs = useActivityLogStore((state) => state.logs);
-  const currentPage = useActivityLogStore((state) => state.currentPage);
-  const pageSize = useActivityLogStore((state) => state.pageSize);
-  const totalRecords = useActivityLogStore((state) => state.totalRecords);
   const getActivityLogs = useActivityLogStore.use.getActivityLogs();
 
-  // Create pageSettings with the current state values
-  const pageSettings: PageSettingsModel = { 
-    pageSize: pageSize,
-    pageCount: Math.ceil(totalRecords / pageSize),
-    currentPage: currentPage
+  const pageSettings: PageSettingsModel = {
+    pageSize: 100,
+    currentPage: 1,
+    pageCount: 4,
+    totalRecordsCount: 400,
   };
+
+
+  // Add created event handler to implement real-time search
+  const created = () => {
+    const searchElement = document.getElementById(
+      (gridRef.current as GridComponent).element.id + "_searchbar"
+    ) as HTMLElement;
+
+    if (searchElement) {
+      searchElement.addEventListener("keyup", (event) => {
+        const searchValue = (event.target as HTMLInputElement).value;
+        // Force search even with a single character
+        (gridRef.current as GridComponent).search(searchValue);
+      });
+    }
+  };
+
 
   // observe error state and display error message
   useEffect(() => {
@@ -52,19 +66,11 @@ const ActivityLogScreen = () => {
 
   useEffect(() => {
     async function fetchActivityLogs() {
-      await getActivityLogs(currentPage, pageSize);
+      await getActivityLogs(1, 100);
     }
 
     fetchActivityLogs();
   }, []);
-
-  // Handle page change events
-  const onPageChange = (event: any) => {
-    const newPage = event.currentPage || 1;
-    if (newPage !== currentPage) {
-      getActivityLogs(newPage, pageSize);
-    }
-  };
 
   const handleErrorSnackbarClick = () => {
     setOpenErrorSnackBar(true);
@@ -72,7 +78,7 @@ const ActivityLogScreen = () => {
 
   const handleErrorSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
+    reason?: SnackbarCloseReason
   ) => {
     // do not close the snackbar if the reason is 'clickaway'
     if (reason === "clickaway") {
@@ -81,6 +87,17 @@ const ActivityLogScreen = () => {
 
     setOpenErrorSnackBar(false);
   };
+
+  // Configure search settings
+  const searchSettings: SearchSettingsModel = {
+    fields: ["id", "userId", "action", "level", "details", "timestamp"],
+    operator: "contains",
+    ignoreCase: true,
+    key: "",
+  };
+
+  // Configure toolbar with search
+  const toolbarOptions: ToolbarItems[] = ["Search"];
 
   return (
     <Box
@@ -100,77 +117,63 @@ const ActivityLogScreen = () => {
 
       <Box
         sx={{
-          marginTop: "16px",
+          height: "80vh", // Fixed height for the grid container
+          overflow: "auto", // or "scroll"
+          p: 2,
         }}
       >
         <GridComponent
           dataSource={logs}
-          allowResizing={true}
-          autoFit={true}
+          toolbar={toolbarOptions}
           allowPaging={true}
+          allowResizing={true}
           pageSettings={pageSettings}
           allowSorting={true}
-          dataBound={(args) => {
-            // This event fires after data is bound to the grid
-            // We can use it to set up event listeners
-            const grid = args.target;
-            if (grid) {
-              grid.on('actionComplete', (e: any) => {
-                // Check if this is a paging action
-                if (e.requestType === 'paging') {
-                  onPageChange(e);
-                }
-              });
-            }
-          }}
+          created={created}
+          searchSettings={searchSettings}
+          ref={(g: GridComponent | null) => {
+            gridRef.current = g;
+          }} 
         >
           <ColumnsDirective>
             <ColumnDirective
               field="id"
               headerText="Id"
-              minWidth="50"
-              width="70"
-              maxWidth="100"
-              textAlign="Left"
+              width={100}
+              allowResizing={true}
             />
             <ColumnDirective
               field="userId"
               headerText="UserId"
-              minWidth="50"
-              width="70"
-              maxWidth="100"
-              textAlign="Left"
+              width={100}
+              allowResizing={true}
             />
             <ColumnDirective
               field="action"
               headerText="Action"
-              minWidth="100"
-              width="200"
-              textAlign="Left"
+              width={150}
+              allowResizing={true}
             />
             <ColumnDirective
               field="level"
               headerText="Level"
-              minWidth={"100"}
-              maxWidth={"100"}
-              textAlign="Left"
-            />
-            <ColumnDirective
-              field="timestamp"
-              headerText="Timestamp"
-              minWidth="150"
-              width="150"
-              maxWidth="250"
-              textAlign="Left"
+              width={100}
+              allowResizing={true}
             />
             <ColumnDirective
               field="details"
               headerText="Details"
-              minWidth="150"
-              textAlign="Left"
+              width={300}
+              allowResizing={true}
+            />
+            <ColumnDirective
+              field="timestamp"
+              headerText="Timestamp"
+              width={200}
+              allowResizing={true}
             />
           </ColumnsDirective>
-          <Inject services={[Page, Sort, Filter, Group, Resize, Toolbar]} />
+          <Inject services={[Page, Sort, Toolbar, Resize, Search]} />
         </GridComponent>
       </Box>
 

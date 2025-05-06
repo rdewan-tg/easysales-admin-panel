@@ -10,19 +10,21 @@ const useActivityLogStore = create<ActivityLogState>((set) => ({
   currentPage: 1,
   pageSize: 100,
   totalRecords: 0,
+  totalPages: 0,
   getActivityLogs: async (page = 1, pageSize = 100) => {
     try {
       set({ isLoading: true, error: null });
       const response = await getActivityLogs(page, pageSize);
-      
+
       // Update state with the response data and pagination metadata
-      set({ 
-        logs: response.data, 
-        isLoading: false, 
+      set({
+        logs: response.data,
+        isLoading: false,
         error: null,
-        currentPage: response.meta?.currentPage || page,
+        currentPage: response.meta?.page || page,
         pageSize: response.meta?.pageSize || pageSize,
-        totalRecords: response.meta?.totalRecords || 0
+        totalRecords: response.meta?.total || 0,
+        totalPages: response.meta?.totalPages || 0,
       });
     } catch (error) {
       const errorMessage = (error as Error).message;

@@ -14,8 +14,8 @@ export interface ActivityLog {
 }
 
 export interface PaginationMetadata {
-  currentPage: number;
+  page: number;
   pageSize: number;
-  totalRecords: number;
+  total: number;
   totalPages: number;
 }

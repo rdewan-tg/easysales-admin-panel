@@ -33,7 +33,6 @@ import ItemScreen from "@/features/master-data/item/presentation/ui/ItemScreen";
 import ItemListScreen from "@/features/master-data/item/presentation/ui/ItemListScreen";
 import PriceScreen from "@/features/master-data/price/presentation/ui/PriceScreen";
 import PriceListScreen from "@/features/master-data/price/presentation/ui/PriceListScreen";
-import ActivityLogScreen from "@/features/activity-log/presentation/ui/ActivityLogScreen";
 import DeviceSettingPage from "@/features/device-setting/presentation/ui/DeviceSettingPage";
 import DeviceSettingListPage from "@/features/device-setting/presentation/ui/DeviceSettingListPage";
 import CreateDeviceSettingPage from "@/features/device-setting/presentation/ui/CreateDeviceSettingPage";
@@ -48,6 +47,7 @@ import {
 } from "@/features/order/presentation";
 import SalesHeaderListScreen from "@/features/order/presentation/ui/SalesHeaderListScreen";
 import SalesHeaderScreen from "@/features/order/presentation/ui/SalesHeaderScreen";
+import { ActivityLogScreen } from "@/features/activity-log/presentation";
 
 export const router = createBrowserRouter([
   {
@@ -273,6 +273,7 @@ export const router = createBrowserRouter([
                   {
                     path: routeName.activityLog,
                     element: <ActivityLogScreen />,
+                    errorElement: <NotFoundPage />,
                   },
                   // device setting
                   {
