@@ -70,7 +70,7 @@ export const getPhotoCustomerChainsEndpoint: string =
   "/v1/api/merchandiser/photos/customer-chains";
 // sales
 export const getSalesHeadersByCompanyEndpoint: string =
-  "/v1/api/sales-header/find/by-company-id";
+  "/v1/api/sales-header/search/search-by-company-id";
 export const getSalesLinesByCompanyEndpoint: string =
   "/v1/api/sales-line/search/search-by-company-id";
 export const getSalesHeaderByIdEndpoint: string = "/v1/api/sales-header";
