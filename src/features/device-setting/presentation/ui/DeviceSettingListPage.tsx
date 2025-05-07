@@ -5,7 +5,7 @@ import {
   IconButton,
   SnackbarCloseReason,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UpdateDeviceSettingForm } from "@/common/types";
 import { AddCircleOutlineOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +27,8 @@ import {
   Sort,
   Edit,
   SaveEventArgs,
+  ExcelExport,
+  Search,
 } from "@syncfusion/ej2-react-grids";
 import { L10n } from "@syncfusion/ej2-base";
 import { ClickEventArgs } from "@syncfusion/ej2-react-navigations";
@@ -56,14 +58,21 @@ const DeviceSettingListPage = () => {
   const deleteDevicesetting = useDeviceSettingStore.use.deleteDeviceSetting();
   const updateDeviceSetting = useDeviceSettingStore.use.updateDeviceSetting();
 
-  let grid: GridComponent | null;
+  const gridRef = useRef<GridComponent | null>(null);
   const editSettings = {
     allowEditing: true,
     allowAdding: true,
     allowDeleting: true,
     showDeleteConfirmDialog: true,
   };
-  const toolbar: ToolbarItems[] = ["Edit", "Delete", "Update", "Cancel"];
+  const toolbar: ToolbarItems[] = [
+    "Edit",
+    "Delete",
+    "Update",
+    "Cancel",
+    "ExcelExport",
+    "Search",
+  ];
   const userRules: Object = { required: true };
   const stringParams = {
     params: {
@@ -101,7 +110,7 @@ const DeviceSettingListPage = () => {
 
   const handleSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
+    reason?: SnackbarCloseReason
   ) => {
     // do not close the snackbar if the reason is 'clickaway'
     if (reason === "clickaway") {
@@ -120,7 +129,7 @@ const DeviceSettingListPage = () => {
 
   const navigateToDeviceSetting = () => {
     navigate(
-      `/${routeName.dashboard}/${routeName.deviceSetting}/${routeName.createdeviceSetting}`,
+      `/${routeName.dashboard}/${routeName.deviceSetting}/${routeName.createdeviceSetting}`
     );
   };
 
@@ -130,9 +139,14 @@ const DeviceSettingListPage = () => {
 
   const toolbarClick = (args: ClickEventArgs) => {
     if ((args.item as any).properties.text === "Delete") {
-      const dialogObj = (grid as GridComponent).editModule.dialogObj;
+      const dialogObj = (gridRef.current as GridComponent).editModule.dialogObj;
       dialogObj.header = "Delete Confirmation Dialog";
       dialogObj.showCloseIcon = true;
+    }
+    if ((args.item as any).properties.text === "ExcelExport") {
+      (gridRef.current as GridComponent).excelExport({
+        fileName: "DeviceSettingList.xlsx",
+      });
     }
   };
   const actionComplete = (args: SaveEventArgs) => {
@@ -159,6 +173,18 @@ const DeviceSettingListPage = () => {
     }
   };
 
+  const created = () => {
+      (
+        document.getElementById(
+          (gridRef.current as GridComponent).element.id + "_searchbar",
+        ) as HTMLElement
+      ).addEventListener("keyup", (event) => {
+        (gridRef.current as GridComponent).search(
+          (event.target as HTMLInputElement).value,
+        );
+      });
+    };
+
   return (
     <Box
       component={"main"}
@@ -170,8 +196,7 @@ const DeviceSettingListPage = () => {
         m: 0,
         p: 0,
       }}
-    > 
-
+    >
       {isLoading ? (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -200,16 +225,21 @@ const DeviceSettingListPage = () => {
         }}
       >
         <GridComponent
-          ref={(g: GridComponent | null) => (grid = g)}
+          ref={(g: GridComponent | null) => {
+            gridRef.current = g;
+          }}
           dataSource={devices}
           allowResizing={true}
           autoFit={true}
           toolbar={toolbar}
           editSettings={editSettings}
           allowPaging={true}
+          allowSorting={true}
+          allowMultiSorting={true}
           pageSettings={pageSettings}
           toolbarClick={toolbarClick}
           actionComplete={actionComplete}
+          created={created}
         >
           <ColumnsDirective>
             <ColumnDirective
@@ -263,7 +293,17 @@ const DeviceSettingListPage = () => {
             />
           </ColumnsDirective>
           <Inject
-            services={[Edit, Page, Sort, Filter, Group, Resize, Toolbar]}
+            services={[
+              Edit,
+              Page,
+              Sort,
+              Filter,
+              Group,
+              Resize,
+              Toolbar,
+              ExcelExport,
+              Search,
+            ]}
           />
         </GridComponent>
       </Box>
