@@ -48,6 +48,7 @@ import {
 import SalesHeaderListScreen from "@/features/order/presentation/ui/SalesHeaderListScreen";
 import SalesHeaderScreen from "@/features/order/presentation/ui/SalesHeaderScreen";
 import { ActivityLogScreen } from "@/features/activity-log/presentation";
+import UpdateUserPage from "@/features/user/presentation/ui/UpdateUserPage";
 
 export const router = createBrowserRouter([
   {
@@ -99,6 +100,11 @@ export const router = createBrowserRouter([
                       {
                         path: routeName.createUser,
                         element: <CreateUserPage />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: "edit/:id",
+                        element: <UpdateUserPage />,
                         errorElement: <NotFoundPage />,
                       },
                     ],

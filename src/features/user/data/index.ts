@@ -6,3 +6,4 @@ export * from "./source/remote/dto/delete-user.dto";
 export * from "../../../common/dtos/company.dto";
 export * from "./source/remote/dto/create-user.dto";
 export * from "./source/remote/dto/update-password.dto";
+export * from "./source/remote/dto/update-user.dto";

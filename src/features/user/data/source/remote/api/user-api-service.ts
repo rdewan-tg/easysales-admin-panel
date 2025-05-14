@@ -1,5 +1,5 @@
 import { SignupForm } from "@/common/types";
-import { UpdatePasswordDto, UserDto, UsersDto } from "../../..";
+import { UpdatePasswordDto, UpdateUserDto, UserDto, UsersDto } from "../../..";
 import {
   axiosAdminInstance,
   createUserEndpoint,
@@ -7,6 +7,7 @@ import {
   getUserByIdEndpoint,
   getUsersByCompanyEndpoint,
   updatePasswordEndpoint,
+  updateUserEndpoint,
 } from "@/core/data";
 import { DeleteUserDto } from "../dto/delete-user.dto";
 
@@ -43,6 +44,14 @@ export const updatePassword = async (data: any) => {
   const response = await axiosAdminInstance.post<UpdatePasswordDto>(
     `${updatePasswordEndpoint}`,
     data,
+  );
+  return response.data;
+};
+
+export const updateUser = async (data: UpdateUserDto) => {
+  const response = await axiosAdminInstance.put<UserDto>(
+    updateUserEndpoint,
+    data
   );
   return response.data;
 };
