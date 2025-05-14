@@ -35,7 +35,7 @@ import {
 function roleChipsTemplate(props: any) {
   // Based on the actual data structure provided
   const roles = props?.roles || [];
-  
+
   if (!roles || !Array.isArray(roles) || roles.length === 0) {
     return <span style={{ color: "#666" }}>No roles</span>;
   }
@@ -46,7 +46,7 @@ function roleChipsTemplate(props: any) {
         // Extract the role object from the structure
         const role = roleItem.role;
         if (!role) return null;
-        
+
         return (
           <Chip
             key={role.id || index}
@@ -171,13 +171,16 @@ const UsersListPage = () => {
     <Box
       component={"main"}
       sx={{
-        position: "fixed",
-        height: "100vh", // Full viewport height
+        position: "relative",
+        height: "100%", // Changed from 100vh to 100%
         display: "flex",
         flexDirection: "column",
-        boxSizing: "border-box", // Ensures padding is included in height/width
+        boxSizing: "border-box",
+        width: "100%",
         m: 0,
         p: 0,
+        overflow: "hidden",
+        minHeight: 0, // Prevent flex items from expanding beyond container
       }}
     >
       {isLoading ? (
