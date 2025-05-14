@@ -8,6 +8,8 @@ import {
   getUserById,
   getUsersByCompany,
   updatePassword,
+  updateUser,
+  UpdateUserDto,
 } from "../../data";
 import { SignupForm, UpdatePasswordForm } from "@/common/types";
 
@@ -18,7 +20,8 @@ const useUserStore = create<UserState>((set, get) => ({
   isLoading: false,
   isPasswordUpdated: null,
   isUserDeleted: null,
-  isUserCreated: null,
+  isUserCreated: null,  
+  isUserUpdated: null,
   error: null,
   deleteSnackbarOpen: false,
   createUser: async (data: SignupForm): Promise<void> => {
@@ -93,6 +96,22 @@ const useUserStore = create<UserState>((set, get) => ({
       // Better error handling
       const errorMessage =
         error instanceof Error ? error.message : "Failed to update password";
+      set({ isLoading: false, error: errorMessage });
+    }
+  },
+  updateUser: async (data: UpdateUserDto) => {
+    try {
+      set({ isLoading: true, error: null, isUserUpdated: null });
+      await updateUser(data);
+      set({ isLoading: false, error: null, isUserUpdated: true });
+      // Refresh user data
+      await get().getUserById(data.id);
+      setTimeout(() => {
+        set({ isUserUpdated: false });
+      }, 5000);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to update user";
       set({ isLoading: false, error: errorMessage });
     }
   },

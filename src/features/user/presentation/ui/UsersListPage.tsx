@@ -4,6 +4,9 @@ import {
   CircularProgress,
   IconButton,
   SnackbarCloseReason,
+  Tooltip,
+  Chip,
+  Stack,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import useUserStore from "../store/user-store";
@@ -11,6 +14,7 @@ import { PersonAdd, RefreshOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { BaseSnackBarComponent } from "../../../../common/components";
 import { routeName } from "@/core/route";
+
 import {
   ColumnDirective,
   ColumnsDirective,
@@ -27,6 +31,44 @@ import {
   ToolbarItems,
 } from "@syncfusion/ej2-react-grids";
 
+// Template function for rendering role chips in the grid
+function roleChipsTemplate(props: any) {
+  // Based on the actual data structure provided
+  const roles = props?.roles || [];
+  
+  if (!roles || !Array.isArray(roles) || roles.length === 0) {
+    return <span style={{ color: "#666" }}>No roles</span>;
+  }
+
+  return (
+    <Stack direction="row" spacing={0.5} flexWrap="wrap">
+      {roles.map((roleItem, index) => {
+        // Extract the role object from the structure
+        const role = roleItem.role;
+        if (!role) return null;
+        
+        return (
+          <Chip
+            key={role.id || index}
+            label={role.name || "Unknown"}
+            size="small"
+            variant="outlined"
+            color="success"
+            sx={{
+              borderRadius: 3,
+              fontSize: "0.7rem",
+              height: 22,
+              "& .MuiChip-label": {
+                px: 1,
+              },
+            }}
+          />
+        );
+      })}
+    </Stack>
+  );
+}
+
 const UsersListPage = () => {
   const navigate = useNavigate();
   const gridRef = useRef<GridComponent | null>(null);
@@ -35,7 +77,7 @@ const UsersListPage = () => {
     type: "Single",
   };
   const toolbarOptions: ToolbarItems[] = ["Search"];
-  const pageSettings: PageSettingsModel = { pageSize: 20 };
+  const pageSettings: PageSettingsModel = { pageSize: 100 };
   const sortSettings: SortSettingsModel = {
     columns: [{ field: "name", direction: "Ascending" }],
   };
@@ -55,11 +97,11 @@ const UsersListPage = () => {
   const created = () => {
     (
       document.getElementById(
-        (gridRef.current as GridComponent).element.id + "_searchbar",
+        (gridRef.current as GridComponent).element.id + "_searchbar"
       ) as HTMLElement
     ).addEventListener("keyup", (event) => {
       (gridRef.current as GridComponent).search(
-        (event.target as HTMLInputElement).value,
+        (event.target as HTMLInputElement).value
       );
     });
   };
@@ -88,7 +130,7 @@ const UsersListPage = () => {
 
   const handleSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
+    reason?: SnackbarCloseReason
   ) => {
     // do not close the snackbar if the reason is 'clickaway'
     if (reason === "clickaway") {
@@ -121,7 +163,7 @@ const UsersListPage = () => {
 
   const navigateToCreateUser = () => {
     navigate(
-      `/${routeName.dashboard}/${routeName.users}/${routeName.createUser}`,
+      `/${routeName.dashboard}/${routeName.users}/${routeName.createUser}`
     );
   };
 
@@ -138,7 +180,6 @@ const UsersListPage = () => {
         p: 0,
       }}
     >
-      
       {isLoading ? (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -158,16 +199,20 @@ const UsersListPage = () => {
           gap: 1,
           width: "100%",
           maxWidth: "100%",
-          overflow: "hidden"
+          overflow: "hidden",
         }}
       >
-        <IconButton color="primary" onClick={getUsersByCompany}>
-          <RefreshOutlined />
-        </IconButton>
+        <Tooltip title="Refresh">
+          <IconButton color="primary" onClick={getUsersByCompany}>
+            <RefreshOutlined />
+          </IconButton>
+        </Tooltip>
 
-        <IconButton color="primary" onClick={navigateToCreateUser}>
-          <PersonAdd />
-        </IconButton>
+        <Tooltip title="Add User">
+          <IconButton color="primary" onClick={navigateToCreateUser}>
+            <PersonAdd />
+          </IconButton>
+        </Tooltip>
       </Box>
 
       <Box
@@ -196,22 +241,17 @@ const UsersListPage = () => {
             <ColumnDirective field="id" headerText="Id" width={80} />
             <ColumnDirective field="name" headerText="Name" />
             <ColumnDirective field="email" headerText="Email" />
+            <ColumnDirective field="company.name" headerText="Company" />
             <ColumnDirective
-              field="companyId"
-              headerText="CompanyCode"
-              width={100}
+              field="roles"
+              headerText="Roles"
+              width={200}
+              template={roleChipsTemplate}
+              textAlign="Left"
+              clipMode="EllipsisWithTooltip"
             />
-            <ColumnDirective field="createAt" headerText="CreatedAt" />
-            <ColumnDirective field="updatedAt" headerText="UpdatedAt" />
           </ColumnsDirective>
-          <Inject
-            services={[
-              Page,
-              Sort,
-              Toolbar,
-              Resize
-            ]}
-          />
+          <Inject services={[Page, Sort, Toolbar, Resize]} />
         </GridComponent>
       </Box>
 

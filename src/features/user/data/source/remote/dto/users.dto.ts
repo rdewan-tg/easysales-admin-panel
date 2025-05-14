@@ -1,3 +1,6 @@
+import { Company } from "@/common/dtos";
+import { Role } from "@/common/interface";
+
 export interface UsersDto {
   status: string;
   data: User[];
@@ -15,5 +18,6 @@ export interface User {
   authType: string;
   emailVerified: boolean;
   firebaseUID: null;
-  comapnyId: number;
+  roles: Role[];
+  comapny: Company;
 }

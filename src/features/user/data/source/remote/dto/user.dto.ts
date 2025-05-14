@@ -11,7 +11,7 @@ export interface UserDetail {
   email: string;
   phoneNumber: null;
   photo: null;
-  role: Role[];
+  roles: Role[];
   comapny: Company;
 }
 
