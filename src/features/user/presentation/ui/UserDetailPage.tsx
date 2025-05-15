@@ -201,7 +201,6 @@ export const UserDetailPage = () => {
                         onDelete={() => handleRoleOpenDialog(r.id)}
                         sx={{
                           borderRadius: 3,
-                          fontWeight: 500,
                           px: 1,
                           my: 0.5,
                         }}

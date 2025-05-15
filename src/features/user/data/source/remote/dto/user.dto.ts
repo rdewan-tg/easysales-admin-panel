@@ -9,10 +9,10 @@ export interface UserDetail {
   updatedAt: Date;
   name: string;
   email: string;
-  phoneNumber: null;
-  photo: null;
+  phoneNumber: string | null;
+  photo: string | null;
   roles: Role[];
-  comapny: Company;
+  company: Company;
 }
 
 interface Role {
