@@ -14,6 +14,7 @@ import {
   DevicesOutlined,
   ContactMailOutlined,
   ShoppingBagOutlined,
+  PlaceOutlined,
 } from "@mui/icons-material";
 import { Theme } from "@mui/material";
 import React from "react";
@@ -35,6 +36,7 @@ const iconMapping = {
   devicesOutlined: DevicesOutlined,
   contactMailOutlined: ContactMailOutlined,
   shoppingBagOutlined: ShoppingBagOutlined,
+  areaOutlinedIcon: PlaceOutlined,
 };
 
 /*
@@ -67,6 +69,12 @@ export const menuConfig: MenuItemConfig[] = [
     path: "/dashboard/countries",
     iconKey: "countries",
   }, 
+  {
+    key: "area",
+    label: "Area",
+    path: "/dashboard/area",
+    iconKey: "areaOutlinedIcon",
+  },
   {
     key: "order-detail",
     label: "Order Detail",

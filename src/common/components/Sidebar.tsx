@@ -152,7 +152,7 @@ const Sidebar = ({ roles, theme }: { roles: Role[] | null; theme: Theme }) => {
     <List>
       {/* Map over the menuConfig array and render each menu item */}
       {menuConfig.map((menu, index) =>
-        menu.label === "Master Data" || menu.label === "Countries" ? (
+        menu.label === "Master Data" || menu.label === "Area" ? (
           <div key={`${menu.label}-${index}`}>
             {renderMenuItem(menu)}
             <Divider /> {/* Divider after Master Data */}

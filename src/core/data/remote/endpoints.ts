@@ -9,6 +9,8 @@ export const logoutEndpoint: string = "/v1/api/admin/auth/logout";
 // company
 export const getCompaniesEndpoint: string = "/v1/api/company";
 export const createCompanyEndpoint: string = "/v1/api/company";
+export const updateCompanyEndpoint: string = "/v1/api/company";
+export const deleteCompanyEndpoint: string = "/v1/api/company";
 // country
 export const getCountriesEndpoint: string = "/v1/api/admin/countries";
 export const createCountryEndpoint: string = "/v1/api/admin/countries";
@@ -84,6 +86,14 @@ export const exportOrderToCSVEndpoint: string =
   "/v1/api/sales-header/export-sales-orders";
 export const OrderCreatedDateEndpoint: string =
   "/v1/api/sales-header/find/order-created-dates";
+
+//area
+export const getAreasEndpoint: string = "/v1/api/admin/area/filter/by-company";
+export const getAreaByIdEndpoint: string = "/v1/api/admin/area";
+export const createAreaEndpoint: string = "/v1/api/admin/area";
+export const createManyAreaEndpoint: string = "/v1/api/admin/area/create-many";
+export const updateAreaEndpoint: string = "/v1/api/admin/area/update";
+export const deleteAreaEndpoint: string = "/v1/api/admin/area";
 
 //master data
 export const importItemsFromAzureDbEndpoint: string = "/v1/api/items/import/from-azure-db";
