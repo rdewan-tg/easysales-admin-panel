@@ -254,7 +254,7 @@ const CreateCompanyPage = () => {
                       <em>Select a country</em>
                     </MenuItem>
                     {countries.map((country) => (
-                      <MenuItem key={country.name} value={country.id}>
+                      <MenuItem key={country.name} value={country.id.toString()}>
                         {country.name}
                       </MenuItem>
                     ))}
