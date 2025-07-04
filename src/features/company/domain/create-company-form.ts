@@ -16,8 +16,7 @@ export const createCompanySchema = z.object({
     .max(20),
   countryId: z
     .string()
-    .min(4, { message: "Country must be at least 4 characters long" })
-    .max(20),
+    .min(1, { message: "Country must be selected" }),
   companyCode: z
     .string()
     .min(4, { message: "Company code must be at least 4 characters long" })
