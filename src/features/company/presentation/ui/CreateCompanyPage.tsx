@@ -288,7 +288,6 @@ const CreateCompanyPage = () => {
                     id="company_code"
                     label="Company Code"
                     variant="outlined"
-                    disabled
                     error={!!errors.companyCode}
                     helperText={errors.companyCode?.message}
                   />
@@ -320,7 +319,6 @@ const CreateCompanyPage = () => {
                     id="time_zone"
                     label="Time Zone"
                     variant="outlined"
-                    disabled
                     error={!!errors.companySetting?.timeZone}
                     helperText={errors.companySetting?.timeZone?.message}
                   />
