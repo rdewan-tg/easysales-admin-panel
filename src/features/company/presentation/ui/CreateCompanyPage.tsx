@@ -233,7 +233,7 @@ const CreateCompanyPage = () => {
                     onChange={(e) => {
                       // find the selected country
                       const selectedCountry = countries.find(
-                        (country) => country.name === e.target.value
+                        (country) => country.id.toString() === e.target.value
                       );
                       if (selectedCountry) {
                         setValue("countryId", selectedCountry.id.toString());
