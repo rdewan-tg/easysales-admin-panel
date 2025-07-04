@@ -25,6 +25,9 @@ const useCompanyStore = create<CompanyState>((set) => ({
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     }
   },
   createCompany: async (data: CreateCompanyDto): Promise<void> => {
@@ -35,6 +38,9 @@ const useCompanyStore = create<CompanyState>((set) => ({
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage, isCreated: false });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     }
   },
   
@@ -52,6 +58,9 @@ const useCompanyStore = create<CompanyState>((set) => ({
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage, isUpdated: false });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     }
   },
   
@@ -69,6 +78,9 @@ const useCompanyStore = create<CompanyState>((set) => ({
     } catch (error) {
       const errorMessage = (error as Error).message;
       set({ isLoading: false, error: errorMessage, isDeleted: false });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     }
   },
 }));
