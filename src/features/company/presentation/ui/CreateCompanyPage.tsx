@@ -56,8 +56,7 @@ const CreateCompanyPage = () => {
       address: "",
       email: "",
       phone: "",
-      country: "",
-      countryCode: "",
+      countryId: "",
       companyCode: "",
       companySetting: {
         currencyCode: "",
@@ -218,7 +217,7 @@ const CreateCompanyPage = () => {
                 <Divider sx={{ mb: 2 }} />
               </Box>
               <Controller
-                name="country"
+                name="countryId"
                 control={control}
                 render={({ field }) => (
                   <TextField
@@ -229,15 +228,15 @@ const CreateCompanyPage = () => {
                     label="Country"
                     variant="outlined"
                     required
-                    error={!!errors.country}
-                    helperText={errors.country?.message}
+                    error={!!errors.countryId}
+                    helperText={errors.countryId?.message}
                     onChange={(e) => {
                       // find the selected country
                       const selectedCountry = countries.find(
                         (country) => country.name === e.target.value
                       );
                       if (selectedCountry) {
-                        setValue("countryCode", selectedCountry.countryCode);
+                        setValue("countryId", selectedCountry.id.toString());
                         setValue("companyCode", selectedCountry.companyCode);
                         setValue(
                           "companySetting.currencyCode",
@@ -261,23 +260,7 @@ const CreateCompanyPage = () => {
                     ))}
                   </TextField>
                 )}
-              />
-              <Controller
-                control={control}
-                name="countryCode"
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    fullWidth
-                    id="country_code"
-                    label="Country Code"
-                    variant="outlined"
-                    disabled
-                    error={!!errors.countryCode}
-                    helperText={errors.countryCode?.message}
-                  />
-                )}
-              />
+              />              
               <Controller
                 control={control}
                 name="companyCode"

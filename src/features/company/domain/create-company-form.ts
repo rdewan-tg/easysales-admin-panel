@@ -14,14 +14,10 @@ export const createCompanySchema = z.object({
     .string()
     .min(10, { message: "Phone must be at least 10 characters long" })
     .max(20),
-  country: z
+  countryId: z
     .string()
     .min(4, { message: "Country must be at least 4 characters long" })
     .max(20),
-  countryCode: z
-    .string()
-    .min(2, { message: "Country code must be at least 4 characters long" })
-    .max(2),
   companyCode: z
     .string()
     .min(4, { message: "Company code must be at least 4 characters long" })
