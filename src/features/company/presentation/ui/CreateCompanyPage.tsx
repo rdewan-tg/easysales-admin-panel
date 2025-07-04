@@ -224,7 +224,7 @@ const CreateCompanyPage = () => {
                     {...field}
                     select
                     fullWidth
-                    id="country"
+                    id="country_id"
                     label="Country"
                     variant="outlined"
                     required
@@ -254,7 +254,7 @@ const CreateCompanyPage = () => {
                       <em>Select a country</em>
                     </MenuItem>
                     {countries.map((country) => (
-                      <MenuItem key={country.name} value={country.name}>
+                      <MenuItem key={country.name} value={country.id}>
                         {country.name}
                       </MenuItem>
                     ))}
