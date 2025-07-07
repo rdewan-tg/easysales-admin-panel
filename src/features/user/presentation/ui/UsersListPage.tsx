@@ -7,7 +7,6 @@ import {
   Tooltip,
   Chip,
   Stack,
-  Button,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import useUserStore from "../store/user-store";
@@ -178,43 +177,45 @@ const UsersListPage = () => {
     }
 
     // Format the data for Excel export
-    const exportData = users.map(user => {
+    const exportData = users.map((user) => {
       // Extract roles from the user object
-      const roleNames = user.roles ? 
-        user.roles.map((roleObj: any) => {
-          // Based on the actual structure from the sample data
-          return roleObj.role?.name || 'Unknown';
-        }).join(', ') : 
-        'N/A';
+      const roleNames = user.roles
+        ? user.roles
+            .map((roleObj: any) => {
+              // Based on the actual structure from the sample data
+              return roleObj.role?.name || "Unknown";
+            })
+            .join(", ")
+        : "N/A";
 
       // Get company name and timezone
       const companyId = user.company.id;
-      const companyName = user.company?.name || 'N/A';
-      const timeZone = user.company?.companySetting?.timeZone || 'N/A';
+      const companyName = user.company?.name || "N/A";
+      const timeZone = user.company?.companySetting?.timeZone || "N/A";
 
       return {
         ID: user.id,
         Name: user.name,
         Email: user.email,
-        Phone: user.phoneNumber || 'N/A',
+        Phone: user.phoneNumber || "N/A",
         CompanyId: companyId,
         Company: companyName,
         Roles: roleNames,
-        TimeZone: timeZone
+        TimeZone: timeZone,
       };
     });
 
     // Create a new workbook
     const workbook = XLSX.utils.book_new();
-    
+
     // Convert data to worksheet
     const worksheet = XLSX.utils.json_to_sheet(exportData);
-    
+
     // Add worksheet to workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Users');
-    
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+
     // Generate Excel file and trigger download
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toISOString().split("T")[0];
     XLSX.writeFile(workbook, `Users_List_${currentDate}.xlsx`);
   };
 
@@ -262,23 +263,16 @@ const UsersListPage = () => {
           </IconButton>
         </Tooltip>
 
+        <Tooltip title="Export to Excel">
+          <IconButton color="primary" onClick={exportToExcel}>
+            <FileDownload />
+          </IconButton>
+        </Tooltip>
+
         <Tooltip title="Add User">
           <IconButton color="primary" onClick={navigateToCreateUser}>
             <PersonAdd />
           </IconButton>
-        </Tooltip>
-
-        <Tooltip title="Export to Excel">
-          <Button 
-            variant="contained" 
-            color="primary" 
-            startIcon={<FileDownload />}
-            onClick={exportToExcel}
-            size="small"
-            sx={{ ml: 1 }}
-          >
-            Export
-          </Button>
         </Tooltip>
       </Box>
 
@@ -308,7 +302,7 @@ const UsersListPage = () => {
             <ColumnDirective field="id" headerText="Id" width={80} />
             <ColumnDirective field="name" headerText="Name" />
             <ColumnDirective field="email" headerText="Email" />
-            <ColumnDirective field="comapny.name" headerText="Company" />
+            <ColumnDirective field="company.name" headerText="Company" />
             <ColumnDirective
               field="roles"
               headerText="Roles"
