@@ -19,5 +19,5 @@ export interface User {
   emailVerified: boolean;
   firebaseUID: null;
   roles: Role[];
-  comapny: Company;
+  company: Company;
 }
