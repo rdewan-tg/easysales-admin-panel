@@ -24,8 +24,7 @@ const BaseSnackBarComponent = ({
       <Alert
         onClose={onClose}
         severity={severity}
-        variant="filled"
-        sx={{ width: "100%", color: "white" }}
+        sx={{ width: "100%"}}
       >
         {message}
       </Alert>

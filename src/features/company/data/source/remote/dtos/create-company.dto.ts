@@ -5,8 +5,7 @@ export interface CreateCompanyDto {
   address: string;
   email: string;
   phone: string;
-  country: string;
-  countryCode: string;
+  countryId: number;
   companyCode: string;
   companySetting: CompanySetting;
 }

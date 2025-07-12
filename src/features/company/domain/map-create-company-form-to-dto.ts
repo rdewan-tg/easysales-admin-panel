@@ -6,8 +6,7 @@ export const mapCreateCompanyFormToDto = (form: CreateCompanyForm) => {
     address: form.address,
     email: form.email,
     phone: form.phone,
-    country: form.country,
-    countryCode: form.countryCode,
+    countryId: parseInt(form.countryId),
     companyCode: form.companyCode,
     companySetting: {
       timeZone: form.companySetting.timeZone,

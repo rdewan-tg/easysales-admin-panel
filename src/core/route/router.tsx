@@ -49,6 +49,7 @@ import SalesHeaderListScreen from "@/features/order/presentation/ui/SalesHeaderL
 import SalesHeaderScreen from "@/features/order/presentation/ui/SalesHeaderScreen";
 import { ActivityLogScreen } from "@/features/activity-log/presentation";
 import UpdateUserPage from "@/features/user/presentation/ui/UpdateUserPage";
+import { AreaListPage, AreaPage, CreateAreaPage } from "@/features/area/presentation";
 
 export const router = createBrowserRouter([
   {
@@ -109,7 +110,7 @@ export const router = createBrowserRouter([
                       },
                     ],
                   },
-                  //rols
+                  //roles
                   {
                     path: routeName.roles,
                     element: <UserRolePage />,
@@ -146,6 +147,23 @@ export const router = createBrowserRouter([
                       {
                         path: routeName.createCountry,
                         element: <CreateCountryPage />,
+                        errorElement: <NotFoundPage />,
+                      },
+                    ],
+                  },
+                  // area
+                  {
+                    path: routeName.area,
+                    element: <AreaPage />,
+                    children: [
+                      {
+                        index: true,
+                        element: <AreaListPage />,
+                        errorElement: <NotFoundPage />,
+                      },
+                      {
+                        path: routeName.createArea,
+                        element: <CreateAreaPage />,
                         errorElement: <NotFoundPage />,
                       },
                     ],

@@ -1,11 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Alert,
   Box,
-  Slide,
-  Snackbar,
-  SnackbarCloseReason,
+  Button,
+  Container,
+  Divider,
+  IconButton,
+  MenuItem,
+  Paper,
+  Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -15,17 +19,20 @@ import {
 } from "../../domain/create-company-form";
 import { mapCreateCompanyFormToDto } from "../../domain";
 import { useCompanyStore } from "..";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { AddBusiness } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { ArrowBack } from "@mui/icons-material";
+import { useEffect } from "react";
 import { useCountryStore } from "@/features/country/presentation";
+import { useNavigate } from "react-router-dom";
+import { routeName } from "@/core/route";
+import { NotificationSnackbar } from "@/common/components";
 // import { DevTool } from "@hookform/devtools";
 
 const CreateCompanyPage = () => {
-  const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
+  const navigate = useNavigate();
 
   const createCompany = useCompanyStore.use.createCompany();
   const errorMessage = useCompanyStore((state) => state.error);
+  const isCreated = useCompanyStore((state) => state.isCreated);
 
   const countries = useCountryStore((state) => state.countries);
   const getCountries = useCountryStore.use.getCountries();
@@ -41,13 +48,6 @@ const CreateCompanyPage = () => {
     fetchCountries();
   }, []);
 
-  // observe error state and display error message
-  useEffect(() => {
-    if (errorMessage) {
-      handleErrorSnackbarClick();
-    }
-  }, [errorMessage]);
-
   const form = useForm<CreateCompanyForm>({
     resolver: zodResolver(createCompanySchema),
     mode: "onChange",
@@ -56,8 +56,7 @@ const CreateCompanyPage = () => {
       address: "",
       email: "",
       phone: "",
-      country: "",
-      countryCode: "",
+      countryId: "",
       companyCode: "",
       companySetting: {
         currencyCode: "",
@@ -66,289 +65,294 @@ const CreateCompanyPage = () => {
     },
   });
 
-  const handleErrorSnackbarClick = () => {
-    setOpenErrorSnackBar(true);
-  };
-
-  const handleErrorSnackbarClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
-  ) => {
-    // do not close the snackbar if the reason is 'clickaway'
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenErrorSnackBar(false);
-  };
-
   // destructure form
   const { handleSubmit, formState, control, setValue } = form;
   // destructure formState
-  const { errors, isSubmitting } = formState;
+  const { errors, isSubmitting, isValid } = formState;
 
   const onSubmit: SubmitHandler<CreateCompanyForm> = async (
-    formData: CreateCompanyForm,
+    formData: CreateCompanyForm
   ) => {
     const data = mapCreateCompanyFormToDto(formData);
     createCompany(data);
   };
 
+  const handleGoBack = () => {
+    navigate(`/${routeName.dashboard}/${routeName.companies}`);
+  };
+
   return (
-    <Box
-      component={"form"}
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "start",
-        justifyContent: "start",
-        height: "100vh",
-        width: "100vw",
-        gap: 1.4,
-        p: 2,
-        backgroundColor: (theme) => theme.palette.background.default,
-      }}
-    >
-      <Typography variant="h5">Create Company</Typography>
-
-      <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            fullWidth
-            id="name"
-            label="Name"
-            type="name"
-            variant="outlined"
-            required={true}
-            error={!!errors.name} // Set error state
-            helperText={errors.name ? errors.name.message : null} // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
-      <Controller
-        name="address"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="address"
-            label="Address"
-            type="text"
-            variant="outlined"
-            required={true}
-            error={!!errors.address} // Set error state
-            helperText={errors.address ? errors.address.message : null} // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
-      <Controller
-        name="email"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="email"
-            label="Email"
-            type="email"
-            variant="outlined"
-            required={true}
-            error={!!errors.email} // Set error state
-            helperText={errors.email ? errors.email.message : null} // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
-      <Controller
-        name="phone"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="phone"
-            label="Phone"
-            type="text"
-            variant="outlined"
-            required={true}
-            error={!!errors.phone} // Set error state
-            helperText={errors.phone ? errors.phone.message : null} // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="country"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="country"
-            type="text"
-            variant="outlined"
-            select
-            required={true}
-            slotProps={{
-              select: {
-                native: true,
-              },
-            }}
-            error={!!errors.country} // Set error state
-            helperText={errors.country ? errors.country.message : null} // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-            onChange={(e) => {
-              const selectedCountry = countries.find(
-                (country) => country.name === e.target.value,
-              );
-              if (selectedCountry) {
-                setValue("countryCode", selectedCountry.countryCode);
-                setValue("companyCode", selectedCountry.companyCode);
-                setValue(
-                  "companySetting.currencyCode",
-                  selectedCountry.currencyCode,
-                );
-                setValue("companySetting.timeZone", selectedCountry.timeZone);
-              }
-              field.onChange(e);
-            }}
-          >
-            <option aria-label="None" value="">
-              Please select a country
-            </option>
-            {countries.map((country) => (
-              <option key={country.name} value={country.name}>
-                {country.name}
-              </option>
-            ))}
-          </TextField>
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="countryCode"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="country_code"
-            type="text"
-            variant="outlined"
-            required={true}
-            disabled
-            error={!!errors.countryCode} // Set error state
-            helperText={errors.countryCode ? errors.countryCode.message : null} // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="companyCode"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="company_code"
-            type="text"
-            variant="outlined"
-            disabled
-            error={!!errors.companyCode} // Set error state
-            helperText={errors.companyCode ? errors.companyCode.message : null} // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="companySetting.timeZone"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="time_zone"
-            type="text"
-            variant="outlined"
-            disabled
-            error={!!errors.companySetting?.timeZone} // Set error state
-            helperText={
-              errors.companySetting?.timeZone
-                ? errors.companySetting?.timeZone.message
-                : null
-            } // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="companySetting.currencyCode"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="currency_code"
-            type="text"
-            variant="outlined"
-            disabled
-            error={!!errors.companySetting?.currencyCode} // Set error state
-            helperText={
-              errors.companySetting?.currencyCode
-                ? errors.companySetting?.currencyCode.message
-                : null
-            } // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
-      <LoadingButton
-        loading={isSubmitting}
-        loadingPosition="center"
-        startIcon={<AddBusiness />}
-        variant={"contained"}
-        disabled={isSubmitting}
-        type="submit"
+    <Box component={"main"}>
+      <Box
         sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          padding: { xs: "8px", sm: "12px", md: "16px" },
+          flexWrap: "wrap",
+          gap: 1,
           width: "100%",
-          maxWidth: 180,
-          marginTop: 2,
-          backgroundColor: "primary.main",
-          "&:hover": {
-            backgroundColor: "secondary.main",
-          },
+          maxWidth: "100%",
+          overflow: "hidden",
         }}
       >
-        Create
-      </LoadingButton>
-      {/* <DevTool control={control} /> */}
-
-      {/* Display global error */}
-      {errorMessage && (
-        <Snackbar
-          open={openErrorSnackBar}
-          autoHideDuration={6000}
-          TransitionComponent={Slide}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          onClose={handleErrorSnackbarClose}
+        <Tooltip title="Back to Companies">
+          <IconButton color="primary" onClick={() => navigate(-1)}>
+            <ArrowBack />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <Container maxWidth="md" sx={{ py: 2 }}>
+        <Paper
+          elevation={2}
+          sx={{
+            borderRadius: 2,
+            overflow: "hidden",
+          }}
         >
-          <Alert
-            onClose={handleErrorSnackbarClose}
-            severity="error"
-            variant="filled"
-            sx={{ width: "100%" }}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              p: 2,
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
+            }}
           >
-            {errorMessage}
-          </Alert>
-        </Snackbar>
-      )}
+            <Typography variant="h5" component="h1">
+              Create Company
+            </Typography>
+          </Box>
+
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+              p: 3,
+            }}
+          >
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="subtitle1" gutterBottom>
+                Company Information
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
+            </Box>
+
+            <Stack spacing={2.5}>
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    id="name"
+                    label="Company Name"
+                    type="text"
+                    variant="outlined"
+                    required
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                  />
+                )}
+              />
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    type="email"
+                    variant="outlined"
+                    required
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                  />
+                )}
+              />
+              <Controller
+                name="phone"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    id="phone"
+                    label="Phone Number"
+                    type="tel"
+                    variant="outlined"
+                    required
+                    error={!!errors.phone}
+                    helperText={errors.phone?.message}
+                  />
+                )}
+              />
+              <Controller
+                name="address"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    id="address"
+                    label="Address"
+                    type="text"
+                    variant="outlined"
+                    required
+                    multiline
+                    rows={2}
+                    error={!!errors.address}
+                    helperText={errors.address?.message}
+                  />
+                )}
+              />
+
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Location & Settings
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+              </Box>
+              <Controller
+                name="countryId"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    select
+                    fullWidth
+                    id="country_id"
+                    label="Country"
+                    variant="outlined"
+                    required
+                    error={!!errors.countryId}
+                    helperText={errors.countryId?.message}
+                    onChange={(e) => {
+                      // find the selected country
+                      const selectedCountry = countries.find(
+                        (country) => country.id.toString() === e.target.value
+                      );
+                      if (selectedCountry) {
+                        setValue("countryId", selectedCountry.id.toString());
+                        setValue("companyCode", selectedCountry.companyCode);
+                        setValue(
+                          "companySetting.currencyCode",
+                          selectedCountry.currencyCode
+                        );
+                        setValue(
+                          "companySetting.timeZone",
+                          selectedCountry.timeZone
+                        );
+                      }
+                      field.onChange(e);
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Select a country</em>
+                    </MenuItem>
+                    {countries.map((country) => (
+                      <MenuItem key={country.name} value={country.id.toString()}>
+                        {country.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />              
+              <Controller
+                control={control}
+                name="companyCode"
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    id="company_code"
+                    label="Company Code"
+                    variant="outlined"
+                    error={!!errors.companyCode}
+                    helperText={errors.companyCode?.message}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="companySetting.currencyCode"
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    id="currency_code"
+                    label="Currency Code"
+                    variant="outlined"
+                    disabled
+                    error={!!errors.companySetting?.currencyCode}
+                    helperText={errors.companySetting?.currencyCode?.message}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="companySetting.timeZone"
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    id="time_zone"
+                    label="Time Zone"
+                    variant="outlined"
+                    error={!!errors.companySetting?.timeZone}
+                    helperText={errors.companySetting?.timeZone?.message}
+                  />
+                )}
+              />
+
+              <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleGoBack}
+                  size="large"
+                  sx={{
+                    px: 4,
+                    py: 1.5,
+                    borderRadius: 2,
+                    boxShadow: 2,
+                    textTransform: "none",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Box sx={{ mr: 2 }} />
+                <Button
+                  loading={isSubmitting}
+                  loadingPosition="start"
+                  variant="contained"
+                  disabled={isSubmitting || !isValid}
+                  type="submit"
+                  size="large"
+                  sx={{
+                    px: 4,
+                    py: 1.5,
+                    borderRadius: 2,
+                    boxShadow: 2,
+                    textTransform: "none",
+                  }}
+                >
+                  Create Company
+                </Button>
+              </Box>
+            </Stack>
+          </Box>
+        </Paper>
+
+        <NotificationSnackbar
+          isSuccess={isCreated === true}
+          successMessage="Company created successfully"
+          error={errorMessage || undefined}
+        />
+      </Container>
     </Box>
   );
 };

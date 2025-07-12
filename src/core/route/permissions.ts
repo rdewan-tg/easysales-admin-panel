@@ -19,6 +19,7 @@ export const permissions: Record<Role["name"], string[]> = {
     "address",
     "item",
     "price",
+    "area",
   ],
   superAdmin: [
     "dashboard",
@@ -37,6 +38,7 @@ export const permissions: Record<Role["name"], string[]> = {
     "address",
     "item",
     "price",
+    "area",
   ],
   manager: [
     "dashboard",
@@ -49,6 +51,7 @@ export const permissions: Record<Role["name"], string[]> = {
     "address",
     "item",
     "price",
+    "area",
   ],
   supervisor: [
     "dashboard",

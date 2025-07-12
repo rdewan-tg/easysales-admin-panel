@@ -111,14 +111,14 @@ const CountryListPage = () => {
                 >
                   <CardHeader
                     title={country.name}
-                    subheader={country.companyCode}
+                    subheader={country.countryCode}
                   />
                   <CardContent>
                     <Typography
                       variant="body2"
                       sx={{ color: "text.secondary" }}
                     >
-                      {country.currencyCode} - {country.timeZone}
+                      {country.currencyCode}
                     </Typography>
                   </CardContent>
                 </Card>

@@ -152,6 +152,10 @@ function LoginPage() {
       sx={{
         position: "fixed", // lock to viewport
         display: "flex",
+        top: 0,
+        left: 0,
+        margin: 0,
+        padding: 0,
         minHeight: "100vh",
         width: "100vw",
         background: "linear-gradient(135deg, #4527a0 0%, #8e24aa 100%)",

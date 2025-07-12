@@ -46,9 +46,7 @@ const CreateCountryPage = () => {
     defaultValues: {
       name: "",
       countryCode: "",
-      companyCode: "",
       currencyCode: "",
-      timeZone: "",
     },
   });
   // destructure form
@@ -148,27 +146,7 @@ const CreateCountryPage = () => {
             sx={{ width: "100%", maxWidth: 400 }}
           />
         )}
-      />
-
-      <Controller
-        control={control}
-        name="companyCode"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="company-code"
-            label="Company Code"
-            type="text"
-            variant="outlined"
-            required={true}
-            error={!!errors.companyCode} // Set error state
-            helperText={
-              errors.companyCode ? errors.companyCode.message : "e.g. SGMA"
-            } // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
+      />      
 
       <Controller
         control={control}
@@ -190,28 +168,7 @@ const CreateCountryPage = () => {
         )}
       />
 
-      <Controller
-        control={control}
-        name="timeZone"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="time-zone"
-            label="Time Zone"
-            type="text"
-            variant="outlined"
-            required={true}
-            error={!!errors.currencyCode} // Set error state
-            helperText={
-              errors.currencyCode
-                ? errors.currencyCode.message
-                : "e.g. Asia/Singapore"
-            } // Display error message
-            sx={{ width: "100%", maxWidth: 400 }}
-          />
-        )}
-      />
-
+      
       <LoadingButton
         loading={isSubmitting}
         loadingPosition="center"

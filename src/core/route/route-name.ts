@@ -36,5 +36,8 @@ export const routeName = {
   salesHeaderList: "sales-header-list",
   salesLine: "sales-line",
   salesLineList: "sales-line-list",
+  area: "area",
+  areaList: "area-list",
+  createArea: "create-area",
   others: "*",
 };
