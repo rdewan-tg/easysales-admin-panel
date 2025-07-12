@@ -1,3 +1,6 @@
+import { Area } from "@/common/interface";
+import { Role } from "@/common/interface";
+
 export interface UserDto {
   status: string;
   data: UserDetail;
@@ -13,15 +16,14 @@ export interface UserDetail {
   photo: string | null;
   roles: Role[];
   company: Company;
+  areas: Area[];
 }
 
-interface Role {
-  id: number;
-  name: string;
-}
 
 interface Company {
   id: number;
   name: string;
   timeZone: string;
 }
+
+

@@ -68,6 +68,46 @@ function roleChipsTemplate(props: any) {
       })}
     </Stack>
   );
+
+}
+
+// Template function for rendering role chips in the grid
+function areaChipsTemplate(props: any) {
+  // Based on the actual data structure provided
+  const areas = props?.userAreas || [];
+
+  if (!areas || !Array.isArray(areas) || areas.length === 0) {
+    return <span style={{ color: "#666" }}>-</span>;
+  }
+
+  return (
+    <Stack direction="row" spacing={0.5} flexWrap="wrap">
+      {areas.map((areaItem, index) => {
+        // Extract the role object from the structure
+        const area = areaItem.area;
+        if (!area) return null;
+
+        return (
+          <Chip
+            key={area.id || index}
+            label={area.name || "Unknown"}
+            size="small"
+            variant="outlined"
+            color="success"
+            sx={{
+              borderRadius: 3,
+              fontSize: "0.7rem",
+              height: 22,
+              "& .MuiChip-label": {
+                px: 1,
+              },
+            }}
+          />
+        );
+      })}
+    </Stack>
+  );
+
 }
 
 const UsersListPage = () => {
@@ -308,6 +348,14 @@ const UsersListPage = () => {
               headerText="Roles"
               width={200}
               template={roleChipsTemplate}
+              textAlign="Left"
+              clipMode="EllipsisWithTooltip"
+            />
+            <ColumnDirective
+              field="userAreas"
+              headerText="Areas"
+              width={200}
+              template={areaChipsTemplate}
               textAlign="Left"
               clipMode="EllipsisWithTooltip"
             />

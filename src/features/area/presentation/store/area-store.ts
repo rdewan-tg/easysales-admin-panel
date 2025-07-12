@@ -9,6 +9,8 @@ import {
   getAreaById as getAreaByIdApi,
   updateArea as updateAreaApi,
   deleteArea as deleteAreaApi,
+  setUserArea as setUserAreaApi,
+  deleteUserArea as deleteUserAreaApi,
 } from "../../data/source/remote/api/area-api";
 import { createSelectors } from "@/core/data";
 
@@ -19,7 +21,10 @@ const useAreaStore = create<AreaState>((set) => ({
   isCreated: null,
   isUpdated: null,
   isDeleted: null,
+  isUserAreaSet: null,
+  isUserAreaRemoved: null,
   error: null,
+  selectedArea: null,
   getAreas: async () => {
     try {
       set({ loading: true, error: null });
@@ -27,6 +32,9 @@ const useAreaStore = create<AreaState>((set) => ({
       set({ areas: response.data, loading: false });
     } catch (error) {
       set({ error: error as string });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     } finally {
       set({ loading: false });
     }
@@ -38,6 +46,9 @@ const useAreaStore = create<AreaState>((set) => ({
       set({ area: response.data, loading: false });
     } catch (error) {
       set({ error: error as string });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     } finally {
       set({ loading: false });
     }
@@ -52,6 +63,9 @@ const useAreaStore = create<AreaState>((set) => ({
       }, 3000);
     } catch (error) {
       set({ error: error as string });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     } finally {
       set({ loading: false });
     }
@@ -66,6 +80,9 @@ const useAreaStore = create<AreaState>((set) => ({
       }, 3000);
     } catch (error) {
       set({ error: error as string });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     } finally {
       set({ loading: false });
     }
@@ -80,6 +97,9 @@ const useAreaStore = create<AreaState>((set) => ({
       }, 3000);
     } catch (error) {
       set({ error: error as string });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     } finally {
       set({ loading: false });
     }
@@ -94,9 +114,49 @@ const useAreaStore = create<AreaState>((set) => ({
       }, 3000);
     } catch (error) {
       set({ error: error as string });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
     } finally {
       set({ loading: false });
     }
+  },
+  setUserArea: async (userId: number, areaId: number) => {
+    try {
+      set({ loading: true, error: null });
+      const response = await setUserAreaApi(userId, areaId);
+      set({ area: response.data, loading: false, isUserAreaSet: true });
+      setTimeout(() => {
+        set({ isUserAreaSet: false });
+      }, 3000);
+    } catch (error) {
+      set({ error: error as string });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  deleteUserArea: async (userId: number, areaId: number) => {
+    try {
+      set({ loading: true, error: null });
+      const response = await deleteUserAreaApi(userId, areaId);
+      set({ area: response.data, loading: false, isUserAreaRemoved: true });
+      setTimeout(() => {
+        set({ isUserAreaRemoved: false });
+      }, 3000);
+    } catch (error) {
+      set({ error: error as string });
+      setTimeout(() => {
+        set({ error: null });
+      }, 5000);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  setSelectedArea: (area: string | null) => {
+    set({ selectedArea: area });
   },
 }));
 

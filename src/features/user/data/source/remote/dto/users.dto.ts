@@ -1,5 +1,6 @@
 import { Company } from "@/common/dtos";
 import { Role } from "@/common/interface";
+import { Area } from "@/common/interface";
 
 export interface UsersDto {
   status: string;
@@ -20,4 +21,5 @@ export interface User {
   firebaseUID: null;
   roles: Role[];
   company: Company;
+  userAreas: Area[];
 }

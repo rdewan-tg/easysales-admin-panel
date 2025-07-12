@@ -1,6 +1,6 @@
 
 import { CreateAreaDto } from "../dto/create-area.dto";
-import { axiosAdminInstance, createAreaEndpoint, createManyAreaEndpoint, deleteAreaEndpoint, getAreaByIdEndpoint, getAreasEndpoint, updateAreaEndpoint } from "@/core/data";
+import { axiosAdminInstance, createAreaEndpoint, createManyAreaEndpoint, deleteAreaEndpoint, deleteUserAreaEndpoint, getAreaByIdEndpoint, getAreasEndpoint, setUserAreaEndpoint, updateAreaEndpoint } from "@/core/data";
 import { UpdateAreaDto } from "../dto/update-area.dto";
 import { AreaDeleteDto, AreaDto, AreasDto } from "../dto/area.dto";
 
@@ -31,5 +31,23 @@ export const getAreas = async () => {
 
 export const deleteArea = async (id: number) => {
     const response = await axiosAdminInstance.delete<AreaDeleteDto>(`${deleteAreaEndpoint}/${id}`);
+    return response.data;
+};
+
+export const setUserArea = async (userId: number, areaId: number) => {
+    const response = await axiosAdminInstance.post<AreaDto>(`${setUserAreaEndpoint}`, {
+        userId: userId,
+        areaId: areaId
+    });
+    return response.data;
+};
+
+export const deleteUserArea = async (userId: number, areaId: number) => {
+    const response = await axiosAdminInstance.delete<AreaDeleteDto>(deleteUserAreaEndpoint, {
+        params: {
+            userId: userId,
+            areaId: areaId
+        }
+    });
     return response.data;
 };
