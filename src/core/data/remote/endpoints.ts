@@ -36,6 +36,10 @@ export const changeCompanyEndpoint: string =
 export const updatePasswordEndpoint: string =
   "/v1/api/admin/users/update-password";
 export const updateUserEndpoint: string = "/v1/api/admin/users/update-user";
+// area
+export const setUserAreaEndpoint: string = "/v1/api/admin/users/set-user-area";
+export const deleteUserAreaEndpoint: string =
+  "/v1/api/admin/users/delete-user-area";
 // me
 export const getMeEndpoint: string = "/v1/api/me";
 // role
@@ -96,8 +100,13 @@ export const updateAreaEndpoint: string = "/v1/api/admin/area/update";
 export const deleteAreaEndpoint: string = "/v1/api/admin/area";
 
 //master data
-export const importItemsFromAzureDbEndpoint: string = "/v1/api/items/import/from-azure-db";
-export const importPricesFromAzureDbEndpoint: string = "/v1/api/prices/import/from-azure-db";
-export const importCustomersFromAzureDbEndpoint: string = "/v1/api/customers/import/from-azure-db";
-export const importMerchandiserCustomersFromAzureDbEndpoint: string = "/v1/api/merchandiser-customers/import/from-azure-db";
-export const importAddressesFromAzureDbEndpoint: string = "/v1/api/addresses/import/from-azure-db";
+export const importItemsFromAzureDbEndpoint: string =
+  "/v1/api/items/import/from-azure-db";
+export const importPricesFromAzureDbEndpoint: string =
+  "/v1/api/prices/import/from-azure-db";
+export const importCustomersFromAzureDbEndpoint: string =
+  "/v1/api/customers/import/from-azure-db";
+export const importMerchandiserCustomersFromAzureDbEndpoint: string =
+  "/v1/api/merchandiser-customers/import/from-azure-db";
+export const importAddressesFromAzureDbEndpoint: string =
+  "/v1/api/addresses/import/from-azure-db";

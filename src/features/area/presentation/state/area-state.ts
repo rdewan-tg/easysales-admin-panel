@@ -9,6 +9,9 @@ export type AreaState = {
     isCreated: boolean | null;
     isUpdated: boolean | null;
     isDeleted: boolean | null;
+    isUserAreaSet: boolean | null;
+    isUserAreaRemoved: boolean | null;
+    selectedArea: string | null;
     error: string | null;
     getAreas: () => Promise<void>;
     getAreaById: (id: number) => Promise<void>;
@@ -16,4 +19,7 @@ export type AreaState = {
     createManyArea: (area: CreateAreaDto[]) => Promise<void>;
     updateArea: (area: UpdateAreaDto) => Promise<void>;
     deleteArea: (id: number) => Promise<void>;
+    setUserArea: (userId: number, areaId: number) => Promise<void>;
+    deleteUserArea: (userId: number, areaId: number) => Promise<void>;
+    setSelectedArea: (area: string | null) => void;
 };

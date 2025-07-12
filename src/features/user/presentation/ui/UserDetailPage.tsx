@@ -32,6 +32,7 @@ import {
   BaseConfirmDialog,
   BaseSnackBarComponent,
 } from "../../../../common/components";
+import SetAreaComponent from "./components/SetAreaComponent";
 
 export const UserDetailPage = () => {
   const { id } = useParams();
@@ -208,6 +209,38 @@ export const UserDetailPage = () => {
                     ))}
                   </Stack>
                 </Stack>
+
+                {/* Area chips - show only if user has area */}
+                {(user?.areas?.length ?? 0) > 0 && (
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    alignItems="center"
+                    sx={{ mt: 1 }}
+                  >
+                    <Typography variant="body1" color="text.secondary">
+                      Areas:
+                    </Typography>
+                    <Stack direction="row" spacing={0.5} flexWrap="wrap">
+                      {user?.areas?.map((r) => (
+                        <Chip
+                          key={r.id}
+                          label={r.name}
+                          color="primary"
+                          size="small"
+                          variant="outlined"
+                          deleteIcon={<DeleteIcon fontSize="small" />}
+                          onDelete={() => handleRoleOpenDialog(r.id)}
+                          sx={{
+                            borderRadius: 3,
+                            px: 1,
+                            my: 0.5,
+                          }}
+                        />
+                      ))}
+                    </Stack>
+                  </Stack>
+                )}
               </Stack>
             </Stack>
 
@@ -228,6 +261,7 @@ export const UserDetailPage = () => {
 
             <Divider sx={{ my: 3 }} />
 
+            {/* Display user area */}
             <Paper
               elevation={0}
               sx={{
@@ -235,6 +269,20 @@ export const UserDetailPage = () => {
                 borderRadius: 3,
                 bgcolor: "background.subtle",
                 mb: 3,
+              }}
+            >
+              <SetAreaComponent />
+            </Paper>
+
+            <Divider sx={{ my: 3 }} />
+
+            <Paper
+              elevation={0}
+              sx={{
+                p: 2,
+                borderRadius: 3,
+                bgcolor: "background.subtle",
+                mb: 1,
               }}
             >
               <UpdatePasswordComponent userId={Number(id)} />

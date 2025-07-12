@@ -76,7 +76,7 @@ const SetRoleComponent = () => {
   return (
     <Box>
       <Typography variant="h6" component="div" gutterBottom>
-        Set Member Roles
+        Set User Roles
       </Typography>
       <FormControl
         id="role-form"

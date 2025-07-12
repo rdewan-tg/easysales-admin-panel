@@ -51,10 +51,6 @@ const UpdatePasswordComponent = (props: any) => {
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        mt: 2,
-        mb: 8,
-      }}
     >
       <Stack spacing={2} sx={{ mb: 2 }}>
         <Typography variant="h5" gutterBottom>
