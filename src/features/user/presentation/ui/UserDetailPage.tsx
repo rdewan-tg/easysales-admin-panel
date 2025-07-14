@@ -33,6 +33,7 @@ import {
   BaseSnackBarComponent,
 } from "../../../../common/components";
 import SetAreaComponent from "./components/SetAreaComponent";
+import { useAreaStore } from "@/features/area/presentation";
 
 export const UserDetailPage = () => {
   const { id } = useParams();
@@ -41,9 +42,13 @@ export const UserDetailPage = () => {
   const [openErrorSnackbar, setErrorSnackbarOpen] = useState(false);
 
   const [roleId, setRoleId] = useState<number | null>(null);
+  const [areaId, setAreaId] = useState<number | null>(null);
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
+  const [isAreaDialogOpen, setIsAreaDialogOpen] = useState(false);
   const isRoleAdded = useRoleStore((state) => state.isRoleAdded);
   const isRoleDeleted = useRoleStore((state) => state.isRoleDeleted);
+  const isAreaAdded = useAreaStore((state) => state.isUserAreaSet);
+  const isAreaDeleted = useAreaStore((state) => state.isUserAreaRemoved);
 
   const isLoading = useUserStore((state) => state.isLoading);
   const errorMessage = useUserStore((state) => state.error);
@@ -51,6 +56,7 @@ export const UserDetailPage = () => {
 
   const getUserById = useUserStore.use.getUserById();
   const deleteUserRole = useRoleStore.use.deleteUserRole();
+  const deleteUserArea = useAreaStore.use.deleteUserArea();
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -60,7 +66,7 @@ export const UserDetailPage = () => {
       }
     };
     fetchMember();
-  }, [id, isRoleAdded, isRoleDeleted]);
+  }, [id, isRoleAdded, isRoleDeleted, isAreaAdded, isAreaDeleted]);
 
   // observe error state and display error message
   useEffect(() => {
@@ -98,6 +104,21 @@ export const UserDetailPage = () => {
   const handleDeleteUserRole = async () => {
     await deleteUserRole({ userId: Number(id), roleId: roleId ?? 0 });
     setIsRoleDialogOpen(false);
+  };
+
+  const handleAreaOpenDialog = (id: number) => {
+    setIsAreaDialogOpen(true);
+    setAreaId(id);
+  };
+
+  const handleAreaCloseDialog = () => {
+    setIsAreaDialogOpen(false);
+    setAreaId(null);
+  };
+
+  const handleDeleteArea = async () => {
+    await deleteUserArea(Number(id), areaId ?? 0);
+    setIsAreaDialogOpen(false);
   };
 
   return (
@@ -230,7 +251,7 @@ export const UserDetailPage = () => {
                           size="small"
                           variant="outlined"
                           deleteIcon={<DeleteIcon fontSize="small" />}
-                          onDelete={() => handleRoleOpenDialog(r.id)}
+                          onDelete={() => handleAreaOpenDialog(r.id)}
                           sx={{
                             borderRadius: 3,
                             px: 1,
@@ -313,6 +334,14 @@ export const UserDetailPage = () => {
           open={isRoleDialogOpen}
           onCancel={handleRoleCloseDialog}
           onConfirm={handleDeleteUserRole}
+        />
+
+        <BaseConfirmDialog
+          title="Delete Area"
+          description="Are you sure you want to delete this area from user?"
+          open={isAreaDialogOpen}
+          onCancel={handleAreaCloseDialog}
+          onConfirm={handleDeleteArea}
         />
 
         {/* Display global error */}
