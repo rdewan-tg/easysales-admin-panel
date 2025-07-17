@@ -39,5 +39,7 @@ export const routeName = {
   area: "area",
   areaList: "area-list",
   createArea: "create-area",
+  siteVisit: "site-visit",
+  siteVisitList: "site-visit-list",
   others: "*",
 };

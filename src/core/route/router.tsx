@@ -50,6 +50,7 @@ import SalesHeaderScreen from "@/features/order/presentation/ui/SalesHeaderScree
 import { ActivityLogScreen } from "@/features/activity-log/presentation";
 import UpdateUserPage from "@/features/user/presentation/ui/UpdateUserPage";
 import { AreaListPage, AreaPage, CreateAreaPage } from "@/features/area/presentation";
+import { SiteVisitPage, SiteVisitListPage } from "@/features/site-visit/presentation";
 
 export const router = createBrowserRouter([
   {
@@ -236,6 +237,18 @@ export const router = createBrowserRouter([
                       {
                         path: routeName.merchandiserReportByDaterange,
                         element: <MerchandiserReportByDateRangeScreen />,
+                        errorElement: <NotFoundPage />,
+                      },
+                    ],
+                  },
+                  // site visit
+                  {
+                    path: routeName.siteVisit,
+                    element: <SiteVisitPage />,
+                    children: [
+                      {
+                        index: true,
+                        element: <SiteVisitListPage />,
                         errorElement: <NotFoundPage />,
                       },
                     ],

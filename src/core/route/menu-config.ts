@@ -122,6 +122,12 @@ export const menuConfig: MenuItemConfig[] = [
     ],
   },
   {
+    key: "site-visit",
+    label: "Site Visit",
+    path: "/dashboard/site-visit",
+    iconKey: "list",
+  },
+  {
     key: "master-data",
     label: "Master Data",
     path: "/dashboard/customer",

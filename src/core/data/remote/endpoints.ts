@@ -110,3 +110,6 @@ export const importMerchandiserCustomersFromAzureDbEndpoint: string =
   "/v1/api/merchandiser-customers/import/from-azure-db";
 export const importAddressesFromAzureDbEndpoint: string =
   "/v1/api/addresses/import/from-azure-db";
+
+// site visit
+export const getSiteVisitListEndpoint: string = "/v1/api/site-visit/filter/by-company-and-date";
