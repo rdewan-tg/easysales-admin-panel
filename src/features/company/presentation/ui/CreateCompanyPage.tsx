@@ -8,6 +8,7 @@ import {
   MenuItem,
   Paper,
   Stack,
+  Switch,
   TextField,
   Tooltip,
   Typography,
@@ -20,7 +21,7 @@ import {
 import { mapCreateCompanyFormToDto } from "../../domain";
 import { useCompanyStore } from "..";
 import { ArrowBack } from "@mui/icons-material";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useCountryStore } from "@/features/country/presentation";
 import { useNavigate } from "react-router-dom";
 import { routeName } from "@/core/route";
@@ -48,8 +49,9 @@ const CreateCompanyPage = () => {
     fetchCountries();
   }, []);
 
+  // Use type assertion to ensure the resolver matches the expected type
   const form = useForm<CreateCompanyForm>({
-    resolver: zodResolver(createCompanySchema),
+    resolver: zodResolver(createCompanySchema) as any,
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -61,6 +63,7 @@ const CreateCompanyPage = () => {
       companySetting: {
         currencyCode: "",
         timeZone: "",
+        isSiteVisitEnabled: false,
       },
     },
   });
@@ -305,6 +308,24 @@ const CreateCompanyPage = () => {
                     error={!!errors.companySetting?.timeZone}
                     helperText={errors.companySetting?.timeZone?.message}
                   />
+                )}
+              />
+              
+              <Controller
+                control={control}
+                name="companySetting.isSiteVisitEnabled"
+                render={({ field }) => (
+                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                    <Typography variant="body1" sx={{ mr: 2 }}>
+                      Enable Site Visit
+                    </Typography>
+                    <Switch
+                      {...field}
+                      checked={field.value}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(e.target.checked)}
+                      color="primary"
+                    />
+                  </Box>
                 )}
               />
 

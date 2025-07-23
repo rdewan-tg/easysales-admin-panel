@@ -11,6 +11,7 @@ export const mapCreateCompanyFormToDto = (form: CreateCompanyForm) => {
     companySetting: {
       timeZone: form.companySetting.timeZone,
       currencyCode: form.companySetting.currencyCode,
+      isSiteVisitEnabled: form.companySetting.isSiteVisitEnabled,
     },
   };
 };
