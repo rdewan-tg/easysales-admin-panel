@@ -20,6 +20,7 @@ export interface Company {
 export interface CompanySetting {
   timeZone: string;
   currencyCode: string;
+  isSiteVisitEnabled: boolean;
 }
 
 // Converts JSON strings to/from your types

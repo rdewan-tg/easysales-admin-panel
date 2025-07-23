@@ -1,4 +1,10 @@
-import { Backdrop, Box, CircularProgress } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  CircularProgress,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import {
   GridComponent,
   ColumnsDirective,
@@ -12,6 +18,8 @@ import {
 import { useSiteVisitStore } from "../index";
 import { useEffect, useRef } from "react";
 import { NotificationSnackbar } from "@/common/components";
+import { format } from "date-fns";
+import { RefreshOutlined } from "@mui/icons-material";
 
 const SiteVisitListPage = () => {
   const gridRef = useRef<GridComponent | null>(null);
@@ -20,10 +28,13 @@ const SiteVisitListPage = () => {
   const siteVisits = useSiteVisitStore((state) => state.siteVisits);
   const getSiteVisits = useSiteVisitStore.use.getSiteVisits();
 
+  async function fetchSiteVisits() {
+    const fromDate = format(new Date(), "yyyy-MM-dd");
+    const toDate = format(new Date(), "yyyy-MM-dd");
+    await getSiteVisits(fromDate, toDate);
+  }
+
   useEffect(() => {
-    async function fetchSiteVisits() {
-      await getSiteVisits();
-    }
     fetchSiteVisits();
   }, []);
 
@@ -72,6 +83,26 @@ const SiteVisitListPage = () => {
         error={error || undefined}
       />
 
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          padding: { xs: "8px", sm: "12px", md: "16px" },
+          flexWrap: "wrap",
+          gap: 1,
+          width: "100%",
+          maxWidth: "100%",
+          overflow: "hidden",
+        }}
+      >
+        <Tooltip title="Refresh">
+          <IconButton color="primary" onClick={fetchSiteVisits}>
+            <RefreshOutlined />
+          </IconButton>
+        </Tooltip>
+      </Box>
+
       {/* Site Visits Grid */}
       <Box sx={{ flex: 1, width: "100%", overflow: "auto" }}>
         <GridComponent
@@ -79,15 +110,16 @@ const SiteVisitListPage = () => {
           dataSource={siteVisits}
           allowPaging={true}
           allowSorting={true}
+          allowResizing={true}
           created={created}
           pageSettings={{ pageSize: 10 }}
           height="100%"
           toolbar={["Search"]}
           sortSettings={{
             columns: [
+              { field: "id", direction: "Descending" },
               { field: "salesPersonName", direction: "Ascending" },
               { field: "customerName", direction: "Ascending" },
-              { field: "id", direction: "Ascending" },
             ],
           }}
           ref={(g: GridComponent | null) => {
@@ -119,14 +151,14 @@ const SiteVisitListPage = () => {
             <ColumnDirective
               field="timeIn"
               headerText="Time In"
-              width="150"
-              format={{ type: "dateTime", format: "yMd H:mm" }}
+              width="200"
+              type="string"
             />
             <ColumnDirective
               field="timeOut"
               headerText="Time Out"
-              width="150"
-              format={{ type: "dateTime", format: "yMd H:mm" }}
+              width="200"
+              type="string"
             />
             <ColumnDirective
               field="durationInOutlet"

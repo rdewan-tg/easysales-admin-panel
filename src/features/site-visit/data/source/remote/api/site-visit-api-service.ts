@@ -2,11 +2,11 @@ import { axiosAdminInstance, getSiteVisitListEndpoint } from "@/core/data";
 import { SiteVisitDto } from "../dto/site-visit.dto";
 
 
-export const getSiteVisits = async () => {
+export const getSiteVisits = async (fromDate: string, toDate: string) => {
     const response = await axiosAdminInstance.get<SiteVisitDto>(getSiteVisitListEndpoint, {
         params: {
-            fromDate: new Date().toISOString(),
-            toDate: new Date().toISOString()
+            fromDate,
+            toDate
         }
     });
     return response.data;

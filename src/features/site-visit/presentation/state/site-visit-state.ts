@@ -5,5 +5,5 @@ export type SiteVisitState = {
     siteVisits: SiteVisitData[];
     isLoading: boolean;
     error: string | null;
-    getSiteVisits: () => Promise<void>;
+    getSiteVisits: (fromDate: string, toDate: string) => Promise<void>;
 }

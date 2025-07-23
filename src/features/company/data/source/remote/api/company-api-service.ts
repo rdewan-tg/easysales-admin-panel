@@ -5,7 +5,7 @@ import {
   updateCompanyEndpoint,
   deleteCompanyEndpoint,
 } from "@/core/data";
-import { CompanyDto } from "@/features/user/data";
+import { CompanyDto } from "@/common/dtos";
 
 export const getCompanies = async () => {
   const response =
