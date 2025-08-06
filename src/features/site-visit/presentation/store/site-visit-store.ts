@@ -9,10 +9,10 @@ const useSiteVisitStore = create<SiteVisitState>((set) => ({
     siteVisits: [],
     isLoading: false,
     error: null,
-    getSiteVisits: async () => {
+    getSiteVisits: async (fromDate: string, toDate: string) => {
         try {
             set({ isLoading: true });
-            const response = await getSiteVisits();
+            const response = await getSiteVisits(fromDate, toDate);
             set({ siteVisits: response.data });
         } catch (error) {
             const errorMessage = (error as Error).message;

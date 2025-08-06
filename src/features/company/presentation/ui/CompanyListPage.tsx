@@ -148,7 +148,7 @@ const CompanyListPage = () => {
               width="80"
               isPrimaryKey={true}
               isIdentity={true}
-              visible={false}
+              visible={true}
             />
             <ColumnDirective
               field="name"
@@ -164,6 +164,17 @@ const CompanyListPage = () => {
             />
             <ColumnDirective field="phone" headerText="Phone" width="150" />
             <ColumnDirective field="address" headerText="Address" width="200" />
+            <ColumnDirective field="companyCode" headerText="Company Code" width="150" />
+            <ColumnDirective field="companySetting.timeZone" headerText="Time Zone" width="150" />
+            <ColumnDirective field="companySetting.currencyCode" headerText="Currency" width="150" />
+            <ColumnDirective
+              field="companySetting.isSiteVisitEnabled"
+              headerText="Site Visit"
+              width="150"
+              type="boolean"
+              displayAsCheckBox={true}
+              editType="booleanedit"
+            />
           </ColumnsDirective>
           <Inject services={[Page, Toolbar, Edit, CommandColumn]} />
         </GridComponent>

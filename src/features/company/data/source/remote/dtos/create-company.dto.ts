@@ -13,4 +13,5 @@ export interface CreateCompanyDto {
 export interface CompanySettingDto {
   timeZone: string;
   currencyCode: string;
+  isSiteVisitEnabled: boolean;
 }

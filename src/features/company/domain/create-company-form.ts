@@ -30,6 +30,7 @@ export const createCompanySchema = z.object({
       .string()
       .min(3, { message: "Currency code must be at least 4 characters long" })
       .max(3),
+    isSiteVisitEnabled: z.boolean().default(false),
   }),
 });
 
