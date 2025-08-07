@@ -87,6 +87,10 @@ const SiteVisitListPage = () => {
     handleCloseMenu();
   };
 
+  const handleCloseDateFilter = () => {
+    setOpenDateFilter(false);
+  };
+
   // Template for map link
   const mapTemplate = (props: any) => (
     <IconButton
@@ -110,10 +114,7 @@ const SiteVisitListPage = () => {
     columns: ["salesPersonName"],
   };
 
-  const handleCloseDateFilter = () => {
-    setOpenDateFilter(false);
-  };
-
+  
   // Function to export data to Excel
   const exportToExcel = () => {
     if (!siteVisits || siteVisits.length === 0) {

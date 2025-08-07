@@ -1,14 +1,14 @@
-export interface SiteVisiteReportByDateRangeDto {
+export interface PhotoReportByDateRangeDto {
   status: string;
-  data: SiteVisiteReportByDateRangeData;
+  data: PhotoReportByDateRangeData;
 }
 
-export interface SiteVisiteReportByDateRangeData {
+export interface PhotoReportByDateRangeData {
   totalUniqueVisits: number;
-  visitDetails: SiteVisiteReportByDateRangeDetail[];
+  visitDetails: PhotoReportByDateRangeDetail[];
 }
 
-export interface SiteVisiteReportByDateRangeDetail {
+export interface PhotoReportByDateRangeDetail {
   salesPersonCode: string;
   customerId: string;
   customerName: string;

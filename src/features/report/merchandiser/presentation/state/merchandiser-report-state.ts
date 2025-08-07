@@ -1,11 +1,11 @@
 import { TransDate } from "@/common/dtos";
-import { SiteVisiteReportByDateRangeDetail } from "../../data";
+import { PhotoReportByDateRangeDetail } from "../../data";
 
 export type MerchandiserReportState = {
   isLoading: boolean;
-  siteVisiteReportByDateRangeDetail: SiteVisiteReportByDateRangeDetail[];
+  photoReportByDateRangeDetail: PhotoReportByDateRangeDetail[];
   error: string | null;
   transDates: TransDate[];
-  getSiteVisiteReportByDateRange: (start: string, end: string) => Promise<void>;
-  getTransDates: () => Promise<void>;
+  getPhotoReportByDateRange: (start: string, end: string) => Promise<void>;
+  clearFilter: () => Promise<void>;
 };

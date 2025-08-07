@@ -1,12 +1,10 @@
 import {
-  Alert,
   Backdrop,
   Box,
+  Button,
   CircularProgress,
-  Slide,
-  Snackbar,
-  SnackbarCloseReason,
-  TextField,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { useMerchandiserReportStore } from "..";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
@@ -28,24 +26,32 @@ import {
   ToolbarItems,
   Search,
 } from "@syncfusion/ej2-react-grids";
-import { useEffect, useRef, useState } from "react";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { SendOutlined } from "@mui/icons-material";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-  GetMerchandiserReportByDateRangeForm,
-  getMerchandiserReportByDateRangeSchema,
-} from "@/common/types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { parse } from "date-fns";
+import { MouseEvent, useRef, useState } from "react";
+import { CalendarMonth, FilterAlt } from "@mui/icons-material";
+import FilterByDate from "./components/FilterByDate";
+import { NotificationSnackbar } from "@/common/components";
 
 const MerchandiserReportByDateRangeScreen = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openDateFilter, setOpenDateFilter] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const isLoading = useMerchandiserReportStore((state) => state.isLoading);
+  const error = useMerchandiserReportStore((state) => state.error);
+  const data = useMerchandiserReportStore(
+    (state) => state.photoReportByDateRangeDetail
+  );
+  const getPhotoReportByDateRange =
+    useMerchandiserReportStore.use.getPhotoReportByDateRange();
+  const clearFilter = useMerchandiserReportStore.use.clearFilter();
+
   const gridRef = useRef<GridComponent | null>(null);
   const pageSettings: PageSettingsModel = { pageSize: 50 };
   const toolbar: ToolbarItems[] = ["ExcelExport", "Search"];
   const groupOptions: GroupSettingsModel = {
     columns: ["salesPersonCode"],
   };
+
   const sortingOptions = {
     columns: [
       { field: "salesPersonCode", direction: "Ascending" as SortDirection },
@@ -55,11 +61,11 @@ const MerchandiserReportByDateRangeScreen = () => {
   const created = () => {
     (
       document.getElementById(
-        (gridRef.current as GridComponent).element.id + "_searchbar",
+        (gridRef.current as GridComponent).element.id + "_searchbar"
       ) as HTMLElement
     ).addEventListener("keyup", (event) => {
       (gridRef.current as GridComponent).search(
-        (event.target as HTMLInputElement).value,
+        (event.target as HTMLInputElement).value
       );
     });
   };
@@ -77,63 +83,25 @@ const MerchandiserReportByDateRangeScreen = () => {
     }
   };
 
-  const [openErrorSnackbar, setOpenErrorSnackBar] = useState(false);
-  const isLoading = useMerchandiserReportStore((state) => state.isLoading);
-  const errorMessage = useMerchandiserReportStore((state) => state.error);
-  const transDates = useMerchandiserReportStore((state) => state.transDates);
-  const data = useMerchandiserReportStore(
-    (state) => state.siteVisiteReportByDateRangeDetail,
-  );
-  const getSiteVisiteReportByDateRange =
-    useMerchandiserReportStore.use.getSiteVisiteReportByDateRange();
-  const getTransDates = useMerchandiserReportStore.use.getTransDates();
-
-  // fetch transDates when the component mounts
-  useEffect(() => {
-    async function fetchTransDates() {
-      getTransDates();
-    }
-    fetchTransDates();
-  }, []);
-
-  // observe error state and display error message
-  useEffect(() => {
-    if (errorMessage) {
-      handleErrorSnackbarClick();
-    }
-  }, [errorMessage]);
-
-  const handleErrorSnackbarClick = () => {
-    setOpenErrorSnackBar(true);
+  // Filter menu handlers
+  const handleOpenMenu = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const handleErrorSnackbarClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
-  ) => {
-    // do not close the snackbar if the reason is 'clickaway'
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenErrorSnackBar(false);
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
   };
 
-  const form = useForm<GetMerchandiserReportByDateRangeForm>({
-    resolver: zodResolver(getMerchandiserReportByDateRangeSchema),
-  });
-
-  // destructure form
-  const { control, handleSubmit, formState } = form;
-
-  // destructure formState
-  const { errors, isSubmitting, isValid } = formState;
-
-  const onSubmit: SubmitHandler<GetMerchandiserReportByDateRangeForm> = async (
-    data: GetMerchandiserReportByDateRangeForm,
-  ) => {
-    await getSiteVisiteReportByDateRange(data.startDate, data.endDate);
+  const handleOpenDateFilter = () => {
+    setOpenDateFilter(true);
+    handleCloseMenu();
   };
+
+  const handleCloseDateFilter = () => {
+    setOpenDateFilter(false);
+  };
+
+  
 
   return (
     <Box
@@ -151,103 +119,120 @@ const MerchandiserReportByDateRangeScreen = () => {
         </Backdrop>
       ) : null}
 
-      <Box
-        component={"form"}
-        onSubmit={handleSubmit(onSubmit)}
+      <NotificationSnackbar
+        isUpdated={false}
+        isDeleted={false}
+        updateMessage=""
+        deleteMessage=""
+        error={error || undefined}
+      />
+
+      <Button
+        variant="outlined"
+        startIcon={<FilterAlt />}
+        onClick={handleOpenMenu}
+        size="small"
         sx={{
-          display: "block",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
+          borderRadius: "20px",
+          textTransform: "none",
+          fontWeight: 500,
+          boxShadow: "none",
+          "&:hover": {
+            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+          },
+          mr: "auto", // This pushes the button to the left
         }}
       >
-        <Controller
-          name="startDate"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              id="from-date"
-              type="text"
-              size="small"
-              select
-              slotProps={{
-                select: {
-                  native: true,
-                },
-              }}
-              helperText={errors.startDate ? errors.startDate.message : null}
-              sx={{ width: "auto", maxWidth: 300, marginRight: 2 }}
-            >
-              <option aria-label="None" value="">
-                Select a From Date
-              </option>
-              {transDates
-                .slice() // Copy to avoid mutating the original state
-                .sort(
-                  (a, b) =>
-                    parse(a.transDate, "dd-MM-yyyy", new Date()).getTime() -
-                    parse(b.transDate, "dd-MM-yyyy", new Date()).getTime(),
-                )
-                .map((option, index) => (
-                  <option key={index} value={option.transDate}>
-                    {option.transDate}
-                  </option>
-                ))}
-            </TextField>
-          )}
-        />
+        Filters
+      </Button>
 
-        <Controller
-          name="endDate"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              id="end-date"
-              type="text"
-              size="small"
-              select
-              slotProps={{
-                select: {
-                  native: true,
-                },
-              }}
-              helperText={errors.startDate ? errors.startDate.message : null}
-              sx={{ width: "auto", maxWidth: 300 }}
-            >
-              <option aria-label="None" value="">
-                Select a To Date
-              </option>
-              {transDates.map((option, index) => (
-                <option key={index} value={option.transDate}>
-                  {option.transDate}
-                </option>
-              ))}
-            </TextField>
-          )}
-        />
-
-        <LoadingButton
-          loading={isSubmitting}
-          loadingPosition="center"
-          startIcon={<SendOutlined />}
-          variant="contained"
-          disabled={!isValid || isSubmitting}
-          type="submit"
+      {/* Filter Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            borderRadius: "12px",
+            minWidth: "200px",
+            mt: 1,
+            overflow: "visible",
+            "&:before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem
+          onClick={handleOpenDateFilter}
           sx={{
-            width: "100%",
-            maxWidth: 180,
-            marginLeft: 2,
-            backgroundColor: "primary.main",
+            borderRadius: "8px",
+            mx: 0.5,
+            my: 0.5,
+            py: 1,
             "&:hover": {
-              backgroundColor: "secondary.main",
+              backgroundColor: "action.hover",
             },
           }}
         >
-          Go
-        </LoadingButton>
-      </Box>
+          <CalendarMonth
+            sx={{ mr: 2, color: "primary.main" }}
+            fontSize="small"
+          />
+          <span>Date</span>
+        </MenuItem>
+        {isFiltered && (
+          <MenuItem
+            onClick={async () => {
+              // clear filter
+              clearFilter();
+              // close the filter menu
+              setIsFiltered(false);
+              handleCloseMenu();
+            }}
+            sx={{
+              borderRadius: "8px",
+              mx: 0.5,
+              my: 0.5,
+              py: 1,
+              borderTop: "1px solid",
+              borderColor: "divider",
+              mt: 1,
+              pt: 1.5,
+              "&:hover": {
+                backgroundColor: "action.hover",
+              },
+            }}
+          >
+            <FilterAlt sx={{ mr: 2, color: "success.main" }} fontSize="small" />
+            <span>Clear Filters</span>
+          </MenuItem>
+        )}
+      </Menu>
+
+      {/* Date Filter Dialog */}
+      <FilterByDate
+        open={openDateFilter}
+        close={handleCloseDateFilter}
+        title="Filter by Date"
+        description=""
+        onFilter={async (fromDate, toDate) => {
+          getPhotoReportByDateRange(fromDate, toDate);
+          setIsFiltered(true);
+        }}
+      />
 
       <Box
         sx={{
@@ -320,26 +305,6 @@ const MerchandiserReportByDateRangeScreen = () => {
           />
         </GridComponent>
       </Box>
-
-      {/* Display global error */}
-      {errorMessage && (
-        <Snackbar
-          open={openErrorSnackbar}
-          autoHideDuration={6000}
-          TransitionComponent={Slide}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          onClose={handleErrorSnackbarClose}
-        >
-          <Alert
-            onClose={handleErrorSnackbarClose}
-            severity="error"
-            variant="filled"
-            sx={{ width: "100%" }}
-          >
-            {errorMessage}
-          </Alert>
-        </Snackbar>
-      )}
     </Box>
   );
 };

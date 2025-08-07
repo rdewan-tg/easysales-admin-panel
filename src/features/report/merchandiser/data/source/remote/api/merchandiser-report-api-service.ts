@@ -1,26 +1,17 @@
 import {
   axiosAdminInstance,
-  getSiteVisitReportByDateRangeEndpoint,
-  getPhotoTransDatesEndpoint,
+  getPhotoReportByDateRangeEndpoint,
 } from "@/core/data";
-import { SiteVisiteReportByDateRangeDto } from "../../..";
-import { TransDateDto } from "@/common/dtos";
+import { PhotoReportByDateRangeDto } from "../dto/site-visit-report-by-date-range.dto";
 
-export const getSiteVisitReportByDateRange = async (
+export const getPhotoReportByDateRange = async (
   start: string,
   end: string,
 ) => {
-  const response = await axiosAdminInstance.get<SiteVisiteReportByDateRangeDto>(
-    `${getSiteVisitReportByDateRangeEndpoint}?fromDate=${start}&toDate=${end}`,
+  const response = await axiosAdminInstance.get<PhotoReportByDateRangeDto>(
+    `${getPhotoReportByDateRangeEndpoint}?fromDate=${start}&toDate=${end}`,
   );
 
   return response.data;
 };
 
-export const getTransDates = async () => {
-  const response = await axiosAdminInstance.get<TransDateDto>(
-    getPhotoTransDatesEndpoint,
-  );
-
-  return response.data;
-};
