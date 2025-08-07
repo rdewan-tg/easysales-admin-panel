@@ -68,8 +68,8 @@ export const getItemsEndpoint: string = "/v1/api/items";
 // price
 export const getPricesEndpoint: string = "/v1/api/prices";
 // report
-export const getSiteVisitReportByDateRangeEndpoint: string =
-  "/v1/api/merchandiser/photos/report/site-visit-report-by-date-range";
+export const getPhotoReportByDateRangeEndpoint: string =
+  "/v1/api/merchandiser/photos/report/photo-report-by-date-range";
 export const getPhotoTransDatesEndpoint: string =
   "/v1/api/merchandiser/photos/trans-dates";
 export const getPhotoCustomerChainsEndpoint: string =

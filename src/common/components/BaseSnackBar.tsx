@@ -18,7 +18,7 @@ const BaseSnackBarComponent = ({
       open={open}
       autoHideDuration={autoHideDuration}
       TransitionComponent={Slide}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       onClose={onClose}
     >
       <Alert
