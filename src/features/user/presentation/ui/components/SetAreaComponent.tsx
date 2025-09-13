@@ -28,11 +28,13 @@ const SetAreaComponent = () => {
 
   useEffect(() => {
     const fetchAreas = async () => {
-      await getAreas();
+      if (areas.length === 0) {
+        await getAreas();
+      }
     };
 
     fetchAreas();
-  },[]);
+  },[areas, getAreas]);
 
 
 
