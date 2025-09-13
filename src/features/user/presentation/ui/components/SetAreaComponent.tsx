@@ -28,10 +28,7 @@ const SetAreaComponent = () => {
 
   useEffect(() => {
     const fetchAreas = async () => {
-      if (areas.length === 0) {
-        // call only if areas are empty
-        await getAreas();
-      }
+      await getAreas();
     };
 
     fetchAreas();
